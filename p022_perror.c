@@ -4,6 +4,8 @@
 #include <fcntl.h>
 
 int main(void) {
+    printf( "Hello!\nThis is perror() program v1.0." );
+
     int fd = -1;
 
     // Always Reset errno before use.
@@ -18,11 +20,12 @@ int main(void) {
         // Seems like some error occured. Use strerror to print it
         printf( "\nerrono: %d" , errno );
         
-        printf("\nstrerror() says -> [%s]\n",(char*)strerror(errno));
-        return 1;
+        printf("\nstrerror() : %s",(char*)strerror(errno));
     } else {
         printf( "\nSuccess: open the file." );
     }
+
+    printf( "\nGood bye!" ); 
 
     return 0;
 }

@@ -7,7 +7,9 @@
 #include <locale.h>
 
 int main(void) {
-    setlocale( LC_ALL, "" ) ;
+    printf( "Hello!\nThis is perror() program v1.1." );
+
+    setlocale( LC_ALL, "en-US" ) ;
 
     int fd = -1;
 
@@ -23,11 +25,12 @@ int main(void) {
         // Seems like some error occured. Use strerror to print it
         wprintf( L"\nerrono: %d" , errno );
         
-        wprintf( L"\nStrerror() says -> [%s]\n",(char*)strerror(errno));
-        return 1;
+        wprintf( L"\nstrerror() : %s",(char*)strerror(errno));
     } else {
         wprintf( L"\nSuccess: open the file." );
     }
+
+    wprintf( L"\nGood bye!" );
 
     return 0;
 }
