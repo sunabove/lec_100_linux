@@ -6,7 +6,7 @@
 
 int main( int argc, char ** argv) {
 
-    printf( "________________\n" );
+    printf( "################\n" );
     printf( "This is a file open program.\n" );
 
     int fd ;
@@ -20,7 +20,7 @@ int main( int argc, char ** argv) {
     }
 
     printf( "Good bye!\n" );
-    printf( "________________\n" );
+    printf( "################\n" );
     
     return 0;
 

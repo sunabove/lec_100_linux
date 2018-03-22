@@ -7,9 +7,9 @@
 #include <locale.h>
 
 int main(void) {
-    printf( "Hello!\nThis is perror() program v1.1." );
+    setlocale( LC_ALL, "" ) ;
 
-    setlocale( LC_ALL, "en-US" ) ;
+    wprintf( L"Hello!\nThis is perror() program v1.1." );
 
     int fd = -1;
 

@@ -5,9 +5,8 @@
 
 int main( int argc , char ** argv )
 {
-    FILE * out = stdout ; 
-
- 	fprintf( out, "Hello World!" );
+    FILE * out = stdout ;
+    fprintf( out, "Hello World!" );
 
     char c = 'A' ; 
     size_t cSize = sizeof( c );  
@@ -25,7 +24,7 @@ int main( int argc , char ** argv )
     size_t strArrSize = sizeof( strArr );
     fprintf( out, "\nchar [] size of %s : %zu" , strArr, strArrSize );
 
- 	fprintf( out, "\nGood Bye!" );
+    fprintf( out, "\nGood Bye!" );
 
-	return 0 ;
+    return 0 ;
 }
