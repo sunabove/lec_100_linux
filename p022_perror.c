@@ -3,7 +3,7 @@
 #include <string.h>
 #include <fcntl.h>
 
-int main(void) {
+int main(int argc, char ** argv) {
     printf( "Hello!\nThis is perror() program v1.0." );
 
     int fd = -1;
