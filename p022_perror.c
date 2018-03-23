@@ -19,12 +19,14 @@ int main(int argc, char ** argv) {
     if(fd == -1) {
         // Seems like some error occured. Use strerror to print it
         printf( "\nerrono: %d" , errno );
+
+        perror ( "open failed." );
         
         printf("\nstrerror() : %s",(char*)strerror(errno));
     } else {
         printf( "\nSuccess: open the file." );
         if (close (fd) == −1) {
-            perror ("close");
+            perror ( "close failed" );
         }
     }
 
