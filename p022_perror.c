@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 int main(int argc, char ** argv) {
     printf( "Hello!\nThis is perror() program v1.0." );
@@ -25,7 +26,7 @@ int main(int argc, char ** argv) {
         printf("\nstrerror() : %s",(char*)strerror(errno));
     } else {
         printf( "\nSuccess: open the file." );
-        if (close (fd) == −1) {
+        if (close (fd) == -1 ) {
             perror ( "close failed" );
         }
     }
