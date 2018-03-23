@@ -23,6 +23,9 @@ int main(int argc, char ** argv) {
         printf("\nstrerror() : %s",(char*)strerror(errno));
     } else {
         printf( "\nSuccess: open the file." );
+        if (close (fd) == −1) {
+            perror ("close");
+        }
     }
 
     printf( "\nGood bye!" ); 
