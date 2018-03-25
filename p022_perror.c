@@ -6,7 +6,7 @@
 
 int main(int argc, char ** argv) {
     FILE * out = stdout ; 
-    fprintf( out, "Hello!\nThis is perror() program v1.0." );
+    fprintf( out, "Hello!\nThis is perror() program v1.1." );
 
     int fd = -1;
 
@@ -20,19 +20,22 @@ int main(int argc, char ** argv) {
 
     if(-1 == fd) {
         // Seems like some error occured. Use strerror to print it
-        printf( "\nerrono: %d" , errno );
-
-        perror ( "open failed." );
-        
-        printf("\nstrerror() : %s",(char*)strerror(errno));
+        fprintf( out, "\nerrono: %d" , errno );
+        fflush( out );
+        perror ( "\nopen failed." );
+        fflush( out );
+        fprintf( out, "\nstrerror() : %s", strerror(errno) );
     } else {
+        fflush( out );
         perror( "\nSuccess: open the file." );
+        fflush( out );
         if (close (fd) == -1 ) {
-            perror ( "close failed" );
+            perror ( "\nclose failed" );
         }
     }
 
-    printf( "\nGood bye!" ); 
+    fprintf( out, "\nGood bye!" ); 
+    fflush( out );
 
     return 0;
 }
