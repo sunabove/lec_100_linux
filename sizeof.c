@@ -12,9 +12,9 @@ int main( int argc , char ** argv )
     size_t cSize = sizeof( c );  
     fprintf( out, "\nchar size of %c : %zu", c, cSize ); 
 
-    wchar_t ga = L'가' ; 
-    size_t gaSize = sizeof( ga );
-    fprintf( out, "\nga char size of %c : %zu" , ga, gaSize );
+    wchar_t wc = L'가' ; 
+    size_t wcSize = sizeof( wc );
+    fprintf( out, "\nwc char size of %c : %zu" , wc, wcSize );
 
     char * str = "abcdefghi" ; 
     size_t strSize = sizeof( str );
