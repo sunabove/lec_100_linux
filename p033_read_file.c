@@ -32,7 +32,7 @@ int main( int argc, char ** argv) {
         close( fd );
     }
 
-    fprintf( out, "\nGood bye!" );
+    fprintf( out, "\nGood bye!\n" );
     fflush( out );
     
     return 0;
