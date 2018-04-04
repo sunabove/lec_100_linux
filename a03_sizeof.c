@@ -41,6 +41,7 @@ int main( int argc , char ** argv )
     fprintf( out, "\nsize of %s : %zu" , "unsigned long", sizeof( unsigned long ) );
     
     fprintf( out, "\nGood Bye!" );
+    fprintf( out, "\n" );
 
     fflush( out );
 
