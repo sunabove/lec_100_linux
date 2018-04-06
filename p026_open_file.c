@@ -12,7 +12,7 @@ int main( int argc, char ** argv) {
     fd = open( "test.txt" , O_RDONLY ) ; 
 
     if( -1 == fd ) {
-        printf( "Cannot open!\n" );
+        printf( "Error: cannot open!\n" );
     } else {
         printf( "Success: file open.\n" );
         // close the filedescriptor and may be resued.

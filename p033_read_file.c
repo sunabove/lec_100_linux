@@ -12,7 +12,7 @@ int main( int argc, char ** argv) {
     fd = open( "inputFile.txt" , O_RDONLY ) ; 
 
     if( -1 == fd ) {
-        fprintf( out, "\nCannot open!" );
+        fprintf( out, "\nError: cannot open!" );
     } else {
         fprintf( out, "\nSuccess: file open." );
         unsigned char c;
