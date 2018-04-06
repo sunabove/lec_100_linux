@@ -14,9 +14,9 @@ int main( int argc, char ** argv) {
     //fd = open (fileName, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
     if( -1 == fd ) {
-        fprintf( out, "\nCannot create a file[%s]!" , fileName );
-    } else {
-        fprintf( out, "\nSuccess: create a file[%s]." , fileName ); 
+        fprintf( out, "\nError: cannot create a file [%s]!" , fileName );
+    } else if( -1 < fd ) {
+        fprintf( out, "\nSuccess: create a file [%s]." , fileName ); 
         close( fd );
     }
 
