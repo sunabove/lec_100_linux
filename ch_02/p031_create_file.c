@@ -6,7 +6,7 @@
 
 int main( int argc, char ** argv) {
     FILE * out = stdout ; 
-    fprintf( out, "This is a file creat program.\n" );
+    fprintf( out, "This is a file create program.\n" );
 
     int fd  = -1 ;
     const char * fileName = "outputFile.txt" ; 
