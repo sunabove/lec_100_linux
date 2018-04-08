@@ -25,11 +25,11 @@ int main( int argc, char ** argv) {
         if( -1 == close( fd ) ) {
             int eno = errno ; 
             fflush( out );
-            fprintf( err, "\nError: cannot close filedescriptor(%d)", fd ); 
+            fprintf( err, "\nError: cannot close filedescriptor(%d).", fd ); 
             fprintf( err, "\nstrerror: %s", strerror( eno ) ); 
             fflush( err );
         } else {
-            fprintf( out, "\nSuccess: closed the file(%d)" , fd );
+            fprintf( out, "\nSuccess: closed the file(%d)." , fd );
         }
     }
 
