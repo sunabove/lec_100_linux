@@ -17,7 +17,7 @@ int main( int argc, char ** argv) {
 
     if( -1 == fd ) {
         fprintf( out, "\nError: cannot open!" );
-    } else {
+    } else if( -1 < fd ) {
         fprintf( out, "\nSuccess: file open." );
         unsigned long word;
         const size_t bufSize = sizeof( word );
