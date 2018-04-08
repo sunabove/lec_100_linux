@@ -13,12 +13,14 @@ int main( int argc, char ** argv) {
     fprintf( out, "\n%s", LINE );
 
     int fd  = -1 ;
-    fd = open( "inputFile.txt" , O_RDONLY ) ; 
+    const char * inputFileName = "inputFile.txt" ; 
+    fd = open( inputFileName , O_RDONLY ) ;
+    //fd = STDIN_FILENO ;  
 
     if( -1 == fd ) {
-        fprintf( out, "\nError: cannot open!" );
+        fprintf( out, "\nError: cannot open(%d) : %s", fd, inputFileName );
     } else if( -1 < fd ) {
-        fprintf( out, "\nSuccess: file open." );
+        fprintf( out, "\nSuccess: file open(%d) : %s" , fd, inputFileName );
         unsigned long word;
         const size_t bufSize = sizeof( word );
         //size_t bufSize = 8;
