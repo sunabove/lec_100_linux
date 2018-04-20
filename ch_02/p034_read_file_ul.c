@@ -14,8 +14,8 @@ int main( int argc, char ** argv) {
 
     int fd  = -1 ;
     const char * inputFileName = "inputFile.txt" ; 
-    fd = open( inputFileName , O_RDONLY ) ;
-    //fd = STDIN_FILENO ;  
+    //fd = open( inputFileName , O_RDONLY ) ;
+    fd = STDIN_FILENO ;  
 
     if( -1 == fd ) {
         fprintf( out, "\nError: cannot open(%d) : %s", fd, inputFileName );
@@ -40,7 +40,7 @@ int main( int argc, char ** argv) {
             do {
                 idx ++ ;                
                 fprintf( out, "\n[%03d] Try to read %zu byte(s) ...." , idx, (bufSize - tnr) ); 
-                
+                fflush( out );
                 nr = read( fd, buf, bufSize - tnr ) ;
                 tnr += nr ; 
                 

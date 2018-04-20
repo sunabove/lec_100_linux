@@ -6,8 +6,11 @@
 #include <string.h>
 
 int main( int argc, char ** argv) {
-    FILE * out = stdout ; 
-    fprintf( out, "This is a file write program.\n" );
+    FILE * out = stdout ;
+    const char * LINE = "___________________________________________________\n" ; 
+    fprintf( out, "%s", LINE );
+    fprintf( out, "\nA file write program." );
+    fprintf( out, "\n%s", LINE );
 
     int fd  = -1 ;
     const char * fileName = "outputFile.txt" ; 
@@ -32,7 +35,9 @@ int main( int argc, char ** argv) {
         close( fd );
     }
 
-    fprintf( out, "\nGood bye!\n" );
+    fprintf( out, "\n%s", LINE );
+    fprintf( out, "\nGood bye!" );
+    fprintf( out, "\n%s", LINE );
     fflush( out );
     
     return 0;
