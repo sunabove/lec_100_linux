@@ -23,15 +23,10 @@ int main( int argc, char ** argv) {
         fprintf( out, "\nSuccess: file open(%d) : %s" , fd, inputFileName );
         unsigned long word;
         const size_t bufSize = sizeof( word );
-        //size_t bufSize = 8;
         fprintf( out, "\nsizeof unsigned long = %zu", bufSize);
         fprintf( out, "\n%s", LINE );
         fflush( out );
-        if( SSIZE_MAX < bufSize ) { 
-            // check the buffer size
-            fprintf( out, "\nbufSize(%zu) is too large." , bufSize );
-            fflush( out );
-        } else if( SSIZE_MAX >= bufSize ) {
+        if( 1 ) {
             // when the buffer size less than the max size - 1.
             ssize_t tnr = 0;
             ssize_t nr ; 
@@ -42,8 +37,7 @@ int main( int argc, char ** argv) {
                 fprintf( out, "\n[%03d] Try to read %zu byte(s) ...." , idx, (bufSize - tnr) ); 
                 fflush( out );
                 nr = read( fd, buf, bufSize - tnr ) ;
-                tnr += nr ; 
-                
+                tnr += nr ;                 
                 fprintf( out, "\n[%03d] %zu byte(s) read.", idx, nr );
 
                 if( 0 == nr ) { // when end of file is encountered.
