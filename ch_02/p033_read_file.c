@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <limits.h>
 
 int main( int argc, char ** argv) {
     FILE * out = stdout ; 
