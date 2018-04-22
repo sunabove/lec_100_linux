@@ -46,11 +46,9 @@ int main( int argc, char ** argv) {
                     fprintf( out, "\n[%03d] Bad: Total read number : %zu, Current read number : %zu", idx, tnr, nr );
                     fprintf( out, "\n[%03d] Bad: word = 0x%0lX, %zu", idx, word, word );
                     fprintf( out, "\n[%03d] Bad: Reissuing required.", idx );
-
                     buf += nr;
                 } else if( bufSize == tnr ) {
                     fprintf( out, "\n[%03d] Good: word = 0x%0lX, %zu", idx, word, word );
-                    
                     tnr     = 0 ;
                     word    = 0 ;
                     buf     = & word ;
