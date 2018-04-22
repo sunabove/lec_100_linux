@@ -26,6 +26,7 @@ int main( int argc, char ** argv) {
         fprintf( out, "\nsizeof unsigned long = %zu", bufSize);
         fprintf( out, "\n%s", LINE );
         fflush( out );
+        
         if( 1 ) {
             // when the buffer size less than the max size - 1.
             ssize_t tnr = 0;
