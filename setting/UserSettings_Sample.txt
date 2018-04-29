@@ -1,0 +1,23 @@
+{
+    "code-runner.executorMap": {
+        //"c": "gcc $fullFileName && ./a.out" ,
+        //"c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt" ,
+        "c": "cd $dir && gcc $fileName -o a.out && $dir/a.out" ,
+    },
+    "code-runner.runInTerminal": true , 
+    "editor.fontSize": 12 ,
+    //"editor.fontSize": 19 ,
+    "update.enableWindowsBackgroundUpdates": true , 
+    "extensions.autoUpdate": true,
+    "explorer.confirmDelete": false,
+    "workbench.startupEditor": "newUntitledFile",
+    "window.zoomLevel": 2,
+    "git.enableSmartCommit": true,
+    "files.exclude": {
+        ".vscode": true,
+        ".vimrc" : true,
+        ".gitignore": true,
+        "a.out" : true,
+    },
+    "explorer.confirmDragAndDrop": false
+}
