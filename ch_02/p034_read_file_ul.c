@@ -31,7 +31,7 @@ int main( int argc, char ** argv) {
             // when the buffer size less than the max size - 1.
             ssize_t tnr = 0;
             ssize_t nr ; 
-            unsigned long * buf = & word ;
+            void * buf = & word ;
             unsigned int idx = 0 ; 
             do {
                 idx ++ ;                
