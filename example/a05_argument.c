@@ -1,4 +1,4 @@
-/* First C program: Hello World */
+/* c main funtions / argc, argv */
 
 #include <stdio.h>
 
@@ -9,7 +9,7 @@ int main( int argc , char ** argv )
 	const char * LINE = "___________________________________________________\n" ; 
     fprintf( out, "%s", LINE );
  	fprintf( out, "\nArgument Print Program" );
-	 fprintf( out, "\n%s", LINE );
+	fprintf( out, "\n%s", LINE );
 
 	for( int i = 0, iLen = argc ; i < iLen ; i ++ ) {
 		fprintf( out, "\nargv[%d] = %s" , i, argv[i] );
