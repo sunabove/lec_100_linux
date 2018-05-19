@@ -59,7 +59,7 @@ int main( int argc , char ** argv )
 		return 1;
 	}
 	
-	fprintf( console, "name=\"%s\" booty=%lu beard_len=%u\n", p.name, p.booty, p.beard_len);
+	fprintf( console, "\nname=\"%s\" booty=%lu beard_len=%u", p.name, p.booty, p.beard_len);
 
 	fprintf( console, "\n%s", LINE );
     fprintf( console, "\nGood bye!" );
