@@ -40,7 +40,8 @@ int main(int argc, char *argv[]) {
     if (connect(sockfd,&serv_addr,sizeof(serv_addr)) < 0) {
         error("ERROR connecting");
     }
-    printf("Please enter the message: ");
+    fprintf( console, "Please enter the message: ");
+    fflush( console );
     bzero(buffer,256);
     fgets(buffer,255,stdin);
     n = write(sockfd,buffer,strlen(buffer));
@@ -52,6 +53,7 @@ int main(int argc, char *argv[]) {
     if (n < 0) {
         error("ERROR reading from socket");
     }
-    printf("%s\n",buffer);
+    fprintf( console, "%s\n",buffer);
+    fflush( console );
     return 0;
 }
