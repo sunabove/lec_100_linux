@@ -8,8 +8,7 @@
 #include <netdb.h> 
 
 void error(char *msg) {
-    perror(msg);
-    exit(0);
+    perror(msg); 
 }
 
 int main(int argc, char *argv[]) {
@@ -18,7 +17,6 @@ int main(int argc, char *argv[]) {
     struct sockaddr_in serv_addr;
     struct hostent *server;
 
-    char buffer[256];
     if (argc < 3) {
        fprintf(stderr,"usage %s hostname port\n", argv[0]);
        exit(0);
@@ -40,20 +38,33 @@ int main(int argc, char *argv[]) {
     if (connect(sockfd,&serv_addr,sizeof(serv_addr)) < 0) {
         error("ERROR connecting");
     }
-    fprintf( console, "Please enter the message: ");
-    fflush( console );
-    bzero(buffer,256);
-    fgets(buffer,255,stdin);
-    n = write(sockfd,buffer,strlen(buffer));
-    if (n < 0) {
-        error("ERROR writing to socket");
-    } 
-    bzero(buffer,256);
-    n = read(sockfd,buffer,255);
-    if (n < 0) {
-        error("ERROR reading from socket");
+    int valid = 1 ;
+    char buff[256];    
+    while( valid ) {
+        fprintf( console, "Please enter the message: ");
+        fflush( console );
+        bzero(buff,256);
+        fgets(buff,255,stdin);
+
+        if( 'q' == buff[0] ) {
+            valid = 0 ; 
+        } else {            
+            n = write(sockfd,buff,strlen(buff));
+            if ( 0 > n ) {
+                valid = 0 ;
+                error("ERROR writing to socket");
+            } else if ( 0 < n ) {
+                bzero(buff,256);
+                n = read(sockfd,buff,255);
+                if ( 0 > n ) {
+                    valid = 0 ; 
+                    error("ERROR reading from socket");
+                } else if( 0 < n ) {
+                    fprintf( console, "%s\n",buff);
+                    fflush( console );
+                }
+            }
+        }
     }
-    fprintf( console, "%s\n",buffer);
-    fflush( console );
     return 0;
 }

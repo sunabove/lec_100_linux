@@ -21,8 +21,7 @@ int logOut( const char * msg ) {
 } 
 
 void error(char *msg) {
-    perror(msg);
-    exit(1);
+    perror(msg); 
 }
 
 int main(int argc, char *argv[])
@@ -60,10 +59,11 @@ int main(int argc, char *argv[])
         if (pid < 0) {
             error("ERROR on fork");
         } else if (pid == 0) {
+            // child process
             close(sockfd);
-            dostuff(newsockfd);
-            exit(0);
+            dostuff(newsockfd); 
         } else {
+            // parent process
             close(newsockfd);
         }
     }
@@ -78,18 +78,30 @@ int main(int argc, char *argv[])
  *****************************************/
 void dostuff(int sock)
 {
-    int n;
-    char buffer[256];
+    int valid = 1 ;
+    int rn;
+    char buff[256];
 
-    bzero(buffer, 256);
-    n = read(sock, buffer, 255);
-    if (n < 0) {
-        error("ERROR reading from socket");
-    } else {
-        printf("\nHere is the message: %s\n", buffer);
-        n = write(sock, "I got your message", 18);
-        if (n < 0) {
-            error("ERROR writing to socket");
+    while( valid ) {
+        bzero(buff, 256);
+        rn = read(sock, buff, 255);
+        if (rn < 0) {
+            valid = 0 ; 
+            error("ERROR reading from socket");
+            exit(1);
+        } else {
+            printf("\nA client message: %s\n", buff);
+            char msg [1024];
+            snprintf ( msg, 1024, "You have sent a message: %s", buff ); 
+            int wn = write(sock, msg, strlen( msg ));
+            if (wn < 0) {
+                valid = 0 ;
+                wn = write(sock, buff, rn );
+                if( wn < 0 ) {
+                    valid = 0 ;
+                }
+            }
         }
     }
+    exit( 1 );
 }
