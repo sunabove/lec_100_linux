@@ -18,4 +18,4 @@ client-run:
 	./client.out 127.0.0.1 100
 
 clean:
-	$(RM) *.out
+	$(RM) *.out *.o
