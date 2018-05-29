@@ -7,7 +7,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-void dostuff(int sockfd, int clientId ); /* function prototype */
+void dostuff(const int sockfd, const int clientId ); /* function prototype */
 
 int main(int argc, char **argv) {
     FILE * console = stdout ; 
@@ -36,9 +36,9 @@ int main(int argc, char **argv) {
         exit( 1 );
     }
 
-    int clientId = 0;
     struct sockaddr_in clientAddr;
     int clientAddrSize = sizeof(clientAddr);
+    int clientId = 0;
 
     listen(serverSockFd, 5);
     while (1) {
@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
  There is a separate instance of this function for each connection.
  It handles all communication once a connnection has been established.
  *****************************************/
-void dostuff(int sockfd, int clientId) {
+void dostuff(const int sockfd, const int clientId) {
     FILE * console = stdout ;
     int valid = 1 ;
     const int buffLen = 2048;
