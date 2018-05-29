@@ -1,3 +1,4 @@
+/* A simple client */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +8,7 @@
 #include <netinet/in.h>
 #include <netdb.h> 
 
-int main(int argc, char *argv[]) {
+int main(int argc, char **argv) {
     FILE * console = stdout ; 
     
     if (argc < 3) {
@@ -34,7 +35,7 @@ int main(int argc, char *argv[]) {
     bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
     serv_addr.sin_port = htons(portno);
     
-    if (connect(sockfd, (struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) {
+    if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
         perror("ERROR connecting");
         exit( 1 );
     }
