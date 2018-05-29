@@ -1,4 +1,4 @@
-a.out
-*.out
+#a.out
+#*.out
 *.o
 #sample/*
