@@ -42,12 +42,12 @@ int main(int argc, char **argv) {
 
     int valid = 1 ;
     int n ; 
-    char buff[256];    
+    char buff[1024];    
     while( valid ) {
         fprintf( console, "Please enter the message: ");
         fflush( console );
-        bzero(buff,256);
-        fgets(buff,255,stdin);
+        bzero(buff, sizeof(buff));
+        fgets(buff, sizeof(buff),stdin);
 
         if( 'q' == buff[0] ) {
             valid = 0 ; 

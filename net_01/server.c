@@ -50,15 +50,12 @@ int main(int argc, char **argv) {
             perror("ERROR on accept");
 	    } if ( 0 <= clientSockFd ) {
             int pid = fork();
-            if (pid < 0) {
-                // fork error
+            if (pid < 0) { // fork error
                 perror("ERROR on fork");
-            } else if (pid == 0) {
-                // child process
+            } else if (pid == 0) { // child process
                 close(serverSockFd);
                 dostuff(clientSockFd, clientId); 
-            } else {
-                // parent process
+            } else { // parent process
                 close(clientSockFd);
             }
         }
@@ -73,32 +70,37 @@ int main(int argc, char **argv) {
 void dostuff(const int sockfd, const int clientId) {
     FILE * console = stdout ;
     int valid = 1 ;
-    const int buffLen = 2048;
-    char buff[buffLen];
+    char readMsg[2048];
 
     while( valid ) {
-        bzero(buff, buffLen);
-        int rn = read(sockfd, buff, buffLen);
-        if (rn < 0) {
+        bzero(readMsg, sizeof(readMsg));
+
+        // read a line
+        int rn = 0 ;
+        char * buf = readMsg;
+        do {
+            buf += rn ;
+            rn = read(sockfd, buf, 1);
+        } while( -1 < rn && '\n' != *buf );
+        // -- read a line
+
+        if ( 0 > rn ) {
             valid = 0 ; 
-            fprintf(console,"\n[%03d] ERROR reading from socket", clientId);
+            fprintf(console,"\n[%03d] ERROR: reading from socket", clientId);
             fflush( console );
             exit(1);
-        } else {
-            fprintf( console, "\n[%03d] A client message: %s", clientId, buff);
+        } else if( -1 < rn ) {
+            fprintf( console, "\n[%03d] a client message: %s", clientId, readMsg);
             fflush( console );
-            const int msgLen = 2048;
-            char msg [msgLen];
-            snprintf ( msg, msgLen, "[%03d] You have sent a message: %s", clientId, buff ); 
-            int wn = write(sockfd, msg, strlen( msg ));
+            char sendMsg [2048];
+            snprintf ( sendMsg, sizeof(sendMsg), "[%03d] You have sent a message: %s", clientId, readMsg ); 
+            int wn = write(sockfd, sendMsg, strlen( sendMsg ));
             if (wn < 0) {
                 valid = 0 ;
-                wn = write(sockfd, buff, rn );
-                if( wn < 0 ) {
-                    valid = 0 ;
-                }
             }
         }
     }
     exit( 1 );
 }
+// -- dostuff
+// --
