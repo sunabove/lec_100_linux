@@ -17,7 +17,7 @@ class ClientSocket  {
         void * clientSocketListPtr ; 
 } ;
 
-void chatWithClient( void * args );  
+void * chatWithClient( void * args );  
 
 const char * appName = "HANSEI Linux Multi Chat Room System v1.0" ;
 
@@ -78,18 +78,8 @@ int main(int argc, char **argv) {
                 
             clientSocketList.push_back( clientSocket );
 
-            int pid = fork(); // try to make a child process
-
-            if (pid < 0) { // fork error
-                perror("ERROR on fork");
-                clientSocketList.remove( clientSocket );
-            } else if (pid == 0) { // child process
-                close(serverSockFd);
-
-                chatWithClient( clientSocket ); 
-            } else { // parent process
-                close(clientSockFd);
-            }
+            pthread_t thread ;
+            pthread_create (&thread, NULL, chatWithClient, (void *) &clientSocket );             
         }
     }
     return 0;
@@ -113,7 +103,7 @@ int writeClientMessage( int sockfd, char * sendMsg , int msgLen ) {
 }
 
 // There is a separate instance of this function for each connection.
-void chatWithClient( void * args ) { 
+void * chatWithClient( void * args ) { 
     FILE * console = stdout ;
     
     ClientSocket * clientSocket = (ClientSocket *) args ;
@@ -176,7 +166,7 @@ void chatWithClient( void * args ) {
     fprintf( console, "\nThe client(id = %03d) disconnected.\n", clientId );
     fflush( console );
 
-    exit(1);
+    return 0;
 }
 // -- dostuff
 // --
