@@ -88,7 +88,7 @@ void * writeMessageThread( ClientSocket * clientSocket ) {
         bzero( buff, sizeof( buff ) );
         fgets( buff, sizeof( buff ), stdin );
 
-        if( 'q' == buff[0] ) {
+        if( 'q' == buff[0] || 'Q' == buff[0] ) {
             * validPtr = 0 ; 
         }
 
@@ -112,8 +112,14 @@ void * readMessageThread( void * args ) {
     fprintf( console, "\n%s\n", "Reading Thread started." );
     fflush( console );
 
-    int readMsgCount = 0 ; 
+    size_t readMsgCount = 0 ; 
     while( *validPtr ) { 
+        bool doLog = false ; 
+        if( doLog ){
+            fprintf( console, "\n[%03zu] Reading a line ..." , readMsgCount );
+            fflush( console );
+        }
+
         int rn = 0 ; 
         // read a line 
         char readMsg[1024 + 1]; 
@@ -127,16 +133,21 @@ void * readMessageThread( void * args ) {
             // -- read a line
         }
 
+        if( doLog ) {
+            fprintf( console, " done\n" );
+            fflush( console );
+        }
+
         if ( 0 > rn ) {
             *validPtr = 0 ; 
             perror("ERROR reading from socket");
         } else if( 0 < rn ) {
             readMsgCount ++;
-            fprintf( console, "Message[%03d] = %s", readMsgCount, readMsg );
+            fprintf( console, "%s", readMsg );
             fflush( console );
 
             if( 1 == readMsgCount ) {
-                fprintf( console, "\nPlease enter the message: ");
+                fprintf( console, "\nEnter a message: ");
                 fflush( console );        
             }
         }
