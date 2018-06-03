@@ -16,8 +16,8 @@ class ClientSocket {
         FILE * console ; 
 };
 
-void * startWriteThread( void * validPtr );  
-void * startReadThread( void * validPtr );  
+void * readMessageThread( void * args );  
+void * writeMessageThread( ClientSocket * clientSocket );  
 
 int main(int argc, char **argv) {
     FILE * console = stdout ; 
@@ -59,22 +59,19 @@ int main(int argc, char **argv) {
     clientSocket.console    = console ; 
 
     pthread_t readThread ;
-    pthread_create (&readThread, NULL, startReadThread, (void *) & clientSocket ); 
+    pthread_create (&readThread, NULL, readMessageThread, & clientSocket ); 
 
-    pthread_t writeThread ;
-    pthread_create (&writeThread, NULL, startWriteThread, (void *) & clientSocket ); 
+    writeMessageThread( & clientSocket ); 
 
     /*  Wait for the threads to exit. */
    	pthread_join (readThread, NULL);
-   	pthread_join (writeThread, NULL);
 
     fprintf( console, "\nGood bye!\n" );
 
     return 0;
 }
 
-void * startWriteThread( void * args ) {
-    ClientSocket * clientSocket = (ClientSocket *) args ; 
+void * writeMessageThread( ClientSocket * clientSocket ) { 
     FILE * console  = clientSocket->console     ; 
     int * validPtr  = clientSocket->validPtr    ; 
     int sockfd      = clientSocket->sockfd      ;
@@ -86,8 +83,8 @@ void * startWriteThread( void * args ) {
     char buff[1024 + 1];  
 
     while( * validPtr ) {
-        fprintf( console, "Please enter the message: ");
-        fflush( console );
+        //fprintf( console, "Please enter the message: ");
+        //fflush( console );
         bzero( buff, sizeof( buff ) );
         fgets( buff, sizeof( buff ), stdin );
 
@@ -95,38 +92,57 @@ void * startWriteThread( void * args ) {
             * validPtr = 0 ; 
         }
 
-        wn = write(sockfd,buff,strlen(buff));
+        wn = write( sockfd, buff, strlen(buff) );
 
         if ( 0 > wn ) {
             * validPtr = 0 ;
             perror("ERROR writing to socket");
         } 
     }
+
+    return 0;
 }
 
-void * startReadThread( void * args ) { 
+void * readMessageThread( void * args ) { 
     ClientSocket * clientSocket = (ClientSocket *) args ; 
     FILE * console  = clientSocket->console     ; 
     int * validPtr  = clientSocket->validPtr    ; 
     int sockfd      = clientSocket->sockfd       ;
     
     fprintf( console, "\n%s\n", "Reading Thread started." );
-    fflush( console ); 
-    
-    char buff[1024 + 1];  
+    fflush( console );
 
-    int rn ; 
+    int readMsgCount = 0 ; 
     while( *validPtr ) { 
-        bzero(buff, sizeof( buff ));
-        rn = read(sockfd,buff, sizeof( buff ) - 1 );
+        int rn = 0 ; 
+        // read a line 
+        char readMsg[1024 + 1]; 
+        if( *validPtr ) {
+            bzero( readMsg, sizeof( readMsg ));
+            char * buff = readMsg ;
+            do { 
+                buff += rn ; 
+                rn = read( sockfd, buff, 1 );
+            } while( *validPtr && -1 <rn && '\n' != *buff );
+            // -- read a line
+        }
+
         if ( 0 > rn ) {
             *validPtr = 0 ; 
             perror("ERROR reading from socket");
         } else if( 0 < rn ) {
-            fprintf( console, "%s\n",buff);
+            readMsgCount ++;
+            fprintf( console, "Message[%03d] = %s", readMsgCount, readMsg );
             fflush( console );
+
+            if( 1 == readMsgCount ) {
+                fprintf( console, "\nPlease enter the message: ");
+                fflush( console );        
+            }
         }
     }
+
+    return 0 ;
 }
 
 // -- 

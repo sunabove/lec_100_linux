@@ -11,10 +11,16 @@
 
 class ClientSocket  {
     public: 
+        bool closed ;
         int sockfd;
         int clientId ;
         const char * appName ; 
         void * clientSocketListPtr ; 
+
+    public:
+        ClientSocket() {
+            this->closed = false ; 
+        }
 } ;
 
 void * chatWithClient( void * args );  
@@ -59,9 +65,7 @@ int main(int argc, char **argv) {
 
     listen(serverSockFd, 5);
 
-    std::list<ClientSocket * > clientSocketList ;
-    void * clientSocketListPtr = & clientSocketList ; 
-
+    //std::list<ClientSocket * > clientSocketList ; 
     while (1) {
         clientId ++;
         fprintf( console, "\n[%03d] Acceping a client connection...\n" , clientId );
@@ -70,24 +74,23 @@ int main(int argc, char **argv) {
         if ( 0 > clientSockFd ) {
             perror("ERROR on accept");
 	    } if ( 0 <= clientSockFd ) {
-            ClientSocket * clientSocket = new ClientSocket() ;
-            clientSocket->sockfd = clientSockFd ;
-            clientSocket->clientId = clientId ;
-            clientSocket->appName = appName ;
-            clientSocket->clientSocketListPtr = clientSocketListPtr ;
+            ClientSocket clientSocket ;
+            clientSocket.sockfd = clientSockFd ;
+            clientSocket.clientId = clientId ;
+            clientSocket.appName = appName ;
                 
-            clientSocketList.push_back( clientSocket );
-
             pthread_t thread ;
-            pthread_create (&thread, NULL, chatWithClient, (void *) &clientSocket );             
+            pthread_create (&thread, NULL, chatWithClient, &clientSocket );             
         }
     }
+    
     return 0;
 }
 
 // read a client message
-int readClientMessage( int sockfd , char * buff ) {
+int readClientMessage( int sockfd , char * readMsg ) {
     int rn = 0 ; 
+    char * buff = readMsg;
     do {
         buff += rn ;
         rn = read(sockfd, buff, 1);
@@ -97,8 +100,20 @@ int readClientMessage( int sockfd , char * buff ) {
 }
 
 // write a message to the client
-int writeClientMessage( int sockfd, char * sendMsg , int msgLen ) {
-    int wn = write(sockfd, sendMsg, msgLen );
+int writeClientMessage( int sockfd, char * sendMsg ) {
+    const int msgLen = strlen( sendMsg );
+    int wn = 0 , twn = 0 ;
+    char * buff = sendMsg ;
+    do {  
+        twn  += wn; 
+        buff += wn ; 
+        wn = write( sockfd, buff, msgLen - twn );        
+    } while ( -1 < wn && twn < msgLen );
+
+    if ( 0 < msgLen && '\n' != sendMsg[ msgLen -1 ] ) { 
+        wn += write( sockfd , "\n", 1 );
+    }
+
     return wn;
 }
 
@@ -106,27 +121,31 @@ int writeClientMessage( int sockfd, char * sendMsg , int msgLen ) {
 void * chatWithClient( void * args ) { 
     FILE * console = stdout ;
     
-    ClientSocket * clientSocket = (ClientSocket *) args ;
-    const int sockfd        = clientSocket->sockfd      ;
-    const int clientId      = clientSocket->clientId    ;
-    const char * appName    = clientSocket->appName     ; 
+    ClientSocket clientSocket = * ((ClientSocket *) args) ;
+    const int sockfd        = clientSocket.sockfd      ;
+    const int clientId      = clientSocket.clientId    ;
+    const char * appName    = clientSocket.appName     ; 
 
-    std::list<ClientSocket * > * clientSocketListPtr = (std::list<ClientSocket * > *) clientSocket->clientSocketListPtr ; 
+    std::list<ClientSocket * > * clientSocketListPtr = (std::list<ClientSocket * > *) clientSocket.clientSocketListPtr ; 
     
     fprintf( console, "\nA Process(clientId = %03d) started.", clientId );
 
     int valid = 1 ;
-    char readMsg[2048];
-
+    
     if( 1 ) {
         // send a welcome message to client.
         char sendMsg [2048];
+        bzero( sendMsg, sizeof(sendMsg) );
         snprintf ( sendMsg, sizeof(sendMsg), "Welcome to %s" , appName ); 
-        int wn = writeClientMessage(sockfd, sendMsg, strlen( sendMsg ));
+        int wn = writeClientMessage(sockfd, sendMsg );
         if (wn < 0) {
             valid = 0 ;
         }
+        fprintf( console, "\nWelcome message sent." );
+        fflush( console );
     }
+
+    char readMsg[2048];
 
     while( valid ) {
         bzero(readMsg, sizeof(readMsg));
@@ -141,27 +160,30 @@ void * chatWithClient( void * args ) {
             exit(1);
         } else if( -1 < rn ) {
             if( 'q' == readMsg[0] ) { // quit this chatting.
+                fprintf(console, "Quit message.\n" );
                 valid = 0 ; 
             } else { // send a response message.
                 fprintf( console, "\n[%03d] A client message: %s", clientId, readMsg);
                 fflush( console );
-                char sendMsg [2048];
-                snprintf ( sendMsg, sizeof(sendMsg), "[%03d] %s\n", clientId, readMsg ); 
                 
-                fprintf( console, "\nclient size = %zu\n" , clientSocketListPtr->size() );
+                char sendMsg [2048];
+                bzero( sendMsg, sizeof(sendMsg) );
+                snprintf ( sendMsg, sizeof(sendMsg), "Your message = %s", readMsg ); 
+
+                fprintf(console, "\nMsg sent: %s" , sendMsg );
                 fflush( console );
 
                 int wn = 0 ; 
-                for (ClientSocket * cs : * clientSocketListPtr ) { 
-                    wn = writeClientMessage( cs->sockfd, sendMsg, strlen( sendMsg ));                
-                    if (wn < 0) {
-                        valid = 0 ;
-                        break ; 
-                    }
+                wn = writeClientMessage( sockfd, sendMsg );                
+                if (wn < 0) {
+                    valid = 0 ; 
                 }
             }
         }
     } 
+
+    clientSocket.closed = 1 ; ; 
+    close( sockfd );
 
     fprintf( console, "\nThe client(id = %03d) disconnected.\n", clientId );
     fflush( console );
