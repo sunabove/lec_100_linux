@@ -18,6 +18,8 @@
         ".vimrc" : true,
         ".gitignore": true,
         "a.out" : true,
+        "**/*.o" : true,
+        "**/*.out" : true,
     },
     "explorer.confirmDragAndDrop": false
 }

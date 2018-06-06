@@ -120,18 +120,20 @@ void * chatWithClient( void * args ) {
             fflush( console );
             exit(1);
         } else if( true == messageRead.valid ) {
-            if( "quit" == messageRead.text || "Quit" == messageRead.text ) { // quit this chatting.
+            if( 0 < messageRead.text.size() && 'q' == messageRead.text.c_str()[0] ) {
+                // quit this chatting.
                 fprintf(console, "Quit message.\n" );
                 socket->valid = false ; 
-            } else { // send a response message.
+            } else { 
+                // send a response message.
                 fprintf( console, "\n[%03d] A client message: %s", clientId, messageRead.text.c_str() );
                 fflush( console );
                 
-                Message messageSend ;
-                messageSend.clientId = clientId ; 
-                messageSend.text = messageRead.text ;
+                Message messageResponse ;
+                messageResponse.clientId = clientId ; 
+                messageResponse.text = messageRead.text ;
 
-                chatRoom->appendMessage( & messageSend );
+                chatRoom->appendMessage( & messageResponse );
             }
         }
     } 
