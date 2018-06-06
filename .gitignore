@@ -1,4 +1,9 @@
 a.out
 *.out
 *.o
+.cproject
+.project
+language.settings.xml
 #sample/*
+/.metadata/
+#/net_04_protocol_org/
