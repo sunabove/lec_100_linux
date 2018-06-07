@@ -21,16 +21,18 @@ class Socket  {
 
     bool valid ; 
     int sockfd;
-    int clientId ;
+    unsigned int clientId ;
     const char * appName ;  
     ChatRoom * chatRoom ; 
     FILE * console ;
+    unsigned int readMessageCount ;
 
     public:
 
     Socket() { 
         this->valid = true ; 
         this->console = stdout ; 
+        this->readMessageCount = 0 ; 
     }
 
     // read a client message
@@ -47,15 +49,17 @@ class Socket  {
         } while( -1 < rn && '\n' != *buff );
 
         Message message ;
-        message.clientId = clientId ; 
+        message.clientId = this->clientId ; 
         message.text = -1 < rn ? readMsg : "" ;
         message.valid = -1 < rn ? true : false ; 
+
+        this->readMessageCount += message.valid ? 1 : 0 ; 
         
         return message ;
     } 
 
     public :
-    int writeMessage( char * text ) {
+    int writeMessage( const char * text ) {
         Message message ;
         message.clientId = this->clientId ;
         message.text = text ;
@@ -73,9 +77,8 @@ class Socket  {
 
         int wn = 0 ; 
         wn = this->writeClientMessage( sockfd, sendMsg );                
-        if (wn < 0) {
-            this->valid = false ; 
-        }
+        
+        this->valid = -1 < wn ; 
 
         return wn;
     }

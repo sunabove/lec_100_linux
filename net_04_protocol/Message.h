@@ -4,7 +4,7 @@
 
 class Message {
     public:
-        int clientId ;
+        unsigned int clientId ;
         std::string text ; 
         bool valid ;
     

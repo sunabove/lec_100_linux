@@ -89,8 +89,7 @@ void * writeMessageThread( Socket * socket ) {
 
 void * readMessageThread( void * args ) { 
     Socket * socket = (Socket *) args ; 
-    FILE * console  = socket->console  ;  
-    int sockfd      = socket->sockfd   ;
+    FILE * console  = socket->console  ;
     
     fprintf( console, "\n%s\n", "Reading Thread started." );
     fflush( console );
@@ -98,41 +97,24 @@ void * readMessageThread( void * args ) {
     size_t readMsgCount = 0 ; 
     while( socket->valid  ) { 
         bool doLog = false ; 
-        if( doLog ){
+        if( doLog ) {
             fprintf( console, "\n[%03zu] Reading a line ..." , readMsgCount );
             fflush( console );
         }
 
-        int rn = 0 ; 
-        // read a line 
-        char readMsg[1024 + 1]; 
-        if( socket->valid ) {
-            bzero( readMsg, sizeof( readMsg ));
-            char * buff = readMsg ;
-            do { 
-                buff += rn ; 
-                rn = read( sockfd, buff, 1 );
-            } while( socket->valid  && -1 <rn && '\n' != *buff );
-            // -- read a line
-        }
+        Message messageRead = socket->readMessage();
 
         if( doLog ) {
             fprintf( console, " done\n" );
             fflush( console );
         }
 
-        if ( 0 > rn ) {
-            socket->valid = 0 ; 
+        if ( false == socket->valid) {
             perror("ERROR reading from socket");
-        } else if( 0 < rn ) {
+        } else if( socket->valid ) {
             readMsgCount ++;
-            fprintf( console, "%s", readMsg );
+            fprintf( console, "%s", messageRead.text.c_str() );
             fflush( console );
-
-            if( 1 == readMsgCount ) {
-                fprintf( console, "\nEnter a message: ");
-                fflush( console );        
-            }
         }
     }
 

@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 
     struct sockaddr_in clientAddr;
     socklen_t clientAddrSize = sizeof(clientAddr);
-    int clientId = 0;
+    unsigned int clientId = 0;
 
     listen(serverSockFd, 5);
 
@@ -91,7 +91,7 @@ void * chatWithClient( void * args ) {
     
     Socket * socket = (Socket *) args ;
     const int sockfd            = socket->sockfd      ;
-    const int clientId          = socket->clientId    ;
+    const unsigned int clientId = socket->clientId    ;
     const char * appName        = socket->appName     ; 
     ChatRoom * chatRoom   = socket->chatRoom  ;
 
@@ -102,12 +102,13 @@ void * chatWithClient( void * args ) {
         char sendMsg [2048];
         bzero( sendMsg, sizeof(sendMsg) );
         snprintf ( sendMsg, sizeof(sendMsg), "Welcome to %s" , appName ); 
-        int wn = socket->writeMessage( sendMsg );
-        if (wn < 0) {
-            socket->valid = false ;
-        }
+        socket->writeMessage( sendMsg );
         fprintf( console, "\nWelcome message sent." );
         fflush( console );
+    }
+
+    if( socket->valid ) {
+        socket->writeMessage( "Enter a message: " );
     }
 
     while( socket->valid ) {
@@ -142,7 +143,7 @@ void * chatWithClient( void * args ) {
 
     close( sockfd );
 
-    fprintf( console, "\nThe client(id = %03d) disconnected.\n", clientId );
+    fprintf( console, "\nA client(id = %03d) disconnected.\n", clientId );
     fflush( console );
 
     return 0;
