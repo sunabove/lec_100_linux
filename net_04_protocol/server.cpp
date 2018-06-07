@@ -63,12 +63,11 @@ int main(int argc, char **argv) {
         clientId ++;
         fprintf( console, "\n[%03d] Acceping a client connection...\n" , clientId );
         fflush( console );
-        int clientSockFd = accept(serverSockFd, (struct sockaddr *)&clientAddr, &clientAddrSize);
+        const int clientSockFd = accept(serverSockFd, (struct sockaddr *)&clientAddr, &clientAddrSize);
         if ( 0 > clientSockFd ) {
             perror("ERROR on accept");
 	    } if ( 0 <= clientSockFd ) {
-            Socket * socket = new Socket();
-            socket->sockfd = clientSockFd ;
+            Socket * socket = new Socket( clientSockFd );
             socket->clientId = clientId ;
             socket->valid = true ;
             socket->console = console;
@@ -90,7 +89,6 @@ void * chatWithClient( void * args ) {
     FILE * console = stdout ;
     
     Socket * socket = (Socket *) args ;
-    const int sockfd            = socket->sockfd      ;
     const unsigned int clientId = socket->clientId    ;
     const char * appName        = socket->appName     ; 
     ChatRoom * chatRoom   = socket->chatRoom  ;
@@ -123,7 +121,7 @@ void * chatWithClient( void * args ) {
         } else if( true == messageRead.valid ) {
             if( 0 < messageRead.text.size() && 'q' == messageRead.text.c_str()[0] ) {
                 // quit this chatting.
-                fprintf(console, "Quit message.\n" );
+                fprintf(console, "Quit message.\n" ); 
                 socket->valid = false ; 
             } else { 
                 // send a response message.
@@ -141,7 +139,7 @@ void * chatWithClient( void * args ) {
 
     socket->valid = false ;  
 
-    close( sockfd );
+    socket->close(); 
 
     fprintf( console, "\nA client(id = %03d) disconnected.\n", clientId );
     fflush( console );

@@ -38,10 +38,8 @@ int main(int argc, char **argv) {
         exit( 1 );
     } 
 
-    Socket socket;
-    socket.sockfd     = sockfd;
-    socket.valid      = 1 ; 
-    socket.console    = console ; 
+    Socket socket( sockfd );   
+    socket.console = console ; 
 
     pthread_t readThread ;
     pthread_create (&readThread, NULL, readMessageThread, & socket ); 
@@ -57,31 +55,22 @@ int main(int argc, char **argv) {
 }
 
 void * writeMessageThread( Socket * socket ) { 
-    FILE * console  = socket->console     ;
-    int sockfd      = socket->sockfd      ;
+    FILE * console  = socket->console     ; 
 
     fprintf( console, "\n%s\n", "Writing Thread started." );
     fflush( console );    
 
-    int wn ; 
     char buff[1024 + 1];  
 
-    while( socket->valid ) {
-        //fprintf( console, "Please enter the message: ");
-        //fflush( console );
+    while( socket->valid ) { 
         bzero( buff, sizeof( buff ) );
         fgets( buff, sizeof( buff ), stdin );
 
+        socket->writeMessage( buff );
+
         if( 'q' == buff[0] || 'Q' == buff[0] ) {
-            socket->valid = 0 ; 
+            socket->valid = false ; 
         }
-
-        wn = write( sockfd, buff, strlen(buff) );
-
-        if ( 0 > wn ) {
-            socket->valid = 0 ;
-            perror("ERROR writing to socket");
-        } 
     }
 
     return 0;
