@@ -20,60 +20,34 @@ class Socket  {
     public: 
 
     bool valid ; 
-    FILE * stream ;
-    unsigned int clientId ;
+    int sockfd;
+    int clientId ;
     const char * appName ;  
     ChatRoom * chatRoom ; 
     FILE * console ;
-    unsigned int readMessageCount ;
 
-    // constructor
-    public: Socket(const int sockfd) { 
-        this->stream = fdopen( sockfd, "r+" );
-        this->valid = true ; 
+    public:
+
+    Socket() { 
+        this->valid = 1; 
         this->console = stdout ; 
-        this->readMessageCount = 0 ; 
     }
-    // -- constructor
 
     // read a client message
-    public: Message readMessage( ) {
-        char readMsg[2048];
-        bzero(readMsg, sizeof(readMsg));
-
-        FILE * stream = this->stream ; 
+    int readClientMessage( char * readMsg ) {
+        int sockfd = this->sockfd ; 
+        int rn = 0 ; 
         char * buff = readMsg;
-        int c ;
         do {
-            c = fgetc( stream );
-            if( EOF == c ) {
-                // error
-            } else {  
-                *buff = (char) c;
-                buff ++ ;
-            } 
-        } while( EOF != c && '\n' != *buff );
+            buff += rn ;
+            rn = read(sockfd, buff, 1);
+        } while( -1 < rn && '\n' != *buff );
 
-        Message message ;
-        message.clientId = this->clientId ; 
-        message.text  = EOF == c ? "" : readMsg ;
-        message.valid = EOF == c ? false : true ; 
-
-        this->readMessageCount += message.valid ? 1 : 0 ; 
-        
-        return message ;
+        return rn ;
     } 
 
-    public : int writeMessage( const char * text ) {
-        Message message ;
-        message.clientId = this->clientId ;
-        message.text = text ;
-
-        return this->writeMessage( & message );
-    }
-
     // write a message
-    public: int writeMessage( Message * message ) {
+    void writeMessage( Message * message ) {
         char sendMsg [2048];
         bzero( sendMsg, sizeof(sendMsg) );
         message->text.c_str();
@@ -81,48 +55,31 @@ class Socket  {
         snprintf ( sendMsg, sizeof(sendMsg), "%s%s", name, message->text.c_str() ); 
 
         int wn = 0 ; 
-        wn = this->writeMessageOnStream( sendMsg );                
-        
-        this->valid = -1 < wn ; 
-
-        return wn;
+        wn = this->writeClientMessage( sockfd, sendMsg );                
+        if (wn < 0) {
+            this->valid = false ; 
+        }
     }
 
     // write a message to the client
-    private: int writeMessageOnStream( char * sendMsg ) {
-        FILE * stream = this->stream ; 
+    int writeClientMessage( int sockfd, char * sendMsg ) {
         const int msgLen = strlen( sendMsg );
+        int wn = 0 , twn = 0 ;
         char * buff = sendMsg ;
-        int c ;
-        int wn = 0 ; 
         do {  
-            c = fputc( *buff , stream );
-            wn = ( EOF == c ) ? 0 : 1 ;
-        } while ( EOF != c && msgLen > wn );
+            twn  += wn; 
+            buff += wn ; 
+            wn = write( sockfd, buff, msgLen - twn );        
+        } while ( -1 < wn && twn < msgLen );
 
-        if ( EOF != c && 0 < msgLen && '\n' != sendMsg[ msgLen -1 ] ) { 
-            c = fputc( '\n' , stream );
-        }
-
-        if( EOF == c ) {
-            this->valid = false ;
-        } else if( EOF != c ) {
-            fflush( stream );
+        if ( 0 < msgLen && '\n' != sendMsg[ msgLen -1 ] ) { 
+            wn += write( sockfd , "\n", 1 );
         }
 
         fprintf(console, "\nMsg sent to client(%03d): %s" , clientId, sendMsg );
         fflush( console );
 
         return wn;
-    }
-
-    public: void close() {
-        FILE * stream = this->stream ;
-        if( NULL != stream ) {
-            fflush( stream );
-            fclose( stream );
-            this->stream = NULL ;
-        }
     }
 
 } ;

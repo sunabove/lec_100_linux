@@ -2,8 +2,6 @@ CC = g++
 CFLAGS  = -g -Wall
 LDFLAGS = -pthread 
 
-all : server client
-
 %.o: %.cpp $(DEPS)
 	$(CC) $< -c -o $@ $(CFLAGS)
 
