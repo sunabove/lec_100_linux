@@ -38,6 +38,10 @@ class ChatRoom {
 
         for( auto & socket : * sockets ) {
             socket->writeMessage( message );
+
+            fprintf(console, "\nMsg sent to client(%03d): %s" , socket->clientId, message->text.c_str() );
+            fflush( console );
+
         }
     };
     

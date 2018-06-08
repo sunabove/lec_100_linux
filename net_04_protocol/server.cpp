@@ -90,60 +90,55 @@ void * chatWithClient( void * args ) {
     FILE * console = stdout ;
     
     Socket * socket = (Socket *) args ;
-    const int sockfd            = socket->sockfd      ;
     const int clientId          = socket->clientId    ;
-    bool * validPtr             = & socket->valid     ; 
     const char * appName        = socket->appName     ; 
     ChatRoom * chatRoom   = socket->chatRoom  ;
 
     fprintf( console, "\nA Process(clientId = %03d) started.", clientId );
 
-    if( *validPtr ) {
+    if( socket->valid ) {
         // send a welcome message to client.
         char sendMsg [2048];
         bzero( sendMsg, sizeof(sendMsg) );
         snprintf ( sendMsg, sizeof(sendMsg), "Welcome to %s" , appName ); 
-        int wn = socket->writeClientMessage(sockfd, sendMsg );
-        if (wn < 0) {
-            *validPtr = false ;
-        }
+        
+        Message message ;
+        message.text = sendMsg ;
+        message.clientId = clientId ;
+
+        socket->writeMessage( & message );
+        message.text = "Enter a message";
+        socket->writeMessage( & message );
+
         fprintf( console, "\nWelcome message sent." );
         fflush( console );
     }
 
-    char readMsg[2048];
-
-    while( *validPtr ) {
-        bzero(readMsg, sizeof(readMsg));
-
+    while( socket->valid ) {
         // read a line
-        int rn = socket->readClientMessage( readMsg ); 
+        Message message = socket->readMessage( ); 
 
-        if ( 0 > rn ) {
-            *validPtr = false ; 
+        if ( false == message.valid ) {
+            socket->valid = false ; 
             fprintf(console,"\n[%03d] ERROR: reading from socket", clientId);
             fflush( console );
             exit(1);
-        } else if( -1 < rn ) {
-            if( 'q' == readMsg[0] ) { // quit this chatting.
+        } else if( message.valid ) {
+            if( 0 < message.text.size() && 'q' == message.text.c_str()[0] ) { // quit this chatting.
                 fprintf(console, "Quit message.\n" );
-                *validPtr = false ; 
+                socket->valid = false ; 
             } else { // send a response message.
-                fprintf( console, "\n[%03d] A client message: %s", clientId, readMsg);
+                fprintf( console, "\n[%03d] A client message: %s", clientId, message.text.c_str() );
                 fflush( console );
-                
-                Message message ;
-                message.clientId = clientId ; 
-                message.text = readMsg ;
 
                 chatRoom->appendMessage( & message );
             }
         }
     } 
 
-    *validPtr = false ;  
+    socket->valid = false ;  
 
-    close( sockfd );
+    close( socket->sockfd );
 
     fprintf( console, "\nThe client(id = %03d) disconnected.\n", clientId );
     fflush( console );

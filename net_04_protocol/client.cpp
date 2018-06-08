@@ -58,30 +58,30 @@ int main(int argc, char **argv) {
 
 void * writeMessageThread( Socket * socket ) { 
     FILE * console  = socket->console     ;
-    int sockfd      = socket->sockfd      ;
 
     fprintf( console, "\n%s\n", "Writing Thread started." );
     fflush( console );    
 
-    int wn ; 
     char buff[1024 + 1];  
 
     while( socket->valid ) {
         //fprintf( console, "Please enter the message: ");
         //fflush( console );
+
+        // read a line
         bzero( buff, sizeof( buff ) );
         fgets( buff, sizeof( buff ), stdin );
 
+        Message message ;
+        message.text = buff ; 
+        socket->writeMessage( & message );
+
         if( 'q' == buff[0] || 'Q' == buff[0] ) {
-            socket->valid = 0 ; 
-        }
+            fprintf( console, "\nQuit chatting." );
+            fflush( console ); 
 
-        wn = write( sockfd, buff, strlen(buff) );
-
-        if ( 0 > wn ) {
-            socket->valid = 0 ;
-            perror("ERROR writing to socket");
-        } 
+            socket->valid = false ; 
+        }     
     }
 
     return 0;
@@ -89,8 +89,7 @@ void * writeMessageThread( Socket * socket ) {
 
 void * readMessageThread( void * args ) { 
     Socket * socket = (Socket *) args ; 
-    FILE * console  = socket->console  ;  
-    int sockfd      = socket->sockfd   ;
+    FILE * console  = socket->console  ; 
     
     fprintf( console, "\n%s\n", "Reading Thread started." );
     fflush( console );
@@ -103,36 +102,20 @@ void * readMessageThread( void * args ) {
             fflush( console );
         }
 
-        int rn = 0 ; 
-        // read a line 
-        char readMsg[1024 + 1]; 
-        if( socket->valid ) {
-            bzero( readMsg, sizeof( readMsg ));
-            char * buff = readMsg ;
-            do { 
-                buff += rn ; 
-                rn = read( sockfd, buff, 1 );
-            } while( socket->valid  && -1 <rn && '\n' != *buff );
-            // -- read a line
-        }
+        Message message = socket->readMessage();
 
         if( doLog ) {
             fprintf( console, " done\n" );
             fflush( console );
         }
 
-        if ( 0 > rn ) {
-            socket->valid = 0 ; 
+        if ( false == message.valid ) {
+            socket->valid = false ; 
             perror("ERROR reading from socket");
-        } else if( 0 < rn ) {
+        } else if( message.valid ) {
             readMsgCount ++;
-            fprintf( console, "%s", readMsg );
-            fflush( console );
-
-            if( 1 == readMsgCount ) {
-                fprintf( console, "\nEnter a message: ");
-                fflush( console );        
-            }
+            fprintf( console, "%s", message.text.c_str() );
+            fflush( console ); 
         }
     }
 
