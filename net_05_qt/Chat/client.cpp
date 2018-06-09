@@ -1,26 +1,14 @@
-/* A simple client */
-#include <stdio.h>
+/* client */ 
 
-#include "Socket.h"
+#include "client.h"
 
 void * readMessageThread( void * args );  
 void * writeMessageThread( Socket * socket );  
 
-int main(int argc, char **argv) {
-    FILE * console = stdout ; 
+int clientMain(char * hostname , int portno ) {
+    FILE * console = stdout ;  
+    struct hostent *server = gethostbyname(hostname); 
     
-    if (argc < 3) {
-       fprintf(stderr,"usage %s hostname port\n", argv[0]);
-       exit(0);
-    }
-    
-    struct hostent *server = gethostbyname(argv[1]);
-    if (server == NULL) {
-        fprintf(stderr,"ERROR, no such host\n");
-        exit(0);
-    }
-    
-    int portno = atoi(argv[2]);
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         perror("ERROR opening socket"); 

@@ -51,9 +51,11 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Chat/main.cpp \
-		../Chat/mainwindow.cpp moc_mainwindow.cpp
+		../Chat/mainwindow.cpp \
+		../Chat/client.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		client.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -113,6 +115,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		../Chat/.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -132,8 +135,12 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../Chat/Chat.pro ../Chat/mainwindow.h ../Chat/main.cpp \
-		../Chat/mainwindow.cpp
+		../Chat/Chat.pro ../Chat/mainwindow.h \
+		../Chat/Message.h \
+		../Chat/Socket.h \
+		../Chat/client.h ../Chat/main.cpp \
+		../Chat/mainwindow.cpp \
+		../Chat/client.cpp
 QMAKE_TARGET  = Chat
 DESTDIR       = 
 TARGET        = Chat
@@ -203,6 +210,7 @@ Makefile: ../Chat/Chat.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -285,6 +293,7 @@ Makefile: ../Chat/Chat.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -323,8 +332,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Chat/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Chat/main.cpp ../Chat/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Chat/mainwindow.h ../Chat/Message.h ../Chat/Socket.h ../Chat/client.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Chat/main.cpp ../Chat/mainwindow.cpp ../Chat/client.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Chat/mainwindow.ui $(DISTDIR)/
 
 
@@ -390,6 +399,11 @@ main.o: ../Chat/main.cpp ../Chat/mainwindow.h
 mainwindow.o: ../Chat/mainwindow.cpp ../Chat/mainwindow.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Chat/mainwindow.cpp
+
+client.o: ../Chat/client.cpp ../Chat/client.h \
+		../Chat/Socket.h \
+		../Chat/Message.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o client.o ../Chat/client.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
