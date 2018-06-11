@@ -5,7 +5,7 @@
 
 #include "Socket.h"
 
-int connect_socket (int __domain, int __type, int __protocol) ;
+int connect_socket (int domain, int type, int protocol) ;
 
 class Client { 
     public : 
