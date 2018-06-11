@@ -23,8 +23,9 @@ class Socket  {
     int sockfd;
     int clientId ;
     const char * appName ;  
-    ChatRoom * chatRoom ; 
     FILE * console ;
+
+    ChatRoom * chatRoom ;
 
     public: Socket() { 
         this->valid = true ; 
