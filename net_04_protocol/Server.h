@@ -86,11 +86,12 @@ class Server {
 
     // There is a separate instance of this function for each connection.
     public: static void * chatWithClientThread( void * args ) {
-        Socket * socket = (Socket *) args ; 
-        FILE * console = socket->console ;
-        const int clientId          = socket->clientId    ;
-        const char * appName        = socket->appName     ; 
-        ChatRoom * chatRoom   = socket->chatRoom  ;
+        Socket * socket         = (Socket *) args       ; 
+        
+        FILE * console          = socket->console       ;
+        const int clientId      = socket->clientId      ;
+        const char * appName    = socket->appName       ; 
+        ChatRoom * chatRoom     = socket->chatRoom      ;
 
         fprintf( console, "\nA Process(clientId = %03d) started.", clientId );
 
