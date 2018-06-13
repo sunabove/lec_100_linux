@@ -10,10 +10,9 @@ int connect_socket (int domain, int type, int protocol) ;
 class Client { 
     public : 
         Socket socket ;
-        bool connected ;
 
     public : Client() {
-        this->connected = false ;
+
     };
 
     public: virtual int processMessage( Message * message ) = 0 ;
@@ -41,21 +40,55 @@ class Client {
         serv_addr.sin_port = htons(portno);
         
         if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-            this->connected = false ;
             perror("ERROR connecting");
-        } else {
-            Socket * socket = & this->socket ;
-            socket->sockfd     = sockfd;
-            socket->valid      = 1 ;
-            socket->console    = console ;
+            exit( 1 );
+        } 
 
-            this->connected = true ;
+        Socket * socket = & this->socket ; 
+        socket->sockfd     = sockfd;
+        socket->valid      = 1 ; 
+        socket->console    = console ; 
 
+        if( false ) { 
             pthread_t readThread ;
-            pthread_create (&readThread, NULL, readMessageThread, this );
+            pthread_create (&readThread, NULL, readMessageThread, this ); 
+
+            writeMessageThread( ); 
+
+            /*  Wait for the threads to exit. */
+            // pthread_join (readThread, NULL);
+
+            fprintf( console, "\nGood bye!\n" );
         }
 
-        return this->connected ;
+        return 0;
+    }
+
+    public: void writeMessageThread( ) { 
+        Socket * socket = & this->socket ; 
+        FILE * console  = socket->console     ;
+
+        fprintf( console, "\n%s\n", "Writing Thread started." );
+        fflush( console );    
+
+        char buff[1024 + 1];  
+
+        while( socket->valid ) {            
+            // read a line
+            bzero( buff, sizeof( buff ) );
+            fgets( buff, sizeof( buff ), stdin );
+
+            Message message ;
+            message.text = buff ; 
+            socket->writeMessage( & message );
+
+            if( 'q' == buff[0] || 'Q' == buff[0] ) {
+                fprintf( console, "\nQuit chatting." );
+                fflush( console ); 
+
+                socket->valid = false ; 
+            }     
+        }
     }
 
     public: static void * readMessageThread( void * args ) {

@@ -57,10 +57,10 @@ class Message {
 
         int textSize = this->textSize ;
 
-        char readMsg[textSize + 1]; 
+        char readMsg[ textSize + 1 ]; 
         bzero( readMsg, sizeof( readMsg )); 
         
-        valid = this->readDataOnSocket( sockfd, readMsg , textSize + 1 ) ; 
+        valid = this->readDataOnSocket( sockfd, readMsg , textSize ) ; 
 
         if( 0 == valid ) {
             this->text = "";
@@ -90,13 +90,15 @@ class Message {
 
     // write a message
     private: int writeBody( int sockfd ) {
-        int valid = 0 ; 
-        valid = this->writeTextOnSocket( sockfd, this->text.c_str() );      
+        int valid = 1 ; 
+
+        const char * str = this->text.c_str();
+        valid = this->writeDataOnSocket( sockfd, str, strlen( str ) );      
 
         return valid ;
     }
 
-    private: int writeDataOnSocket( int sockfd, void * data , const int size ) {
+    private: int writeDataOnSocket( int sockfd, const void * data , const int size ) {
         int twn = 0 ;
         int wn = 0 ;
         char * buff = (char *) data ;
@@ -107,14 +109,7 @@ class Message {
         } while ( -1 < wn && twn < size );
 
         return wn ; 
-    }
-
-    // write a message to the client
-    private: int writeTextOnSocket( int sockfd, const char * sendMsg ) {        
-        int valid = this->writeDataOnSocket( sockfd, (void *) sendMsg, strlen( sendMsg ) + 1 );
-        
-        return valid ;
-    }
+    } 
 
 } ; 
 // -- 

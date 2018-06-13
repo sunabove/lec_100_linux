@@ -1,4 +1,4 @@
-// qt chat server
+/* A simple server */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,8 +27,8 @@ class Server {
 
         const char * LINE = "___________________________________________________\n" ; 
         fprintf( console, "%s", LINE );
-        fprintf( console, "\n%s" , appName );
-        fprintf( console, "\n%s", LINE );
+        fprintf( console, "\n%s\n" , appName );
+        fprintf( console, "%s\n", LINE );
 
         int serverSockFd = socket(AF_INET, SOCK_STREAM, 0);
         if (serverSockFd < 0) {
@@ -114,7 +114,6 @@ class Server {
         }
 
         while( socket->valid ) {
-            // read a line
             Message message = socket->readMessage( ); 
 
             if ( false == socket->valid ) {
@@ -122,10 +121,14 @@ class Server {
                 fflush( console );
                 exit(1);
             } else if( socket->valid ) {
-                fprintf( console, "[%03d] A client message: %s\n", clientId, message.text.c_str() );
-                fflush( console );
+                if( 0 < message.text.size() && 'q' == message.text.c_str()[0] ) { // quit this chatting.
+                    fprintf(console, "Quit message.\n" );
+                } else { // send a response message.
+                    fprintf( console, "[%03d] A client message: %s\n", clientId, message.text.c_str() );
+                    fflush( console );
 
-                chatRoom->appendMessage( & message );
+                    chatRoom->appendMessage( & message );
+                }
             }
         } 
 
