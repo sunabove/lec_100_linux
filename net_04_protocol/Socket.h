@@ -28,7 +28,7 @@ class Socket  {
     ChatRoom * chatRoom ;
 
     public: Socket() { 
-        this->valid = true ; 
+        this->valid = false ; 
         this->console = stdout ; 
     }
 
