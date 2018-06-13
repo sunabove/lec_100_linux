@@ -14,7 +14,14 @@ class ClientImpl : public Client {
 
     public: int processMessage( Message * message ) {
         FILE * console = stdout ; 
-        fprintf( console, "%s", message->text.c_str() );
+        
+        const char * str = message->text.c_str();
+        
+        fprintf( console, "%s", str );
+
+        if( '\n' != str[ strlen(str) - 1 ] ) {
+            fprintf( console, "\n" );
+        }
         fflush( console );
 
         return 1; 
@@ -22,6 +29,8 @@ class ClientImpl : public Client {
 };
 
 int main(int argc, char **argv) {
+    FILE * console = stdout ;
+
     if (argc < 3) {
        fprintf(stderr,"usage %s hostname port\n", argv[0]);
        exit(0);
@@ -31,6 +40,15 @@ int main(int argc, char **argv) {
     const char * hostName = argv[1];
     const char * portNo = argv[2];
     client.connectServer( hostName, portNo );
+
+    pthread_t readThread ;    
+    pthread_create (&readThread, NULL, ClientImpl::readMessageThread, & client ); 
+
+    client.writeMessageThread( ); 
+
+    /*  Wait for the threads to exit. */
+    
+    fprintf( console, "\nGood bye!\n" );
 
     return 0;
 } 

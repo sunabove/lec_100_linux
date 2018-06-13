@@ -15,6 +15,8 @@ class Client {
 
     };
 
+    public: virtual int processMessage( Message * message ) = 0 ;
+
     public: int connectServer(const char * hostName , const char * portNo ) {
         FILE * console = stdout ; 
         
@@ -47,15 +49,17 @@ class Client {
         socket->valid      = 1 ; 
         socket->console    = console ; 
 
-        pthread_t readThread ;
-        pthread_create (&readThread, NULL, readMessageThread, this ); 
+        if( false ) { 
+            pthread_t readThread ;
+            pthread_create (&readThread, NULL, readMessageThread, this ); 
 
-        writeMessageThread( ); 
+            writeMessageThread( ); 
 
-        /*  Wait for the threads to exit. */
-        // pthread_join (readThread, NULL);
+            /*  Wait for the threads to exit. */
+            // pthread_join (readThread, NULL);
 
-        fprintf( console, "\nGood bye!\n" );
+            fprintf( console, "\nGood bye!\n" );
+        }
 
         return 0;
     }
@@ -115,10 +119,10 @@ class Client {
                 fflush( console );
             }
 
-            if ( false == message.valid ) {
+            if ( false == socket->valid ) {
                 socket->valid = false ; 
                 perror("ERROR reading from socket");
-            } else if( message.valid ) {
+            } else if( socket->valid ) {
                 readMsgCount ++;
                 this->processMessage( & message );
                 //fprintf( console, "%s", message.text.c_str() );
@@ -126,8 +130,7 @@ class Client {
             }
         }
     }
-
-    public: virtual int processMessage( Message * message ) = 0 ;
+    
 };
 
 // -- 

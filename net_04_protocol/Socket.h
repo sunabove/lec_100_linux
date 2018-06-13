@@ -19,7 +19,7 @@ class ChatRoom ;
 class Socket  {
     public: 
 
-    bool valid ; 
+    int valid ; 
     int sockfd;
     unsigned int clientId ;
     const char * appName ;  
@@ -35,10 +35,11 @@ class Socket  {
     // read a client message
     public: Message readMessage( ) {
         Message message ;
-        message.readMessage( this->sockfd );
+        int valid = message.readMessage( this->sockfd );
 
-        message.clientId = clientId ; 
-        this->valid = message.valid ;
+        message.clientId = clientId ;  
+
+        this->valid = valid ; 
 
         return message;
     }

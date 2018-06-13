@@ -1,5 +1,6 @@
 CC = g++
-CFLAGS  = -g -Wall
+#CFLAGS  = -g -Wall 
+CFLAGS  = -Wall
 LDFLAGS = -pthread 
 
 %.o: %.cpp $(DEPS)

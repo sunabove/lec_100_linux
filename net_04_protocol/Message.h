@@ -7,72 +7,113 @@
 
 class Message {
     public:
-        unsigned int clientId ;
-        unsigned int textLen ;
-        std::string text ; 
-        bool valid ;
+        unsigned int    clientId ;
+        unsigned int    textSize ;
+        std::string     text ;
 
     public: Message() {
-        this->valid = true ;
         this->text = "" ;
+        this->textSize = 0 ; 
+        this->clientId = 0 ; 
     } 
     
     public: Message(const Message & message) {
         this->clientId  = message.clientId;
-        this->text      = message.text ;
-        this->valid     = message.valid ;
+        this->textSize  = message.textSize ;
+        this->text      = message.text ; 
     }
 
     // read a client message
     public: int readMessage( int sockfd ) {
-        char readMsg[1024 + 1]; 
-        bzero( readMsg, sizeof( readMsg )); 
-        int rn = 0 ; 
-        char * buff = readMsg;
-        do {
-            buff += rn ;
-            rn = read(sockfd, buff, 1); 
-        } while( this->valid && -1 < rn && '\n' != *buff );
+        int valid = 1;
+        valid = valid && this->readHead( sockfd );
+        valid = valid && this->readBody( sockfd );
 
-        if( 0 > rn ) {
-            this->valid = false;
+        return valid ; 
+    }
+
+    private: int readDataOnSocket( int sockfd, void * data , const int size ) {
+        int trn = 0 ;
+        int rn = 0 ;
+        char * buff = (char *) data ;
+        do {  
+            rn = read( sockfd, buff, size - trn );
+            buff += rn ; 
+            trn  += rn; 
+        } while ( -1 < rn && trn < size );
+
+        return rn ; 
+    }
+
+    private: int readHead( int sockfd ) {
+        int valid = 1; 
+        valid = this->readDataOnSocket( sockfd, & this->textSize , sizeof( this->textSize ) );
+
+        return valid ; 
+    }
+
+    public: int readBody( int sockfd ) {
+        int valid = 1; 
+
+        int textSize = this->textSize ;
+
+        char readMsg[textSize + 1]; 
+        bzero( readMsg, sizeof( readMsg )); 
+        
+        valid = this->readDataOnSocket( sockfd, readMsg , textSize + 1 ) ; 
+
+        if( 0 == valid ) {
             this->text = "";
-        } else if( -1 < rn ) {
-            this->valid = true ;
+        } else {
             this->text = readMsg ;
         }
 
-        return this->valid ; 
+        return valid;
+    }
+
+    public: int writeMessage( int sockfd ) {
+        int valid = this->writeHead( sockfd ) ; 
+        if( valid ) {
+            valid = this->writeBody( sockfd );
+        }
+
+        return valid ; 
+    }
+
+    public: int writeHead( int sockfd ) {
+        this->textSize = this->text.length();
+
+        int valid = this->writeDataOnSocket( sockfd, & this->textSize, sizeof( this->textSize ) );
+
+        return valid;
     }
 
     // write a message
-    public: int writeMessage( int sockfd ) {
-        int wn = 0 ; 
-        wn = this->writeMessageOnSocket( sockfd, this->text.c_str() );      
+    private: int writeBody( int sockfd ) {
+        int valid = 0 ; 
+        valid = this->writeTextOnSocket( sockfd, this->text.c_str() );      
 
-        if (wn < 0) {
-            this->valid = false ; 
-        }
+        return valid ;
+    }
 
-        return this->valid ;
+    private: int writeDataOnSocket( int sockfd, void * data , const int size ) {
+        int twn = 0 ;
+        int wn = 0 ;
+        char * buff = (char *) data ;
+        do {  
+            buff += wn ; 
+            wn = write( sockfd, buff, size - twn );
+            twn  += wn;
+        } while ( -1 < wn && twn < size );
+
+        return wn ; 
     }
 
     // write a message to the client
-    private: int writeMessageOnSocket( int sockfd, const char * sendMsg ) {
-        const int msgLen = strlen( sendMsg );
-        int wn = 0 , twn = 0 ;
-        char * buff = (char *) sendMsg ;
-        do {  
-            twn  += wn; 
-            buff += wn ; 
-            wn = write( sockfd, buff, msgLen - twn );        
-        } while ( -1 < wn && twn < msgLen );
-
-        if ( 0 < msgLen && '\n' != sendMsg[ msgLen -1 ] ) { 
-            wn += write( sockfd , "\n", 1 );
-        }
+    private: int writeTextOnSocket( int sockfd, const char * sendMsg ) {        
+        int valid = this->writeDataOnSocket( sockfd, (void *) sendMsg, strlen( sendMsg ) + 1 );
         
-        return wn;
+        return valid ;
     }
 
 } ; 

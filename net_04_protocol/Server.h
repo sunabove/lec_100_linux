@@ -117,15 +117,13 @@ class Server {
             // read a line
             Message message = socket->readMessage( ); 
 
-            if ( false == message.valid ) {
-                socket->valid = false ; 
+            if ( false == socket->valid ) {
                 fprintf(console,"\n[%03d] ERROR: reading from socket", clientId);
                 fflush( console );
                 exit(1);
-            } else if( message.valid ) {
+            } else if( socket->valid ) {
                 if( 0 < message.text.size() && 'q' == message.text.c_str()[0] ) { // quit this chatting.
                     fprintf(console, "Quit message.\n" );
-                    socket->valid = false ; 
                 } else { // send a response message.
                     fprintf( console, "\n[%03d] A client message: %s", clientId, message.text.c_str() );
                     fflush( console );
