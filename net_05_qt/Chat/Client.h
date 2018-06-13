@@ -22,37 +22,34 @@ class Client {
         
         struct hostent *server = gethostbyname( hostName );
         if (server == NULL) {
-            fprintf(stderr,"ERROR, no such host\n");
-            exit(0);
+            perror("ERROR no such host or port");
+        } else {
+            int portno = atoi( portNo );
+            int sockfd = connect_socket(AF_INET, SOCK_STREAM, 0);
+            if (sockfd < 0) {
+                perror("ERROR opening socket");
+            } else {
+                struct sockaddr_in serv_addr;
+                bzero((char *) &serv_addr, sizeof(serv_addr));
+                serv_addr.sin_family = AF_INET;
+                bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+                serv_addr.sin_port = htons(portno);
+
+                if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+                    perror("ERROR connecting");
+                } else {
+                    Socket * socket = & this->socket ;
+                    socket->sockfd     = sockfd;
+                    socket->valid      = 1 ;
+                    socket->console    = console ;
+
+                    pthread_t readThread ;
+                    pthread_create (&readThread, NULL, readMessageThread, this );
+                }
+            }
         }
-        
-        int portno = atoi( portNo ); 
-        int sockfd = connect_socket(AF_INET, SOCK_STREAM, 0);
-        if (sockfd < 0) {
-            perror("ERROR opening socket"); 
-            exit( 1 );
-        }
 
-        struct sockaddr_in serv_addr;
-        bzero((char *) &serv_addr, sizeof(serv_addr));
-        serv_addr.sin_family = AF_INET;
-        bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
-        serv_addr.sin_port = htons(portno);
-        
-        if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-            perror("ERROR connecting");
-            exit( 1 );
-        } 
-
-        Socket * socket = & this->socket ; 
-        socket->sockfd     = sockfd;
-        socket->valid      = 1 ; 
-        socket->console    = console ; 
-
-        pthread_t readThread ;
-        pthread_create (&readThread, NULL, readMessageThread, this );
-
-        return 0;
+        return this->socket.valid ;
     }
 
     public: void writeMessageThread( ) { 

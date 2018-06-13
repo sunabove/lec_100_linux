@@ -21,7 +21,8 @@ private:
     Ui::MainWindow *ui;
 
 public slots :
-    void play();
+    void slot_connectServer();
+    void slot_sendMessage();
 
 public: int processMessage( Message * message ) ;
 };

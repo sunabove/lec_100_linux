@@ -13,7 +13,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect( ui->sendButton, SIGNAL(clicked()), this, SLOT(play()));
+    ui->sendButton->setEnabled( false );
+    ui->message->setEnabled( false );
+
+    connect( ui->connButton, SIGNAL(clicked()), this, SLOT(slot_connectServer()));
+    connect( ui->sendButton, SIGNAL(clicked()), this, SLOT(slot_sendMessage()));
 }
 
 MainWindow::~MainWindow()
@@ -21,41 +25,43 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::play()
+void MainWindow::slot_connectServer()
 {
-    QString qstring ;
-    QObject* button = QObject::sender();
-
     ui->sendButton->setEnabled( false );
 
-    int valid = this->socket.valid ;
-    if( ! valid ) {
-        const char * hostNameText   = ui->hostName->displayText().toUtf8().constData();
-        const char * portNoText     = "100" ;
+    const char * hostNameText   = ui->hostName->displayText().toUtf8().constData();
+    const char * portNoText     = "100" ;
 
-        this->connectServer( hostNameText, portNoText );
+    int valid = this->connectServer( hostNameText, portNoText );
 
-        qDebug() << "hostName = [" << hostNameText << "]" ;
-        qDebug() << "portNo   = [" << portNoText << "]";
+    ui->connButton->setEnabled( ! valid );
+
+    ui->message->setEnabled( valid );
+    ui->sendButton->setEnabled( valid );
+
+    qDebug() << "hostName = [" << hostNameText << "]" ;
+    qDebug() << "portNo   = [" << portNoText << "]";
+}
+
+void MainWindow::slot_sendMessage()
+{
+    ui->sendButton->setEnabled( false );
+
+    QString qstring = ui->message->displayText();
+
+    if( 1 > qstring.size() ) {
+        qstring = " ";
     }
 
-    if ( valid and button == ui->sendButton) {
-        qstring = ui->message->displayText();
+    Message message ;
+    message.text = qstring.toUtf8().constData() ;
 
-        if( 1 > qstring.size() ) {
-            qstring = " ";
-        }
+    Socket * socket = & this->socket ;
+    socket->writeMessage( & message );
 
-        Message message ;
-        message.text = qstring.toUtf8().constData() ;
+    ui->message->setText( "" );
 
-        Socket * socket = & this->socket ;
-        socket->writeMessage( & message );
-
-        ui->message->setText( "" );
-
-        qDebug() << "Message sent = " << qstring ;
-    }
+    qDebug() << "Message sent = " << qstring ;
 
     ui->sendButton->setEnabled( true );
 }

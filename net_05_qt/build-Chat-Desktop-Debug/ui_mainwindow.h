@@ -37,6 +37,7 @@ public:
     QLabel *label_3;
     QLineEdit *message;
     QPushButton *sendButton;
+    QPushButton *connButton;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -53,7 +54,7 @@ public:
         label->setGeometry(QRect(10, 10, 33, 17));
         hostName = new QLineEdit(centralWidget);
         hostName->setObjectName(QStringLiteral("hostName"));
-        hostName->setGeometry(QRect(80, 10, 441, 25));
+        hostName->setGeometry(QRect(80, 10, 351, 25));
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(10, 40, 32, 29));
@@ -70,6 +71,9 @@ public:
         sendButton = new QPushButton(centralWidget);
         sendButton->setObjectName(QStringLiteral("sendButton"));
         sendButton->setGeometry(QRect(430, 320, 89, 25));
+        connButton = new QPushButton(centralWidget);
+        connButton->setObjectName(QStringLiteral("connButton"));
+        connButton->setGeometry(QRect(440, 10, 81, 25));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -95,6 +99,7 @@ public:
         label_2->setText(QApplication::translate("MainWindow", "Chat", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "Message", Q_NULLPTR));
         sendButton->setText(QApplication::translate("MainWindow", "Send", Q_NULLPTR));
+        connButton->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));
     } // retranslateUi
 
 };

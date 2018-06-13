@@ -93,7 +93,9 @@ class Message {
         int valid = 1 ; 
 
         const char * str = this->text.c_str();
-        valid = this->writeDataOnSocket( sockfd, str, strlen( str ) );      
+        valid = this->writeDataOnSocket( sockfd, str, strlen( str ) );
+
+        fsync( sockfd );
 
         return valid ;
     }
