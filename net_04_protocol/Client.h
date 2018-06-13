@@ -53,7 +53,7 @@ class Client {
         writeMessageThread( ); 
 
         /*  Wait for the threads to exit. */
-        pthread_join (readThread, NULL);
+        // pthread_join (readThread, NULL);
 
         fprintf( console, "\nGood bye!\n" );
 
@@ -69,10 +69,7 @@ class Client {
 
         char buff[1024 + 1];  
 
-        while( socket->valid ) {
-            //fprintf( console, "Please enter the message: ");
-            //fflush( console );
-
+        while( socket->valid ) {            
             // read a line
             bzero( buff, sizeof( buff ) );
             fgets( buff, sizeof( buff ), stdin );
@@ -96,7 +93,7 @@ class Client {
         return 0;    
     }
 
-    void readMessage( ) { 
+    public: void readMessage( ) { 
         Socket * socket = & this->socket ; 
         FILE * console  = socket->console  ; 
         
@@ -123,11 +120,14 @@ class Client {
                 perror("ERROR reading from socket");
             } else if( message.valid ) {
                 readMsgCount ++;
-                fprintf( console, "%s", message.text.c_str() );
-                fflush( console ); 
+                this->processMessage( & message );
+                //fprintf( console, "%s", message.text.c_str() );
+                //fflush( console ); 
             }
         }
     }
+
+    public: virtual int processMessage( Message * message ) = 0 ;
 };
 
 // -- 

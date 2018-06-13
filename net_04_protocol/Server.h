@@ -51,10 +51,10 @@ class Server {
 
         struct sockaddr_in clientAddr;
         socklen_t clientAddrSize = sizeof(clientAddr);
-        int clientId = 0;
-
+        
         listen(serverSockFd, 5);
 
+        unsigned int clientId = 0;
         ChatRoom chatRoom ;
         chatRoom.console = console;
 
