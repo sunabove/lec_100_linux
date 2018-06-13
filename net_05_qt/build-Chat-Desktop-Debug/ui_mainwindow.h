@@ -31,7 +31,7 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QLabel *label;
-    QLineEdit *hostname;
+    QLineEdit *hostName;
     QLabel *label_2;
     QPlainTextEdit *chatContent;
     QLabel *label_3;
@@ -51,9 +51,9 @@ public:
         label = new QLabel(centralWidget);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(10, 10, 33, 17));
-        hostname = new QLineEdit(centralWidget);
-        hostname->setObjectName(QStringLiteral("hostname"));
-        hostname->setGeometry(QRect(80, 10, 441, 25));
+        hostName = new QLineEdit(centralWidget);
+        hostName->setObjectName(QStringLiteral("hostName"));
+        hostName->setGeometry(QRect(80, 10, 441, 25));
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(10, 40, 32, 29));
@@ -91,7 +91,7 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "HANSEI Linux Lec Chat V1.0", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "Host", Q_NULLPTR));
-        hostname->setText(QApplication::translate("MainWindow", "127.0.0.1", Q_NULLPTR));
+        hostName->setText(QApplication::translate("MainWindow", "localhost", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "Chat", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "Message", Q_NULLPTR));
         sendButton->setText(QApplication::translate("MainWindow", "Send", Q_NULLPTR));

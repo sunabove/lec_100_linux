@@ -27,7 +27,7 @@
      <string>Host</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="hostname">
+   <widget class="QLineEdit" name="hostName">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -37,7 +37,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>127.0.0.1</string>
+     <string>localhost</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">

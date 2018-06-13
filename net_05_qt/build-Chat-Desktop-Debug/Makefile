@@ -51,11 +51,9 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Chat/main.cpp \
-		../Chat/mainwindow.cpp \
-		../Chat/client.cpp moc_mainwindow.cpp
+		../Chat/mainwindow.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
-		client.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -138,9 +136,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../Chat/Chat.pro ../Chat/mainwindow.h \
 		../Chat/Message.h \
 		../Chat/Socket.h \
-		../Chat/client.h ../Chat/main.cpp \
-		../Chat/mainwindow.cpp \
-		../Chat/client.cpp
+		../Chat/Client.h ../Chat/main.cpp \
+		../Chat/mainwindow.cpp
 QMAKE_TARGET  = Chat
 DESTDIR       = 
 TARGET        = Chat
@@ -332,8 +329,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Chat/mainwindow.h ../Chat/Message.h ../Chat/Socket.h ../Chat/client.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Chat/main.cpp ../Chat/mainwindow.cpp ../Chat/client.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Chat/mainwindow.h ../Chat/Message.h ../Chat/Socket.h ../Chat/Client.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Chat/main.cpp ../Chat/mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Chat/mainwindow.ui $(DISTDIR)/
 
 
@@ -369,7 +366,10 @@ moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
-moc_mainwindow.cpp: ../Chat/mainwindow.h \
+moc_mainwindow.cpp: ../Chat/Client.h \
+		../Chat/Socket.h \
+		../Chat/Message.h \
+		../Chat/mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/sunabove/lec_100_linux/net_05_qt/Chat -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Chat/mainwindow.h -o moc_mainwindow.cpp
@@ -393,17 +393,18 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-main.o: ../Chat/main.cpp ../Chat/mainwindow.h
+main.o: ../Chat/main.cpp ../Chat/mainwindow.h \
+		../Chat/Client.h \
+		../Chat/Socket.h \
+		../Chat/Message.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Chat/main.cpp
 
 mainwindow.o: ../Chat/mainwindow.cpp ../Chat/mainwindow.h \
+		../Chat/Client.h \
+		../Chat/Socket.h \
+		../Chat/Message.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Chat/mainwindow.cpp
-
-client.o: ../Chat/client.cpp ../Chat/client.h \
-		../Chat/Socket.h \
-		../Chat/Message.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o client.o ../Chat/client.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

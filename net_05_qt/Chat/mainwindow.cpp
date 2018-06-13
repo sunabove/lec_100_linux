@@ -3,6 +3,10 @@
 #include <QtDebug>
 #include <iostream>
 
+int connect_socket (int domain, int type, int protocol) {
+    return socket( domain, type, protocol );
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -23,17 +27,55 @@ MainWindow::~MainWindow()
 
 void MainWindow::play()
 {
-    QString piece;
+    QString qstring ;
     QObject* button = QObject::sender();
 
-    if (button == ui->sendButton)
-    {
-        piece = ui->message->text();
+    int valid = this->socket.valid ;
+    if( ! valid ) {
+        const char * hostNameText   = ui->hostName->text().toUtf8().constData() ;
+        const char * portNoText     = "100";
+
+        this->connectServer( hostNameText, portNoText );
+
+        qDebug() << "hostName = [" << hostNameText << "]" ;
+        qDebug() << "portNo   = [" << portNoText << "]";
+    }
+
+    if ( valid and button == ui->sendButton) {
+        qstring = ui->message->text();
+
+        if( 1 > qstring.size() ) {
+            qstring = " ";
+        }
+
+        Message message ;
+        message.text = qstring.toUtf8().constData() ;
+
+        Socket * socket = & this->socket ;
+        socket->writeMessage( & message );
+
+        ui->message->setText( "" );
+
+        qDebug() << "Message sent = " << qstring ;
     }
 
     // std::cout << "Starting to play:" << piece.toUtf8().constData();
+}
 
-    qDebug() << "Starting to play:" << piece;
+int MainWindow::processMessage( Message * message ) {
+    QPlainTextEdit * chatContent = ui->chatContent ;
+
+    QString qstring = QString::fromStdString( message->text ) ;
+
+    qDebug() << "Message read = " << qstring << endl ;
+
+    if( true ) {
+        chatContent->insertPlainText ( qstring );
+        chatContent->insertPlainText ( "\n" );
+        //chatContent->moveCursor(QTextCursor::End);
+    }
+
+    return 1;
 }
 
 // --

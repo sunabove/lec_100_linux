@@ -60,7 +60,7 @@ class Server {
 
         while (1) {
             clientId ++;
-            fprintf( console, "\n[%03d] Acceping a client connection...\n" , clientId );
+            fprintf( console, "[%03d] Acceping a client connection...\n" , clientId );
             fflush( console );
             int clientSockFd = accept(serverSockFd, (struct sockaddr *)&clientAddr, &clientAddrSize);
             if ( 0 > clientSockFd ) {
@@ -93,7 +93,7 @@ class Server {
         const char * appName    = socket->appName       ; 
         ChatRoom * chatRoom     = socket->chatRoom      ;
 
-        fprintf( console, "\nA Process(clientId = %03d) started.", clientId );
+        fprintf( console, "A Process(clientId = %03d) started.\n", clientId );
 
         if( socket->valid ) {
             // send a welcome message to client.
@@ -109,7 +109,7 @@ class Server {
             message.text = "Enter a message";
             socket->writeMessage( & message );
 
-            fprintf( console, "\nWelcome message sent." );
+            fprintf( console, "Welcome message sent.\n" );
             fflush( console );
         }
 
@@ -118,14 +118,14 @@ class Server {
             Message message = socket->readMessage( ); 
 
             if ( false == socket->valid ) {
-                fprintf(console,"\n[%03d] ERROR: reading from socket", clientId);
+                fprintf(console,"[%03d] ERROR: reading from socket\n", clientId);
                 fflush( console );
                 exit(1);
             } else if( socket->valid ) {
                 if( 0 < message.text.size() && 'q' == message.text.c_str()[0] ) { // quit this chatting.
                     fprintf(console, "Quit message.\n" );
                 } else { // send a response message.
-                    fprintf( console, "\n[%03d] A client message: %s", clientId, message.text.c_str() );
+                    fprintf( console, "[%03d] A client message: %s\n", clientId, message.text.c_str() );
                     fflush( console );
 
                     chatRoom->appendMessage( & message );
@@ -137,7 +137,7 @@ class Server {
 
         close( socket->sockfd );
 
-        fprintf( console, "\nThe client(id = %03d) disconnected.\n", clientId );
+        fprintf( console, "The client(id = %03d) disconnected.\n", clientId );
         fflush( console );
 
         return 0;

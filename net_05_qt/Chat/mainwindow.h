@@ -3,11 +3,13 @@
 
 #include <QMainWindow>
 
+#include "Client.h"
+
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow , Client
 {
     Q_OBJECT
 
@@ -20,6 +22,8 @@ private:
 
 public slots :
     void play();
+
+public: int processMessage( Message * message ) ;
 };
 
 #endif // MAINWINDOW_H
