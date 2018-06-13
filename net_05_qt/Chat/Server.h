@@ -119,7 +119,6 @@ class Server {
             if ( false == socket->valid ) {
                 fprintf(console,"[%03d] ERROR: reading from socket\n", clientId);
                 fflush( console );
-                exit(1);
             } else if( socket->valid ) {
                 if( 0 < message.text.size() && 'q' == message.text.c_str()[0] ) { // quit this chatting.
                     fprintf(console, "Quit message.\n" );

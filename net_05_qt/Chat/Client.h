@@ -49,17 +49,8 @@ class Client {
         socket->valid      = 1 ; 
         socket->console    = console ; 
 
-        if( false ) { 
-            pthread_t readThread ;
-            pthread_create (&readThread, NULL, readMessageThread, this ); 
-
-            writeMessageThread( ); 
-
-            /*  Wait for the threads to exit. */
-            // pthread_join (readThread, NULL);
-
-            fprintf( console, "\nGood bye!\n" );
-        }
+        pthread_t readThread ;
+        pthread_create (&readThread, NULL, readMessageThread, this );
 
         return 0;
     }

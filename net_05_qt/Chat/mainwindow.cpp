@@ -13,11 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // slot
-    //QPushButton* sendButton = this->findChild<QPushButton*>("sendButton");
-
     connect( ui->sendButton, SIGNAL(clicked()), this, SLOT(play()));
-
 }
 
 MainWindow::~MainWindow()
@@ -29,6 +25,8 @@ void MainWindow::play()
 {
     QString qstring ;
     QObject* button = QObject::sender();
+
+    ui->sendButton->setEnabled( false );
 
     int valid = this->socket.valid ;
     if( ! valid ) {
@@ -42,7 +40,7 @@ void MainWindow::play()
     }
 
     if ( valid and button == ui->sendButton) {
-        qstring = ui->message->text();
+        qstring = ui->message->displayText();
 
         if( 1 > qstring.size() ) {
             qstring = " ";
@@ -59,7 +57,7 @@ void MainWindow::play()
         qDebug() << "Message sent = " << qstring ;
     }
 
-    // std::cout << "Starting to play:" << piece.toUtf8().constData();
+    ui->sendButton->setEnabled( true );
 }
 
 int MainWindow::processMessage( Message * message ) {
