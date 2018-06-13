@@ -114,7 +114,6 @@ class Server {
         }
 
         while( socket->valid ) {
-            // read a line
             Message message = socket->readMessage( ); 
 
             if ( false == socket->valid ) {
