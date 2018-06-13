@@ -30,8 +30,8 @@ void MainWindow::play()
 
     int valid = this->socket.valid ;
     if( ! valid ) {
-        const char * hostNameText   = ui->hostName->text().toUtf8().constData() ;
-        const char * portNoText     = "100";
+        const char * hostNameText   = ui->hostName->displayText().toUtf8().constData();
+        const char * portNoText     = "100" ;
 
         this->connectServer( hostNameText, portNoText );
 
