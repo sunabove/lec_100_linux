@@ -1,5 +1,6 @@
 CC = g++
-CFLAGS  = -g -Wall
+#CFLAGS  = -g -Wall 
+CFLAGS  = -Wall
 LDFLAGS = -pthread 
 
 %.o: %.cpp $(DEPS)
@@ -9,7 +10,7 @@ server: server.o
 	$(CC) -o $@.out $^ $(LDFLAGS)
 
 server-run:
-	sudo ./server.out 100 
+	sudo ./server.out 100
 
 clean:
 	$(RM) *.out *.o

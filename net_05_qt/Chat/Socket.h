@@ -19,12 +19,13 @@ class ChatRoom ;
 class Socket  {
     public: 
 
-    bool valid ; 
+    int valid ; 
     int sockfd;
-    int clientId ;
+    unsigned int clientId ;
     const char * appName ;  
-    ChatRoom * chatRoom ; 
     FILE * console ;
+
+    ChatRoom * chatRoom ;
 
     public: Socket() { 
         this->valid = true ; 
@@ -33,64 +34,31 @@ class Socket  {
 
     // read a client message
     public: Message readMessage( ) {
-        char readMsg[1024 + 1]; 
-        bzero( readMsg, sizeof( readMsg ));
-        int sockfd = this->sockfd ; 
-        int rn = 0 ; 
-        char * buff = readMsg;
-        do {
-            buff += rn ;
-            rn = read(sockfd, buff, 1);
-        } while( this->valid && -1 < rn && '\n' != *buff );
-
         Message message ;
-        message.clientId = this->clientId;
-        
-        if( 0 > rn ) {
-            this->valid = false;
-            message.valid = false ; 
-            message.text = "";
-        } else if( -1 < rn ) {
-            message.valid = true ;
-            message.text = readMsg ;
-        }
+        int valid = message.readMessage( this->sockfd );
+
+        message.clientId = clientId ;  
+
+        this->valid = valid ; 
 
         return message;
     }
 
     // write a message
     public: void writeMessage( Message * message ) {
-        char sendMsg [2048];
-        bzero( sendMsg, sizeof(sendMsg) );
-        message->text.c_str();
-        const char * name = ( message->clientId == this->clientId ) ? "* " : "" ;  
-        snprintf ( sendMsg, sizeof(sendMsg), "%s%s", name, message->text.c_str() ); 
-
-        int wn = 0 ; 
-        wn = this->writeMessageOnSocket( sockfd, sendMsg );      
-
-        if (wn < 0) {
-            this->valid = false ; 
-        }
-    }
-
-    // write a message to the client
-    private: int writeMessageOnSocket( int sockfd, char * sendMsg ) {
-        const int msgLen = strlen( sendMsg );
-        int wn = 0 , twn = 0 ;
-        char * buff = sendMsg ;
-        do {  
-            twn  += wn; 
-            buff += wn ; 
-            wn = write( sockfd, buff, msgLen - twn );        
-        } while ( -1 < wn && twn < msgLen );
-
-        if ( 0 < msgLen && '\n' != sendMsg[ msgLen -1 ] ) { 
-            wn += write( sockfd , "\n", 1 );
-        }
         
-        return wn;
-    }
+        std::string textOrg = message->text ;
+
+        if( message->clientId == this->clientId ) {
+            message->text = "*" + message->text ; 
+        } 
+
+        int valid = message->writeMessage( this->sockfd );
+
+        message->text = textOrg;
+
+        this->valid = valid ; 
+    } 
 
 } ;
 
