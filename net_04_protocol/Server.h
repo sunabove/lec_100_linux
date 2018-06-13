@@ -27,8 +27,8 @@ class Server {
 
         const char * LINE = "___________________________________________________\n" ; 
         fprintf( console, "%s", LINE );
-        fprintf( console, "\n%s" , appName );
-        fprintf( console, "\n%s", LINE );
+        fprintf( console, "\n%s\n" , appName );
+        fprintf( console, "%s\n", LINE );
 
         int serverSockFd = socket(AF_INET, SOCK_STREAM, 0);
         if (serverSockFd < 0) {
