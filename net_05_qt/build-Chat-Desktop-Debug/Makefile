@@ -136,7 +136,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../Chat/Chat.pro ../Chat/mainwindow.h \
 		../Chat/Message.h \
 		../Chat/Socket.h \
-		../Chat/Client.h ../Chat/main.cpp \
+		../Chat/Client.h \
+		../Chat/ChatRoom.h ../Chat/main.cpp \
 		../Chat/mainwindow.cpp
 QMAKE_TARGET  = Chat
 DESTDIR       = 
@@ -329,7 +330,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Chat/mainwindow.h ../Chat/Message.h ../Chat/Socket.h ../Chat/Client.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Chat/mainwindow.h ../Chat/Message.h ../Chat/Socket.h ../Chat/Client.h ../Chat/ChatRoom.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../Chat/main.cpp ../Chat/mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Chat/mainwindow.ui $(DISTDIR)/
 
