@@ -32,7 +32,8 @@ HEADERS += \
     Message.h \
     Socket.h \
     Client.h \
-    ChatRoom.h
+    ChatRoom.h \
+    Server.h
 
 FORMS += \
         mainwindow.ui

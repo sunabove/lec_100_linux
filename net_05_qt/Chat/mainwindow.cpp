@@ -9,24 +9,23 @@ int connect_socket (int domain, int type, int protocol) {
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+    ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
     ui->sendButton->setEnabled( false );
     ui->message->setEnabled( false );
 
-    connect( ui->connButton, SIGNAL(clicked()), this, SLOT(slot_connectServer()));
-    connect( ui->sendButton, SIGNAL(clicked()), this, SLOT(slot_sendMessage()));
+    connect( ui->connButton , SIGNAL(clicked()), this, SLOT(slot_connectServer()));
+    connect( ui->sendButton , SIGNAL(clicked()), this, SLOT(slot_sendMessage()));
+    connect( ui->message    , SIGNAL(returnPressed()), this, SLOT(slot_sendMessage()));
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::slot_connectServer()
-{
+void MainWindow::slot_connectServer() {
+    ui->connButton->setEnabled( false );
     ui->sendButton->setEnabled( false );
 
     const char * hostNameText   = ui->hostName->displayText().toUtf8().constData();
@@ -43,8 +42,7 @@ void MainWindow::slot_connectServer()
     qDebug() << "portNo   = [" << portNoText << "]";
 }
 
-void MainWindow::slot_sendMessage()
-{
+void MainWindow::slot_sendMessage() {
     ui->sendButton->setEnabled( false );
 
     QString qstring = ui->message->displayText();
