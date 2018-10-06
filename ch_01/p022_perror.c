@@ -18,7 +18,7 @@ int main(int argc, char ** argv) {
 
     fd = open("abcd",O_RDONLY);
 
-    if(-1 == fd) {
+    if( -1 == fd ) {
         // Seems like some error occured. Use strerror to print it
         fprintf( out, "\nerrono: %d" , errno );
         fflush( out );

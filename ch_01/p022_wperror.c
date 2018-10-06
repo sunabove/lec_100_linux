@@ -25,7 +25,7 @@ int main(void) {
         // Seems like some error occured. Use strerror to print it
         wprintf( L"\nerrono: %d" , errno );
         
-        wprintf( L"\nstrerror() : %s",(char*)strerror(errno));
+        wprintf( L"\n에러메시지 : %s",(char*)strerror(errno));
     } else {
         wprintf( L"\nSuccess: open the file." );
     }
