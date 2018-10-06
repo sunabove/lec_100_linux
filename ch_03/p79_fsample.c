@@ -23,7 +23,9 @@ int main( int argc , char ** argv )
 		char name[100]; /* real name */
 		unsigned long booty; /* in pounds sterling */
 		unsigned int beard_len; /* in inches */
-	} p, blackbeard = { "Edward Teach", 950, 48 };
+	} ;
+	
+	struct pirate p, blackbeard = { "Edward Teach", 950, 48 };
 	
 	out = fopen ( fileName, "w");
 	
