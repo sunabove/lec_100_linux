@@ -22,8 +22,10 @@ int main( int argc , char ** argv ){
 	pthread_t thing1, thing2;
    	const char *message1 = "Thing 1";
    	const char *message2 = "Thing 2";
-   	pthread_create (&thing1, NULL, start_thread, (void *) message1);
-   	pthread_create (&thing2, NULL, start_thread, (void *) message2);
+	for( int i = 0, iLen = 100 ; i < iLen ; i ++ ) {
+		pthread_create (&thing1, NULL, start_thread, (void *) message1);
+		pthread_create (&thing2, NULL, start_thread, (void *) message2);
+	}
    	/*  Wait for the threads to exit. */
    	pthread_join (thing1, NULL);
    	pthread_join (thing2, NULL);

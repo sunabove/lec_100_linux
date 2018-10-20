@@ -1,5 +1,4 @@
 CC = g++
-#CFLAGS  = -g -Wall 
 CFLAGS  = -Wall
 LDFLAGS = -pthread 
 
