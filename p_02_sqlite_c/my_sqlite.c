@@ -349,6 +349,32 @@ int main(int argc, char ** argv) {
     }
 
     // -- Example 09
+
+    // Example 10
+    // Metadata is information about the data in the database. 
+    // Metadata in a SQLite contains information about the tables and columns, in which we store data.
+    // Number of rows affected by an SQL statement is a metadata. 
+    // Number of rows and columns returned in a result set belong to metadata as well.
+
+    if( 1 ) {
+        fprintf( stdout, "\nPRAGMA table_info(Cars)\n" );
+
+        const char *sql = "PRAGMA table_info(Cars)";
+        
+        rc = sqlite3_exec(db, sql, callback, 0, &err_msg);
+        
+        if (rc != SQLITE_OK ) {            
+            fprintf(stderr, "Failed to select data\n");
+            fprintf(stderr, "SQL error: %s\n", err_msg);
+
+            sqlite3_free(err_msg);
+            sqlite3_close(db);
+            
+            return 1;
+        } 
+    }
+
+    // -- Example 10
     
     sqlite3_finalize(res);
     sqlite3_close(db);
