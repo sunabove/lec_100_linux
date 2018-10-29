@@ -1,6 +1,7 @@
 a.out
 *.out
 *.o
+*.db
 .cproject
 .project
 language.settings.xml
