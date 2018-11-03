@@ -10,4 +10,4 @@ my_sqlite: my_sqlite.o sqlite3.o
 	$(CC) -o $@.out $^ $(LDFLAGS) 
 
 clean:
-	$(RM) sqlite *.o
+	$(RM) *.o *.out
