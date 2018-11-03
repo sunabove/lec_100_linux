@@ -7,7 +7,7 @@ LDFLAGS = -lpthread -ldl
 	$(CC) $< -c -o $@ $(CFLAGS)
 
 my_sqlite: my_sqlite.o sqlite3.o 
-	$(CC) -o $@ $^ $(LDFLAGS) 
+	$(CC) -o $@.out $^ $(LDFLAGS) 
 
 clean:
 	$(RM) sqlite *.o
