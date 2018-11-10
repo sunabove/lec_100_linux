@@ -43,7 +43,7 @@ void MainWindow::openFile() {
               "Open Shape File", QDir::currentPath(), "Shape files (*.shp);;");
 
     if( ! fileName.isNull() ) {
-        const char * filePath = fileName.toUtf8().constData()
+        const char * filePath = fileName.toUtf8().constData() ;
         qDebug( "selected file path : %s", filePath );
     }
 }

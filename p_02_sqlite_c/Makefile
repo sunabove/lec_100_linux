@@ -1,7 +1,10 @@
-#CC = g++
-CC = gcc
+CC = g++
+cc = gcc
 CFLAGS  = -Wall
 LDFLAGS = -lpthread -ldl
+
+%.o: %.c $(DEPS)
+	$(cc) $< -c -o $@ $(CFLAGS)
 
 %.o: %.cpp $(DEPS)
 	$(CC) $< -c -o $@ $(CFLAGS)

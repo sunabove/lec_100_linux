@@ -108,7 +108,7 @@ int main(int argc, char ** argv) {
     // In the following example, we retrieve the data from the database.
 
     if( 1 ) {
-        char *sql = "SELECT * FROM Cars";
+        const char *sql = "SELECT * FROM Cars";
         
         rc = sqlite3_exec(db, sql, callback, 0, &err_msg);
         
