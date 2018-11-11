@@ -2,7 +2,7 @@ a.out
 *.out
 *.o
 *.db
-*.log
+#*.log
 .cproject
 .project
 language.settings.xml
