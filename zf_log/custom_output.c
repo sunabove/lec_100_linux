@@ -1,9 +1,7 @@
-#include <syslog.h>
 #include "zf_log.h"
 #include "zf_log.c"
 
-static void custom_output_callback(const zf_log_message *msg, void *arg)
-{
+static void custom_output_callback(const zf_log_message *msg, void *arg) {
 	FILE * out = stdout ;
 	fprintf( out, msg->buf, arg ); 
 	fprintf( out, "\n" );
