@@ -48,7 +48,7 @@ int main( int argc , char ** argv ) {
 
 	if( 2 > argc ) { 
 		fprintf( console, "shape file name is requried.\n" );
-		//return 0 ; 
+		return 0 ; 
 	}
 
 	class Interval {
@@ -117,7 +117,7 @@ int main( int argc , char ** argv ) {
 
 	if( true ) {
 		char * buff = new char[ 100 ];
-		ZF_LOGI( "sizeof( char * buff = new char[ 100 ]; ) = %zu", sizeof( buff ) );
+		ZF_LOGI( "sizeof( char * buff = new char[ 100 ] ) = %zu", sizeof( buff ) );
 	}
 
 	if( true ) {
@@ -168,31 +168,6 @@ int main( int argc , char ** argv ) {
 			fprintf( console, "Bouding Box Mmin = %+011.6f\n" , p.box.m.min ); 
 			fprintf( console, "Bouding Box Mmax = %+011.6f\n" , p.box.m.max );
 			fprintf( console, "\n" );
-		}
-
-		const auto shapeType = p.shapeType ;  
-
-		while( false && nr ) { 
-			fprintf( console, "%s\n", LINE );
-			Header h ; 
-			nr = nr and readData( file, & h.recordNo, 4, true );
-			nr = nr and readData( file, & h.contentLength, 4, true );
-
-			if( 0 == errno and nr ) {
-				fprintf( console, "Record Number  = %d\n", h.recordNo );
-				fprintf( console, "Content Length = %d\n", h.contentLength );
-			}
-		
-			if( 1 == shapeType ) {
-				Point shape ; 
-				nr = nr and readData( file, & shape.shapeType, 4 );
-				nr = nr and readData( file, & shape.x, 8 );
-				nr = nr and readData( file, & shape.y, 8 );
-
-				fprintf( console, "Shape Type  = %d\n", shape.shapeType);
-				fprintf( console, "X = %+011.6f\n", shape.x );
-				fprintf( console, "Y = %+011.6f\n", shape.y );
-			}
 		}
 	}
 

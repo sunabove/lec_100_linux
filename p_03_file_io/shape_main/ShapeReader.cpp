@@ -56,8 +56,6 @@ int main( int argc , char ** argv ) {
 
 int readShapeFile( ShapeFile * shapeFile, FILE * file, FILE * console ) {
 
-	ZF_LOGI( "double size = %zu", sizeof( double ) );
-
 	if( 0 == errno ) { 
 		MainFileHeader * p = & shapeFile->mainFileHeader ; 
 		auto nr = 1 ;
