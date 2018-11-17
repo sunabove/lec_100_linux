@@ -124,6 +124,7 @@ int readShapeFile( ShapeFile * shapeFile, FILE * file, FILE * console ) {
 				// do nothing.
 			} else if( 1 == shapeType ) { // Point
 				auto point = new Point() ;
+				//Point * point = new Point() ;
 				shape = point ; 
 				shape->shapeType = shapeType ;
 
@@ -137,8 +138,14 @@ int readShapeFile( ShapeFile * shapeFile, FILE * file, FILE * console ) {
 					fprintf( console, "X = %+011.6f\n", point->x );
 					fprintf( console, "Y = %+011.6f\n", point->y ); 
 				}
-			} else if( 3 == shapeType ) { // Polyline
-				auto poly = new Polyline() ; 
+			} else if( 3 == shapeType || 5 == shapeType ) { // Polyline, Polygon
+				Polyline * poly = NULL ; 
+				if ( 3 == shapeType ) { 
+					poly = new Polyline() ; 
+				} else if ( 5 == shapeType ) { 
+					poly = new Polygon() ;
+				}
+
 				shape = poly; 
 				shape->shapeType = shapeType ;
 
