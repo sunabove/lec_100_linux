@@ -13,7 +13,7 @@ LDFLAGS = -lpthread -ldl
 	@echo "Compiling $<"
 	$(CC) $< -c -o $@ $(CFLAGS)
 
-a: test_shape_header.o zf_log.o
+a: shape_header.o zf_log.o
 	@echo "======================================="
 	@echo "Linking $<" 
 	$(CC) -o $@.out $^ $(LDFLAGS) 
