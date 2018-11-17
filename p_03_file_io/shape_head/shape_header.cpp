@@ -48,7 +48,7 @@ int main( int argc , char ** argv ) {
 
 	if( 2 > argc ) { 
 		fprintf( console, "shape file name is requried.\n" );
-		return 0 ; 
+		//return 0 ; 
 	}
 
 	class Interval {
@@ -110,7 +110,19 @@ int main( int argc , char ** argv ) {
 		file = fopen ( fileName, "r"); 
 	}
 
-	ZF_LOGI( "double size = %zu", sizeof( double ) );
+	if( true ) {
+		char buff[ 100 ];
+		ZF_LOGI( "sizeof( char buff[ 100 ] ) = %zu", sizeof( buff ) );
+	}
+
+	if( true ) {
+		char * buff = new char[ 100 ];
+		ZF_LOGI( "sizeof( char * buff = new char[ 100 ]; ) = %zu", sizeof( buff ) );
+	}
+
+	if( true ) {
+		ZF_LOGI( "sizeof( double ) = %zu", sizeof( double ) );
+	}
 
 	if( 0 == errno ) {		
 		auto nr = 1 ;
@@ -158,9 +170,9 @@ int main( int argc , char ** argv ) {
 			fprintf( console, "\n" );
 		}
 
-		const auto shapeType = p.shapeType ; 
+		const auto shapeType = p.shapeType ;  
 
-		while( nr ) { 
+		while( false && nr ) { 
 			fprintf( console, "%s\n", LINE );
 			Header h ; 
 			nr = nr and readData( file, & h.recordNo, 4, true );

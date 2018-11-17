@@ -32,8 +32,6 @@ int main( int argc , char ** argv ) {
 		return 0 ; 
 	}
 
-	MainFileHeader p ;
-
 	const char * fileName = argv[ 1 ]; 		
 
 	FILE * file = NULL ;
