@@ -4,15 +4,7 @@
 #include "zf_log.h"
 
 static void custom_output_callback(const zf_log_message *msg, void *arg) {
-    auto useStdOut = false ;
-    if( useStdOut ) {
-        FILE * out = stdout ;
-        fprintf( out, msg->buf, arg );
-        fprintf( out, "\n" );
-        fflush( out );
-    } else {
-        qDebug( msg->buf, arg );
-    }
+    qDebug( msg->buf, arg );
 }
 
 int main(int argc, char *argv[])

@@ -1,9 +1,6 @@
 #include "Shape.h"
 
 namespace esri {
-    size_t ShapeCom::readData( FILE * file, void * buff, const int size, bool isSwap ) {
-        return readData( file, buff, size, isSwap );
-    }
 
     size_t readInteger( FILE * file, void * buff, bool isSwap ) {
         return readData( file, buff, 4, isSwap );

@@ -17,11 +17,6 @@ namespace esri {
     size_t readInteger( FILE * file, void * buff, bool isSwap = false ) ; 
     size_t readDouble ( FILE * file, void * buff, bool isSwap = false ) ; 
 
-    class ShapeCom {
-        public: 
-        size_t readData( FILE * file, void * buff, const int size, bool isSwap = false ) ; 
-    };
-
     class Interval {
 		public :
 		double min ;
@@ -76,16 +71,36 @@ namespace esri {
             Polyline() {
                 this->numParts = 0 ;
                 this->numParts = 0 ;
+
+				this->parts = NULL ;
+				this->points = NULL ;
             }
+
+			~Polyline() {
+				if( NULL != this->parts ) {
+					delete [] this->parts ;
+				}
+
+				if( NULL != this->points ) {
+					delete [] this->points ;
+				}
+			}
+
         Box box;
         int32_t numParts ;
         int32_t numPoints ;
-        vector<int32_t> parts ;
-        vector<Point> points ;
+        int32_t * parts ;
+        Point * points ;
 	};
 
 	class Polygon : public Shape {
 		
+	};
+
+	class ShapeFile {
+		public: 
+		MainFileHeader mainFileHeader ; 
+		vector<Shape> shapes;
 	};
 
 }
