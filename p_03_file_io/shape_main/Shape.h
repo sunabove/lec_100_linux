@@ -93,7 +93,7 @@ namespace esri {
         Point * points ;
 	};
 
-	class Polygon : public Shape {
+	class Polygon : public Polyline {
 		
 	};
 
