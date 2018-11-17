@@ -19,6 +19,7 @@ private:
     Ui::MainWindow *ui;
 
 public :
+    bool eventFilter(QObject *target, QEvent *event) ;
     void openFile();
 
 public slots:

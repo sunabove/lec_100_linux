@@ -2,22 +2,30 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+#include "zf_log.h"
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
     // connect slot
-    connect( ui->actionExit, SIGNAL(triggered()), this, SLOT(clickButton()));
-
+    connect( ui->actionExit,     SIGNAL(triggered()), this, SLOT(clickButton()));
     connect( ui->actionOpenFile, SIGNAL(triggered()), this, SLOT(clickButton()));
 
+    qApp->installEventFilter(this);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
+}
+
+bool MainWindow::eventFilter(QObject *target, QEvent *event) {
+    auto objName = target->objectName().toUtf8().constData(); ;
+    auto eventType = event->type() ;
+
+    ZF_LOGI( "target obj name : %s" , objName );
+    ZF_LOGI( "event type      : %d" , eventType );
+
+    return QMainWindow::eventFilter(target, event);
 }
 
 // click Button slot definition
@@ -25,16 +33,12 @@ void MainWindow::clickButton() {
     QObject *senderObj = sender(); // This will give Sender object
     const char * senderObjName = senderObj->objectName().toUtf8().constData();
 
-    qDebug( "Button: %s" , senderObjName );
+    ZF_LOGI( "Button: %s" , senderObjName );
 
     if( ui->actionExit == senderObj ) {
         this->close();
-
-        qDebug( "Exit" );
     }else if( ui->actionOpenFile == senderObj ) {
         this->openFile();
-
-        qDebug( "OPen" );
     }
 }
 
@@ -44,6 +48,6 @@ void MainWindow::openFile() {
 
     if( ! fileName.isNull() ) {
         const char * filePath = fileName.toUtf8().constData() ;
-        qDebug( "selected file path : %s", filePath );
+        ZF_LOGI( "selected file path : %s", filePath );
     }
 }

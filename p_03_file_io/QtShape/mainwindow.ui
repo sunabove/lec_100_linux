@@ -48,7 +48,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpenFile"/>
-    <addaction name="actionCloseFile"/>
+    <addaction name="actionClose"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -60,7 +60,7 @@
     <string>Open</string>
    </property>
   </action>
-  <action name="actionCloseFile">
+  <action name="actionClose">
    <property name="text">
     <string>Close</string>
    </property>
