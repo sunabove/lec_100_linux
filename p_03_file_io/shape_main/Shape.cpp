@@ -17,7 +17,7 @@ namespace esri {
             if( 4 == size ) {
                 int * i = (int *) buff ; 
                 * i = bswap_32( * i );
-            }else if( 8 == size ) {
+            } else if( 8 == size ) {
                 double * d = (double *) buff ; 
                 * d = bswap_64( * d );
             }
@@ -25,4 +25,23 @@ namespace esri {
 
         return rn ; 
     }
+
+    Polyline::Polyline() {
+        this->numParts = 0 ;
+        this->numParts = 0 ;
+
+        this->parts = NULL ;
+        this->points = NULL ;
+    }
+
+    Polyline::~Polyline() {
+        if( NULL != this->parts ) {
+            delete [] this->parts ;
+        }
+
+        if( NULL != this->points ) {
+            delete [] this->points ;
+        }
+    }
+    
 }

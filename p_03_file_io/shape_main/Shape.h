@@ -27,6 +27,10 @@ namespace esri {
 		public :
 		Interval x;
 		Interval y;
+	};
+
+	class BoxZm : public Box {
+		public : 
 		Interval z;
 		Interval m;
 	};
@@ -46,7 +50,7 @@ namespace esri {
 		int32_t version ;
 		int32_t shapeType ;
 
-		Box box ;
+		BoxZm box ;
 	} ; 
 
 	class Header {
@@ -57,6 +61,7 @@ namespace esri {
 
 	class Shape {
 		public: 
+		Header header;
         int32_t shapeType ;
 	} ;
 
@@ -68,23 +73,8 @@ namespace esri {
 
 	class Polyline : public Shape {
         public:
-            Polyline() {
-                this->numParts = 0 ;
-                this->numParts = 0 ;
-
-				this->parts = NULL ;
-				this->points = NULL ;
-            }
-
-			~Polyline() {
-				if( NULL != this->parts ) {
-					delete [] this->parts ;
-				}
-
-				if( NULL != this->points ) {
-					delete [] this->points ;
-				}
-			}
+            Polyline() ;
+			virtual ~Polyline() ;
 
         Box box;
         int32_t numParts ;
