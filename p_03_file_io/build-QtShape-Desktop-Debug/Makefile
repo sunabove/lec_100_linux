@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = QtShape1.0.0
-DISTDIR = /home/sunabove/lec_100_linux/p_01_shape/build-QtShape-Desktop-Debug/.tmp/QtShape1.0.0
+DISTDIR = /home/sunabove/lec_100_linux/p_03_file_io/build-QtShape-Desktop-Debug/.tmp/QtShape1.0.0
 LINK          = g++
 LFLAGS        = 
 LIBS          = $(SUBLIBS) -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -51,9 +51,13 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../QtShape/main.cpp \
-		../QtShape/mainwindow.cpp moc_mainwindow.cpp
+		../QtShape/mainwindow.cpp \
+		../QtShape/zf_log.c \
+		../QtShape/Shape.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		zf_log.o \
+		Shape.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -133,8 +137,12 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../QtShape/QtShape.pro ../QtShape/mainwindow.h ../QtShape/main.cpp \
-		../QtShape/mainwindow.cpp
+		../QtShape/QtShape.pro ../QtShape/mainwindow.h \
+		../QtShape/zf_log.h \
+		../QtShape/Shape.h ../QtShape/main.cpp \
+		../QtShape/mainwindow.cpp \
+		../QtShape/zf_log.c \
+		../QtShape/Shape.cpp
 QMAKE_TARGET  = QtShape
 DESTDIR       = 
 TARGET        = QtShape
@@ -326,8 +334,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../QtShape/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../QtShape/main.cpp ../QtShape/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../QtShape/mainwindow.h ../QtShape/zf_log.h ../QtShape/Shape.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../QtShape/main.cpp ../QtShape/mainwindow.cpp ../QtShape/zf_log.c ../QtShape/Shape.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../QtShape/mainwindow.ui $(DISTDIR)/
 
 
@@ -363,10 +371,12 @@ moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
-moc_mainwindow.cpp: ../QtShape/mainwindow.h \
+moc_mainwindow.cpp: ../QtShape/Shape.h \
+		../QtShape/zf_log.h \
+		../QtShape/mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/sunabove/lec_100_linux/p_01_shape/QtShape -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../QtShape/mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/sunabove/lec_100_linux/p_03_file_io/QtShape -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../QtShape/mainwindow.h -o moc_mainwindow.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -387,12 +397,23 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-main.o: ../QtShape/main.cpp ../QtShape/mainwindow.h
+main.o: ../QtShape/main.cpp ../QtShape/mainwindow.h \
+		../QtShape/Shape.h \
+		../QtShape/zf_log.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../QtShape/main.cpp
 
 mainwindow.o: ../QtShape/mainwindow.cpp ../QtShape/mainwindow.h \
-		ui_mainwindow.h
+		../QtShape/Shape.h \
+		../QtShape/zf_log.h \
+		../QtShape/ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../QtShape/mainwindow.cpp
+
+zf_log.o: ../QtShape/zf_log.c ../QtShape/zf_log.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o zf_log.o ../QtShape/zf_log.c
+
+Shape.o: ../QtShape/Shape.cpp ../QtShape/Shape.h \
+		../QtShape/zf_log.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Shape.o ../QtShape/Shape.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

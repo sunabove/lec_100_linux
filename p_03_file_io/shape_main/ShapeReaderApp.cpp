@@ -38,14 +38,16 @@ int main( int argc , char ** argv ) {
  	ZF_LOGI( "Hello..." );
 	ZF_LOGI( "%s", LINE );
 	
-	const char * fileName = argv[ 1 ]; 	
+	//const char * fileName = argv[ 1 ]; 	
+
+	const char * fileName = "/home/sunabove/shapefiles/usa-major-cities.shp" ;
 
 	FILE * file = NULL ;
 		
 	if( 0 == errno ) { 
-		file = fopen ( fileName, "r");  
+		file = fopen ( fileName, "r" );  
 
-		fprintf( console, "File = %s\n" , fileName );		
+		ZF_LOGI( "File = %s\n" , fileName );		
 	}
 
 	if( 0 == errno ) {

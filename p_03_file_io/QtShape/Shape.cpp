@@ -45,7 +45,7 @@ namespace esri {
     }
 
     // readShapeFile
-    int readShapeFile( ShapeFile * shapeFile, FILE * file ) {	
+    string readShapeFile( ShapeFile * shapeFile, FILE * file ) {
         const char * LINE = "________________________________" ; 
 
         size_t nr = 1 ;
@@ -100,6 +100,9 @@ namespace esri {
         const auto shapeType = p->shapeType ; 
 
         auto shapes = & shapeFile->shapes ; 
+
+        // Removes all elements from the vector
+        shapes->clear();
 
         while( 0 == errno and nr ) { 			
             ZF_LOGI( "%s", LINE );
@@ -193,11 +196,13 @@ namespace esri {
             fclose ( file );
         }
 
+        string error ;
         if( 0 != errno ) {
-            ZF_LOGW( "SYSTEM ERROR: %s", strerror( errno ) );
-        } 
+           error = strerror( errno ) ;
+           ZF_LOGW( "SYSTEM ERROR: %s", error.c_str() );
+        }
 
-        return 0 == errno ;
+        return error ;
     }
     // -- readShapeFile
     

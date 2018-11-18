@@ -96,7 +96,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Shape Viewer", Q_NULLPTR));
         actionOpenFile->setText(QApplication::translate("MainWindow", "Open", Q_NULLPTR));
         actionClose->setText(QApplication::translate("MainWindow", "Close", Q_NULLPTR));
         actionExit->setText(QApplication::translate("MainWindow", "Exit", Q_NULLPTR));

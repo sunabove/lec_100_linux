@@ -29,7 +29,7 @@ class Ui_MainWindow
 {
 public:
     QAction *actionOpenFile;
-    QAction *actionCloseFile;
+    QAction *actionClose;
     QAction *actionExit;
     QWidget *centralWidget;
     QWidget *verticalLayoutWidget;
@@ -47,8 +47,8 @@ public:
         MainWindow->resize(581, 382);
         actionOpenFile = new QAction(MainWindow);
         actionOpenFile->setObjectName(QStringLiteral("actionOpenFile"));
-        actionCloseFile = new QAction(MainWindow);
-        actionCloseFile->setObjectName(QStringLiteral("actionCloseFile"));
+        actionClose = new QAction(MainWindow);
+        actionClose->setObjectName(QStringLiteral("actionClose"));
         actionExit = new QAction(MainWindow);
         actionExit->setObjectName(QStringLiteral("actionExit"));
         centralWidget = new QWidget(MainWindow);
@@ -85,7 +85,7 @@ public:
 
         menuBar->addAction(menuFile->menuAction());
         menuFile->addAction(actionOpenFile);
-        menuFile->addAction(actionCloseFile);
+        menuFile->addAction(actionClose);
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
 
@@ -96,9 +96,9 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Shape Viewer", Q_NULLPTR));
         actionOpenFile->setText(QApplication::translate("MainWindow", "Open", Q_NULLPTR));
-        actionCloseFile->setText(QApplication::translate("MainWindow", "Close", Q_NULLPTR));
+        actionClose->setText(QApplication::translate("MainWindow", "Close", Q_NULLPTR));
         actionExit->setText(QApplication::translate("MainWindow", "Exit", Q_NULLPTR));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", Q_NULLPTR));
     } // retranslateUi

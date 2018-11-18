@@ -9,6 +9,7 @@
 #include <byteswap.h>
 #include <errno.h>
 
+#include <iostream>
 #include <vector>
 
 #include "zf_log.h" 
@@ -90,11 +91,15 @@ namespace esri {
 		public: 
 		MainFileHeader mainFileHeader ; 
 		vector<Shape> shapes;
+
+        int size() {
+            return shapes.size();
+        }
 	};
 
 	size_t readData( FILE * file, void * buff, const int size, bool isSwap = false ) ; 
     size_t readInteger( FILE * file, void * buff, bool isSwap = false ) ; 
     size_t readDouble ( FILE * file, void * buff, bool isSwap = false ) ; 
-	int    readShapeFile( ShapeFile * shapeFile, FILE * file ) ;
+    string readShapeFile( ShapeFile * shapeFile, FILE * file ) ;
 
 }

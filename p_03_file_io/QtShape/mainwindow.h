@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 
+#include "Shape.h"
+
+using namespace esri ;
+
 namespace Ui {
 class MainWindow;
 }
@@ -17,6 +21,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    ShapeFile shapeFile ;
 
 public :
     bool eventFilter(QObject *target, QEvent *event) ;

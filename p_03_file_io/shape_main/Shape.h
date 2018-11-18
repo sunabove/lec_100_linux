@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -55,7 +57,7 @@ namespace esri {
 		public :
 		int32_t recordNo ;
 		int32_t contentLength ; 
-	} ; 
+	} ;
 
 	class Shape {
 		public: 
@@ -82,7 +84,6 @@ namespace esri {
 	};
 
 	class Polygon : public Polyline {
-		
 	};
 
 	class ShapeFile {

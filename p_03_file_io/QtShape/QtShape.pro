@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    zf_log.c
+    zf_log.c \
+    Shape.cpp
 
 HEADERS += \
         mainwindow.h \
-    zf_log.h
+    zf_log.h \
+    Shape.h
 
 FORMS += \
         mainwindow.ui
