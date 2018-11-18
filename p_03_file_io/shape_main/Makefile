@@ -1,12 +1,13 @@
 CC = g++
 cc = gcc
-CFLAGS  = -Wall
+CFLAGS  = -std=c++17 -Wall
+cflags  = -Wall
 LDFLAGS = -lpthread -ldl
 
 %.o: %.c $(DEPS)
 	@echo "======================================="
 	@echo "Compiling $<"
-	$(cc) $< -c -o $@ $(CFLAGS)
+	$(cc) $< -c -o $@ $(cflags)
 
 %.o: %.cpp $(DEPS)
 	@echo "======================================="
