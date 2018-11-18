@@ -14,7 +14,7 @@ LDFLAGS = -lpthread -ldl
 	@echo "Compiling $<"
 	$(CC) $< -c -o $@ $(CFLAGS)
 
-a: ShapeReaderApp.o ShapeReader.o Shape.o zf_log.o
+a: ShapeReaderApp.o Shape.o zf_log.o
 	@echo "======================================="
 	@echo "Linking $<" 
 	$(CC) -o $@.out $^ $(LDFLAGS) 

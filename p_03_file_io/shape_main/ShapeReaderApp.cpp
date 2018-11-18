@@ -1,7 +1,6 @@
-#include <errno.h>
 #include <iostream>
 
-#include "ShapeReader.h" 
+#include "Shape.h"
 
 using namespace std ;
 using namespace esri ;
