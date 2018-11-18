@@ -7,9 +7,10 @@ using namespace esri ;
 int readShapeFile( ShapeFile * shapeFile, FILE * file ) {
 	const char * LINE = "________________________________" ; 
 
-	if( 0 == errno ) { 
-		MainFileHeader * p = & shapeFile->mainFileHeader ; 
-		auto nr = 1 ;
+	if( 0 == errno ) {
+		size_t nr = 1 ;
+
+		MainFileHeader * p = & shapeFile->mainFileHeader ;
 
 		nr = nr and readInteger( file, & p->fileCode, true );
 		
