@@ -33,26 +33,24 @@ namespace esri {
 
         if( isSwap ) {
             if( 4 == size ) {
-                int * i = (int *) buff ; 
+                int * i = (int *) buff ;
                 * i = bswap_32( * i );
             } else if( 8 == size ) {
-                double * d = (double *) buff ; 
+                double * d = (double *) buff ;
                 * d = bswap_64( * d );
             }
         }
 
-        return rn ; 
+        return rn ;
     }
 
     // readShapeFile
     string readShapeFile( ShapeFile * shapeFile, FILE * file ) {
-        const char * LINE = "________________________________" ; 
+        const char * LINE = "________________________________" ;
 
         size_t nr = 1 ;
 
-        if( 0 != errno ) {
-            nr = 0 ; 
-        }
+        errno = 0 ;
 
         MainFileHeader * p = & shapeFile->mainFileHeader ;
 
@@ -192,14 +190,13 @@ namespace esri {
             }
         }
 
-        if( 0 == errno and NULL != file ) {
-            fclose ( file );
-        }
-
         string error ;
         if( 0 != errno ) {
            error = strerror( errno ) ;
            ZF_LOGW( "SYSTEM ERROR: %s", error.c_str() );
+        } else {
+           ZF_LOGI( "Done reading shape file. shape's count = %zu", shapes->size() );
+           ZF_LOGI( "%s", LINE );
         }
 
         return error ;

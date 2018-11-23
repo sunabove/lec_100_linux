@@ -12,7 +12,7 @@
 #include <iostream>
 #include <vector>
 
-#include "zf_log.h" 
+#include "zf_log.h"
 
 using namespace std ; 
 
@@ -97,9 +97,9 @@ namespace esri {
         }
 	};
 
-	size_t readData( FILE * file, void * buff, const int size, bool isSwap = false ) ; 
-    size_t readInteger( FILE * file, void * buff, bool isSwap = false ) ; 
-    size_t readDouble ( FILE * file, void * buff, bool isSwap = false ) ; 
+    size_t readData( FILE * file, void * buff, const int size, bool isSwap = false ) ;
+    size_t readInteger( FILE * file, void * buff, bool isSwap = false ) ;
+    size_t readDouble ( FILE * file, void * buff, bool isSwap = false ) ;
     string readShapeFile( ShapeFile * shapeFile, FILE * file ) ;
 
 }

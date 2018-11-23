@@ -61,24 +61,18 @@ void MainWindow::openFile() {
     if( qFileName.isNull() ) {
         ZF_LOGI( "qFileName.isNull()" );
     } else if( ! qFileName.isNull() ) {
-        const char * filePath = qFileName.toUtf8().constData() ;
+        string error ;
+
+        errno = 0 ;
+
+        auto filePath = qFileName.toUtf8().constData();
+        ZF_LOGI( "File path = %s" , filePath );
 
         FILE * file = fopen( filePath, "rb" );
 
-        ZF_LOGI( "File = %s\n" , filePath );
+        auto shapeFile = & this->shapeFile ;
 
-        string error ;
-
-        if( 0 != errno ) {
-            error = strerror( errno ) ;
-            ZF_LOGI( "SYSTEM ERROR: [%04d] %s", errno, error.c_str() );
-        } else if( 0 == errno ) {
-            auto shapeFile = & this->shapeFile ;
-
-            error = readShapeFile( shapeFile , file );
-
-            ZF_LOGI( "error = %s", error.c_str() );
-        }
+        error = readShapeFile( shapeFile , file );
 
         if( 0 < error.size() ) {
             QMessageBox messageBox;
