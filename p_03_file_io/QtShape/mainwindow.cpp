@@ -28,7 +28,7 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event) {
     auto objName = target->objectName().toUtf8().constData(); ;
     auto eventType = event->type() ;
 
-    if( debug ) {
+    if( debug ) { 
         ZF_LOGI( "target obj name : %s" , objName );
         ZF_LOGI( "event type      : %d" , eventType );
     }
