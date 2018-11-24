@@ -60,8 +60,7 @@ class Client {
     }
 
     public: void readMessage( ) { 
-        Socket * socket = & this->socket ; 
-        FILE * console  = socket->console  ; 
+        Socket * socket = & this->socket ;
         
         ZF_LOGI( "Reading Thread started." );
 
