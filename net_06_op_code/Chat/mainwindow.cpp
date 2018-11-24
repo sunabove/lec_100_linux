@@ -3,6 +3,8 @@
 #include <QtDebug>
 #include <iostream>
 
+#include "zf_log.h"
+
 int connect_socket (int domain, int type, int protocol) {
     return socket( domain, type, protocol );
 }
@@ -31,15 +33,15 @@ void MainWindow::slot_connectServer() {
     const char * hostNameText   = ui->hostName->displayText().toUtf8().constData();
     const char * portNoText     = "100" ;
 
+    ZF_LOGI( "hostName = %s", hostNameText );
+    ZF_LOGI( "portNo   = %s", portNoText );
+
     int valid = this->connectServer( hostNameText, portNoText );
 
     ui->connButton->setEnabled( ! valid );
 
     ui->message->setEnabled( valid );
     ui->sendButton->setEnabled( valid );
-
-    qDebug() << "hostName = [" << hostNameText << "]" ;
-    qDebug() << "portNo   = [" << portNoText << "]";
 }
 
 void MainWindow::slot_sendMessage() {
@@ -67,7 +69,7 @@ void MainWindow::slot_sendMessage() {
 int MainWindow::processOpCode( OpCode * opCode ) {
     QPlainTextEdit * chatContent = ui->chatContent ;
 
-    OpCodeMsg * opCodeMsg = (OpCodeMsg * ) opCodeMsg ;
+    OpCodeMsg * opCodeMsg = (OpCodeMsg * ) opCode ;
 
     QString qstring = QString::fromStdString( opCodeMsg->text ) ;
 
@@ -82,4 +84,4 @@ int MainWindow::processOpCode( OpCode * opCode ) {
     return 1;
 }
 
-// --
+//

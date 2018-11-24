@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "OpCode.h"
+#include "OpCodeMsg.h"
 #include "Socket.h"
 
 class ChatRoom {
@@ -18,7 +18,7 @@ class ChatRoom {
         this->valid = 1 ; 
     }
 
-    void appendMessage( Message * message ) {
+    void appendOpCode( OpCodeMsg * opCodeMsg ) {
         std::vector<Socket* > * sockets = & this->sockets ;
         // removes invalid sockets
         for( auto it = sockets->begin() ; it != sockets->end() ; ) {
@@ -37,9 +37,9 @@ class ChatRoom {
         fflush( console );
 
         for( auto & socket : * sockets ) {
-            socket->writeMessage( message );
+            socket->writeOpCode( opCodeMsg );
 
-            fprintf(console, "Msg sent to client(%03d): %s \n" , socket->clientId, message->text.c_str() );
+            fprintf(console, "Msg sent to client(%03d): %s \n" , socket->clientId, opCodeMsg->text.c_str() );
             fflush( console );
 
         }

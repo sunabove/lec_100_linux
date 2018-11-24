@@ -25,7 +25,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    OpCode.cpp \
+    OpCodeMsg.cpp \
+    zf_log.c
 
 HEADERS += \
         mainwindow.h \
@@ -33,8 +36,9 @@ HEADERS += \
     Client.h \
     ChatRoom.h \
     Server.h \
+    OpCode.h \
     OpCodeMsg.h \
-    OpCode.h
+    zf_log.h
 
 FORMS += \
         mainwindow.ui

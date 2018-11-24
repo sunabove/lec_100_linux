@@ -11,6 +11,7 @@
 #include <string>
 
 #include "OpCode.h"
+#include "OpCodeMsg.h"
 #include "Socket.h"
 #include "ChatRoom.h"
 
@@ -22,6 +23,7 @@ class Server {
         Server() {
         }
 
+    // runServer
     bool runServer( const char * portNo ) {
         FILE * console = stdout ; 
 
@@ -83,6 +85,7 @@ class Server {
         
         return true ;
     }
+    // -- runServer
 
     // There is a separate instance of this function for each connection.
     public: static void * chatWithClientThread( void * args ) {
@@ -101,32 +104,32 @@ class Server {
             bzero( sendMsg, sizeof(sendMsg) );
             snprintf ( sendMsg, sizeof(sendMsg), "Welcome to %s" , appName ); 
             
-            Message message ;
-            message.text = sendMsg ;
-            message.clientId = clientId ;
+            OpCodeMsg opCodeMsg ;
+            opCodeMsg.text = sendMsg ;
+            opCodeMsg.clientId = clientId ;
 
-            socket->writeMessage( & message );
-            message.text = "Enter a message";
-            socket->writeMessage( & message );
+            socket->writeOpCode( & opCodeMsg );
+            opCodeMsg.text = "Enter a message";
+            socket->writeOpCode( & opCodeMsg );
 
             fprintf( console, "Welcome message sent.\n" );
             fflush( console );
         }
 
         while( socket->valid ) {
-            Message message = socket->readMessage( ); 
+            OpCodeMsg opCodeMsg = socket->readOpCode( ); 
 
             if ( false == socket->valid ) {
                 fprintf(console,"[%03d] ERROR: reading from socket\n", clientId);
                 fflush( console );
             } else if( socket->valid ) {
-                if( 0 < message.text.size() && 'q' == message.text.c_str()[0] ) { // quit this chatting.
+                if( 0 < opCodeMsg.text.size() && 'q' == opCodeMsg.text.c_str()[0] ) { // quit this chatting.
                     fprintf(console, "Quit message.\n" );
                 } else { // send a response message.
-                    fprintf( console, "[%03d] A client message: %s\n", clientId, message.text.c_str() );
+                    fprintf( console, "[%03d] A client message: %s\n", clientId, opCodeMsg.text.c_str() );
                     fflush( console );
 
-                    chatRoom->appendMessage( & message );
+                    chatRoom->appendOpCode( & opCodeMsg );
                 }
             }
         } 
@@ -140,6 +143,6 @@ class Server {
 
         return 0;
     }
-    // -- dostuff
+    // -- chatWithClientThread
 };
 // --
