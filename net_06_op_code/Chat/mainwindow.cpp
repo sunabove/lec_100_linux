@@ -54,6 +54,7 @@ void MainWindow::slot_sendMessage() {
     }
 
     OpCodeMsg message ;
+    message.textSize = qstring.toUtf8().size();
     message.text = qstring.toUtf8().constData() ;
 
     Socket * socket = & this->socket ;

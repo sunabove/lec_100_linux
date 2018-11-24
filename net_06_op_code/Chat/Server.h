@@ -106,10 +106,12 @@ class Server {
             
             OpCodeMsg opCodeMsg ;
             opCodeMsg.text = sendMsg ;
+            opCodeMsg.text = opCodeMsg.text.size();
             opCodeMsg.clientId = clientId ;
 
             socket->writeOpCode( & opCodeMsg );
             opCodeMsg.text = "Enter a message";
+            opCodeMsg.text = opCodeMsg.text.size();
             socket->writeOpCode( & opCodeMsg );
 
             fprintf( console, "Welcome message sent.\n" );
