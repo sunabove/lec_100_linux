@@ -1,7 +1,8 @@
 #include "OpCode.h"
 
+#include "zf_log.h"
+
 OpCode::~OpCode() {
-    //
 }
 
 OpCode::OpCode(void) {
@@ -31,13 +32,13 @@ int OpCode::writeHead( int sockfd ) {
 int OpCode::readHead( int sockfd ) {
     int valid = 1;
 
-    valid = this->readDataOnSocket( sockfd, & this->opCode , sizeof( opCode ) );
-    valid = this->readDataOnSocket( sockfd, & this->seqNo , sizeof( seqNo ) );
-    valid = this->readDataOnSocket( sockfd, & this->flowControl , sizeof( flowControl ) );
-    valid = this->readDataOnSocket( sockfd, & this->contLast , sizeof( contLast ) );
-    valid = this->readDataOnSocket( sockfd, & this->date , sizeof( date ) );
-    valid = this->readDataOnSocket( sockfd, & this->clientId , sizeof( clientId ) );
-    valid = this->readDataOnSocket( sockfd, & this->bodySize , sizeof( bodySize ) );
+    valid = valid and this->readDataOnSocket( sockfd, & this->opCode , sizeof( opCode ) );
+    valid = valid and this->readDataOnSocket( sockfd, & this->seqNo , sizeof( seqNo ) );
+    valid = valid and this->readDataOnSocket( sockfd, & this->flowControl , sizeof( flowControl ) );
+    valid = valid and this->readDataOnSocket( sockfd, & this->contLast , sizeof( contLast ) );
+    valid = valid and this->readDataOnSocket( sockfd, & this->date , sizeof( date ) );
+    valid = valid and this->readDataOnSocket( sockfd, & this->clientId , sizeof( clientId ) );
+    valid = valid and this->readDataOnSocket( sockfd, & this->bodySize , sizeof( bodySize ) );
 
     return valid ;
 }
@@ -45,8 +46,12 @@ int OpCode::readHead( int sockfd ) {
 int OpCode::readOpCode( int sockfd ) {
     int valid = 1;
 
-    valid = valid && this->readHead( sockfd );
-    valid = valid && this->readBody( sockfd );
+    ZF_LOGD( "Reading an opCode ..." );
+
+    valid = valid and this->readHead( sockfd );
+    valid = valid and this->readBody( sockfd );
+
+    ZF_LOGD( "Done. Reading an opCode." );
 
     return valid ;
 }
@@ -54,8 +59,12 @@ int OpCode::readOpCode( int sockfd ) {
 int OpCode::writeOpCode( int sockfd ) {
     int valid = 1 ;
 
-    valid = valid && this->writeHead( sockfd ) ;
-    valid = valid && this->writeBody( sockfd ) ;
+    ZF_LOGD( "Writing an opCode ..." );
+
+    valid = valid and this->writeHead( sockfd ) ;
+    valid = valid and this->writeBody( sockfd ) ;
+
+    ZF_LOGD( "Done. Writing an opCode." );
 
     return valid ;
 }
@@ -70,6 +79,8 @@ int OpCode::readDataOnSocket( int sockfd, void * data , const int size ) {
         trn  += rn;
     } while ( -1 < rn && trn < size );
 
+    ZF_LOGD( "read data size = %d, trn = %d", size, trn );
+
     return rn ;
 }
 
@@ -82,6 +93,8 @@ int OpCode::writeDataOnSocket( int sockfd, const void * data , const int size ) 
         wn = write( sockfd, buff, size - twn );
         twn  += wn;
     } while ( -1 < wn && twn < size );
+
+    ZF_LOGD( "write data size = %d, twn = %d", size, twn );
 
     return wn ;
 }

@@ -8,12 +8,12 @@ OpCodeMsg::OpCodeMsg() {
 int OpCodeMsg::readBody( int sockfd ) {
     int valid = 1; 
 
-    valid = this->readDataOnSocket( sockfd, & this->textSize , textSize ) ;
+    valid = valid and this->readDataOnSocket( sockfd, & this->textSize , textSize ) ;
 
     char readMsg[ textSize + 1 ];
     bzero( readMsg, sizeof( readMsg ));
 
-    valid = this->readDataOnSocket( sockfd, readMsg , textSize ) ;
+    valid = valid and this->readDataOnSocket( sockfd, readMsg , textSize ) ;
 
     if( 0 == valid ) {
         this->text = "";
@@ -29,11 +29,11 @@ int OpCodeMsg::writeBody( int sockfd ) {
 
     this->textSize = this->text.size();
 
-    valid = this->writeDataOnSocket( sockfd, & textSize, sizeof( textSize ) );
+    valid = valid and this->writeDataOnSocket( sockfd, & textSize, sizeof( textSize ) );
 
     const char * str = this->text.c_str();
 
-    valid = this->writeDataOnSocket( sockfd, str, strlen( str ) );
+    valid = valid and this->writeDataOnSocket( sockfd, str, strlen( str ) );
 
     fsync( sockfd );
 

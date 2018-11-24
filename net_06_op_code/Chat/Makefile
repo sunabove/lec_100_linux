@@ -6,7 +6,7 @@ LDFLAGS = -pthread
 %.o: %.cpp $(DEPS)
 	$(CC) $< -c -o $@ $(CFLAGS)
 
-server: OpCode.o OpCodeMsg.o server.o
+server: OpCode.o OpCodeMsg.o Socket.o Server.o zf_log.o 
 	$(CC) -o $@.out $^ $(LDFLAGS)
 
 server-run:

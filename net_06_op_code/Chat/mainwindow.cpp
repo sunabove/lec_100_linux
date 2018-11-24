@@ -33,8 +33,8 @@ void MainWindow::slot_connectServer() {
     const char * hostNameText   = ui->hostName->displayText().toUtf8().constData();
     const char * portNoText     = "100" ;
 
-    ZF_LOGI( "hostName = %s", hostNameText );
-    ZF_LOGI( "portNo   = %s", portNoText );
+    ZF_LOGD( "hostName = %s", hostNameText );
+    ZF_LOGD( "portNo   = %s", portNoText );
 
     int valid = this->connectServer( hostNameText, portNoText );
 

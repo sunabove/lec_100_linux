@@ -27,38 +27,13 @@ class Socket  {
 
     ChatRoom * chatRoom ;
 
-    public: Socket() { 
-        this->valid = false ;
-        this->console = stdout ; 
-    }
+    public: Socket() ;
 
     // read a client message
-    public: OpCodeMsg readOpCode( ) {
-        OpCodeMsg opCodeMsg ;
-        int valid = opCodeMsg.readOpCode( this->sockfd );
-
-        opCodeMsg.clientId = clientId ;
-
-        this->valid = valid ; 
-
-        return opCodeMsg;
-    }
+    public: OpCodeMsg readOpCode() ;
 
     // write a message
-    public: void writeOpCode( OpCodeMsg * opCodeMsg ) {
-        
-        std::string textOrg = opCodeMsg->text ;
-
-        if( opCodeMsg->clientId == this->clientId ) {
-            opCodeMsg->text = "*" + opCodeMsg->text ;
-        } 
-
-        int valid = opCodeMsg->writeOpCode( this->sockfd );
-
-        opCodeMsg->text = textOrg;
-
-        this->valid = valid ; 
-    } 
+    public: void writeOpCode( OpCodeMsg * opCodeMsg ) ;
 
 } ;
 

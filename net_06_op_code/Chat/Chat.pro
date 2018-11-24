@@ -28,7 +28,9 @@ SOURCES += \
         mainwindow.cpp \
     OpCode.cpp \
     OpCodeMsg.cpp \
-    zf_log.c
+    zf_log.c \
+    Client.cpp \
+    Socket.cpp
 
 HEADERS += \
         mainwindow.h \
