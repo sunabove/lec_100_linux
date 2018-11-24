@@ -89,18 +89,17 @@ void * Server::chatWithClientThread( void * args ) {
 
     if( socket->valid ) {
         // send a welcome message to client.
-        char sendMsg [2048];
-        bzero( sendMsg, sizeof(sendMsg) );
-        snprintf ( sendMsg, sizeof(sendMsg), "Welcome to %s" , appName ); 
+        char welcomeMsg [2048];
+        bzero( welcomeMsg, sizeof(welcomeMsg) );
+        snprintf ( welcomeMsg, sizeof(welcomeMsg), "Welcome to %s" , appName ); 
         
         OpCodeMsg opCodeMsg ;
-        opCodeMsg.text = sendMsg ;
-        opCodeMsg.text = opCodeMsg.text.size();
-        opCodeMsg.clientId = clientId ;
+        opCodeMsg.clientId = clientId ; 
 
+        opCodeMsg.setText( welcomeMsg ); 
         socket->writeOpCode( & opCodeMsg );
-        opCodeMsg.text = "Enter a message";
-        opCodeMsg.text = opCodeMsg.text.size();
+        
+        opCodeMsg.setText( "Enter a message" ); 
         socket->writeOpCode( & opCodeMsg );
 
         fprintf( console, "Welcome message sent.\n" );
@@ -114,14 +113,10 @@ void * Server::chatWithClientThread( void * args ) {
             fprintf(console,"[%03d] ERROR: reading from socket\n", clientId);
             fflush( console );
         } else if( socket->valid ) {
-            if( 0 < opCodeMsg.text.size() && 'q' == opCodeMsg.text.c_str()[0] ) { // quit this chatting.
-                fprintf(console, "Quit message.\n" );
-            } else { // send a response message.
-                fprintf( console, "[%03d] A client message: %s\n", clientId, opCodeMsg.text.c_str() );
-                fflush( console );
+            fprintf( console, "[%03d] A client message: %s\n", clientId, opCodeMsg.getText().c_str() );
+            fflush( console );
 
-                chatRoom->appendOpCode( & opCodeMsg );
-            }
+            chatRoom->appendOpCode( & opCodeMsg ); 
         }
     } 
 

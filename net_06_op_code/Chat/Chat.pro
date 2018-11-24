@@ -30,7 +30,8 @@ SOURCES += \
     OpCodeMsg.cpp \
     zf_log.c \
     Client.cpp \
-    Socket.cpp
+    Socket.cpp \
+    ChatRoom.cpp
 
 HEADERS += \
         mainwindow.h \

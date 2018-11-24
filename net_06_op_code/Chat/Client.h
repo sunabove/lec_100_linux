@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #include "Socket.h"
-#include "zf_log.h"
 
 int connect_socket (int domain, int type, int protocol) ;
 

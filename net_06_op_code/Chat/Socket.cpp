@@ -18,15 +18,15 @@ OpCodeMsg Socket::readOpCode( ) {
 
 void Socket::writeOpCode( OpCodeMsg * opCodeMsg ) {
 
-    std::string textOrg = opCodeMsg->text ;
+    std::string textOrg = opCodeMsg->getText() ;
 
     if( opCodeMsg->clientId == this->clientId ) {
-        opCodeMsg->text = "*" + opCodeMsg->text ;
+        opCodeMsg->setText( "*" + textOrg );
     }
 
     int valid = opCodeMsg->writeOpCode( this->sockfd );
 
-    opCodeMsg->text = textOrg;
+    opCodeMsg->setText( textOrg );
 
     this->valid = valid ;
 }

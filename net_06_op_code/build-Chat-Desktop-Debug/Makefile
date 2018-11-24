@@ -56,7 +56,8 @@ SOURCES       = ../Chat/main.cpp \
 		../Chat/OpCodeMsg.cpp \
 		../Chat/zf_log.c \
 		../Chat/Client.cpp \
-		../Chat/Socket.cpp moc_mainwindow.cpp
+		../Chat/Socket.cpp \
+		../Chat/ChatRoom.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		OpCode.o \
@@ -64,6 +65,7 @@ OBJECTS       = main.o \
 		zf_log.o \
 		Client.o \
 		Socket.o \
+		ChatRoom.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -156,7 +158,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../Chat/OpCodeMsg.cpp \
 		../Chat/zf_log.c \
 		../Chat/Client.cpp \
-		../Chat/Socket.cpp
+		../Chat/Socket.cpp \
+		../Chat/ChatRoom.cpp
 QMAKE_TARGET  = Chat
 DESTDIR       = 
 TARGET        = Chat
@@ -349,7 +352,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Chat/mainwindow.h ../Chat/Socket.h ../Chat/Client.h ../Chat/ChatRoom.h ../Chat/Server.h ../Chat/OpCode.h ../Chat/OpCodeMsg.h ../Chat/zf_log.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Chat/main.cpp ../Chat/mainwindow.cpp ../Chat/OpCode.cpp ../Chat/OpCodeMsg.cpp ../Chat/zf_log.c ../Chat/Client.cpp ../Chat/Socket.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Chat/main.cpp ../Chat/mainwindow.cpp ../Chat/OpCode.cpp ../Chat/OpCodeMsg.cpp ../Chat/zf_log.c ../Chat/Client.cpp ../Chat/Socket.cpp ../Chat/ChatRoom.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Chat/mainwindow.ui $(DISTDIR)/
 
 
@@ -453,6 +456,12 @@ Socket.o: ../Chat/Socket.cpp ../Chat/Socket.h \
 		../Chat/OpCodeMsg.h \
 		../Chat/OpCode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Socket.o ../Chat/Socket.cpp
+
+ChatRoom.o: ../Chat/ChatRoom.cpp ../Chat/ChatRoom.h \
+		../Chat/OpCodeMsg.h \
+		../Chat/OpCode.h \
+		../Chat/Socket.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ChatRoom.o ../Chat/ChatRoom.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

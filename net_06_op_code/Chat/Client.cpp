@@ -1,5 +1,7 @@
 #include "Client.h"
 
+#include "zf_log.h"
+
 Client::Client() {
 };
 
@@ -8,12 +10,12 @@ int Client::connectServer(const char * hostName , const char * portNo ) {
 
     struct hostent *server = gethostbyname( hostName );
     if (server == NULL) {
-        ZF_LOGD( "ERROR no such host or port" );
+        ZF_LOGI( "ERROR no such host or port" );
     } else {
         int portno = atoi( portNo );
         int sockfd = connect_socket(AF_INET, SOCK_STREAM, 0);
         if (sockfd < 0) {
-            ZF_LOGD( "ERROR opening socket" );
+            ZF_LOGI( "ERROR opening socket" );
         } else {
             struct sockaddr_in serv_addr;
             bzero((char *) &serv_addr, sizeof(serv_addr));
@@ -22,7 +24,7 @@ int Client::connectServer(const char * hostName , const char * portNo ) {
             serv_addr.sin_port = htons(portno);
 
             if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-                ZF_LOGD( "ERROR connecting" );
+                ZF_LOGI( "ERROR connecting" );
             } else {
                 Socket * socket = & this->socket ;
                 socket->sockfd     = sockfd;
@@ -47,13 +49,13 @@ void * Client::readMessageThread( void * args ) {
 void Client::readOpCode( ) {
     Socket * socket = & this->socket ;
 
-    ZF_LOGD( "Reading Thread started." );
+    ZF_LOGI( "Reading Thread started." );
 
     while( socket->valid  ) {
         OpCodeMsg message = socket->readOpCode();
 
         if ( not socket->valid ) {
-            ZF_LOGD( "ERROR reading from socket" );
+            ZF_LOGI( "ERROR reading from socket" );
         } else if( socket->valid ) {
             this->processOpCode( & message );
         }

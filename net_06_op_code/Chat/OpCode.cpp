@@ -46,12 +46,12 @@ int OpCode::readHead( int sockfd ) {
 int OpCode::readOpCode( int sockfd ) {
     int valid = 1;
 
-    ZF_LOGD( "Reading an opCode ..." );
-
+    ZF_LOGW( "Reading an opCode ..." );
     valid = valid and this->readHead( sockfd );
-    valid = valid and this->readBody( sockfd );
 
-    ZF_LOGD( "Done. Reading an opCode." );
+    ZF_LOGI( "readBody" );
+    valid = valid and this->readBody( sockfd );
+    ZF_LOGW( "Deon. readBody" );
 
     return valid ;
 }
@@ -59,12 +59,11 @@ int OpCode::readOpCode( int sockfd ) {
 int OpCode::writeOpCode( int sockfd ) {
     int valid = 1 ;
 
-    ZF_LOGD( "Writing an opCode ..." );
-
+    ZF_LOGI( "Writing an opCode ..." );
     valid = valid and this->writeHead( sockfd ) ;
+    ZF_LOGI( "writeBody" );
     valid = valid and this->writeBody( sockfd ) ;
-
-    ZF_LOGD( "Done. Writing an opCode." );
+    ZF_LOGI( "Done. Writing an opCode." );
 
     return valid ;
 }
@@ -79,7 +78,7 @@ int OpCode::readDataOnSocket( int sockfd, void * data , const int size ) {
         trn  += rn;
     } while ( -1 < rn && trn < size );
 
-    ZF_LOGD( "read data size = %d, trn = %d", size, trn );
+    ZF_LOGW( "read data size = %d, trn = %d", size, trn );
 
     return rn ;
 }
@@ -94,7 +93,7 @@ int OpCode::writeDataOnSocket( int sockfd, const void * data , const int size ) 
         twn  += wn;
     } while ( -1 < wn && twn < size );
 
-    ZF_LOGD( "write data size = %d, twn = %d", size, twn );
+    ZF_LOGW( "write data size = %d, twn = %d", size, twn );
 
     return wn ;
 }

@@ -33,8 +33,8 @@ void MainWindow::slot_connectServer() {
     const char * hostNameText   = ui->hostName->displayText().toUtf8().constData();
     const char * portNoText     = "100" ;
 
-    ZF_LOGD( "hostName = %s", hostNameText );
-    ZF_LOGD( "portNo   = %s", portNoText );
+    ZF_LOGI( "hostName = %s", hostNameText );
+    ZF_LOGI( "portNo   = %s", portNoText );
 
     int valid = this->connectServer( hostNameText, portNoText );
 
@@ -53,16 +53,15 @@ void MainWindow::slot_sendMessage() {
         qstring = " ";
     }
 
-    OpCodeMsg message ;
-    message.textSize = qstring.toUtf8().size();
-    message.text = qstring.toUtf8().constData() ;
+    OpCodeMsg opCodeMsg ;
+    opCodeMsg.setText( qstring.toUtf8().constData() );
 
     Socket * socket = & this->socket ;
-    socket->writeOpCode( & message );
+    socket->writeOpCode( & opCodeMsg );
 
     ui->message->setText( "" );
 
-    qDebug() << "Message sent = " << qstring ;
+    ZF_LOGI( "Message sent = %s", opCodeMsg.getText().c_str() );
 
     ui->sendButton->setEnabled( true );
 }
@@ -72,9 +71,9 @@ int MainWindow::processOpCode( OpCode * opCode ) {
 
     OpCodeMsg * opCodeMsg = (OpCodeMsg * ) opCode ;
 
-    QString qstring = QString::fromStdString( opCodeMsg->text ) ;
+    QString qstring = QString::fromStdString( opCodeMsg->getText() ) ;
 
-    qDebug() << "Message read = " << qstring << endl ;
+    ZF_LOGI( "Message read = %s", opCodeMsg->getText().c_str() );
 
     if( true ) {
         chatContent->insertPlainText ( qstring );
