@@ -5,9 +5,14 @@
 
 int main(int argc, char **argv) { 
 
-    const char * portNo = argc < 2 ? "100" : argv[1];
-    Server server ;
-    server.runServer( portNo );
+    if (argc < 2) {
+        fprintf(stderr, "ERROR, no port provided\n");
+        exit(1);
+    } else {
+        const char * portNo = argv[1];
+        Server server ;
+        server.runServer( portNo );
+    }
     
     return 0;
 } 

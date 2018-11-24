@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS  = -std=c++17 -Wall
-cflags  = -Wall 
+cflags  = -Wall
 LDFLAGS = -pthread 
 
 %.o: %.cpp $(DEPS)
