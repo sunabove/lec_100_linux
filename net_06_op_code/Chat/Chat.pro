@@ -31,7 +31,8 @@ SOURCES += \
     zf_log.c \
     Client.cpp \
     Socket.cpp \
-    ChatRoom.cpp
+    ChatRoom.cpp \
+    OpCodeExit.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,7 +42,8 @@ HEADERS += \
     Server.h \
     OpCode.h \
     OpCodeMsg.h \
-    zf_log.h
+    zf_log.h \
+    OpCodeExit.h
 
 FORMS += \
         mainwindow.ui

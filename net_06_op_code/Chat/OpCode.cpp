@@ -1,7 +1,5 @@
 #include "OpCode.h"
 
-#include "zf_log.h"
-
 OpCode::~OpCode() {
 }
 
@@ -63,6 +61,9 @@ int OpCode::writeOpCode( int sockfd ) {
     valid = valid and this->writeHead( sockfd ) ;
     ZF_LOGI( "writeBody" );
     valid = valid and this->writeBody( sockfd ) ;
+
+    fsync( sockfd );
+
     ZF_LOGI( "Done. Writing an opCode." );
 
     return valid ;

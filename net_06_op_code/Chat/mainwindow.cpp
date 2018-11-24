@@ -3,8 +3,6 @@
 #include <QtDebug>
 #include <iostream>
 
-#include "zf_log.h"
-
 int connect_socket (int domain, int type, int protocol) {
     return socket( domain, type, protocol );
 }

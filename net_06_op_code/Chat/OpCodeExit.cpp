@@ -15,9 +15,7 @@ int OpCodeExit::readBody( int sockfd ) {
 int OpCodeExit::writeBody( int sockfd ) {
     int valid = 1 ; 
 
-    valid = this->writeDataOnSocket( sockfd, & this->exitCode, sizeof( exitCode ) ); 
-
-    fsync( sockfd );
+    valid = this->writeDataOnSocket( sockfd, & this->exitCode, sizeof( exitCode ) );
 
     return valid ;
 }

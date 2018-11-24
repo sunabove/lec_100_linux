@@ -3,8 +3,8 @@
 #include "OpCode.h"
 
 class OpCodeExit : public OpCode {
-    public:
-    unsigned char    exitCode ; 
+    private :
+        unsigned char    exitCode ;
 
     public: OpCodeExit() ;
 

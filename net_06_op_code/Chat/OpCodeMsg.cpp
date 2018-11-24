@@ -43,11 +43,9 @@ int OpCodeMsg::writeBody( int sockfd ) {
 
     const char * str = this->text.c_str();
 
-    ZF_LOGI( "str = %s, len = %d", str, strlen( str ) );
+    ZF_LOGI( "str = %s, len = %zu", str, strlen( str ) );
 
     valid = valid and this->writeDataOnSocket( sockfd, str, strlen( str ) );
-
-    fsync( sockfd );
 
     return valid ;
 }

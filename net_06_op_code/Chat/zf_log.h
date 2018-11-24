@@ -598,7 +598,7 @@ zf_log_spec;
  * Example:
  *
  *   ZF_LOG_SECRET(ZF_LOGI("Credit card: %s", credit_card));
- *   ZF_LOG_SECRET(ZF_LOGI_MEM(cipher, cipher_sz, "Cipher bytes:"));
+ *   ZF_LOG_SECRET(ZF_LOGD_MEM(cipher, cipher_sz, "Cipher bytes:"));
  */
 #define ZF_LOG_SECRET(f) ZF_LOG_IF(ZF_LOG_SECRETS, f)
 
@@ -612,7 +612,7 @@ zf_log_spec;
  *   #endif
  *   // ...
  *   #if ZF_LOG_ENABLED_DEBUG
- *       ZF_LOGI("enum value: %s", g_enum_strings[v]);
+ *       ZF_LOGD("enum value: %s", g_enum_strings[v]);
  *   #endif
  *
  * See ZF_LOG_LEVEL for details.
@@ -633,7 +633,7 @@ zf_log_spec;
  *   {
  *       char hash[65];
  *       sha256(data_ptr, data_sz, hash);
- *       ZF_LOGI("data: len=%u, sha256=%s", data_sz, hash);
+ *       ZF_LOGD("data: len=%u, sha256=%s", data_sz, hash);
  *   }
  *
  * See ZF_LOG_OUTPUT_LEVEL for details.
@@ -696,7 +696,7 @@ void _zf_log_write_mem_aux(
 
 /* Message logging macros:
  * - ZF_LOGV("format string", args, ...)
- * - ZF_LOGI("format string", args, ...)
+ * - ZF_LOGD("format string", args, ...)
  * - ZF_LOGI("format string", args, ...)
  * - ZF_LOGW("format string", args, ...)
  * - ZF_LOGE("format string", args, ...)
@@ -704,7 +704,7 @@ void _zf_log_write_mem_aux(
  *
  * Memory logging macros:
  * - ZF_LOGV_MEM(data_ptr, data_sz, "format string", args, ...)
- * - ZF_LOGI_MEM(data_ptr, data_sz, "format string", args, ...)
+ * - ZF_LOGD_MEM(data_ptr, data_sz, "format string", args, ...)
  * - ZF_LOGI_MEM(data_ptr, data_sz, "format string", args, ...)
  * - ZF_LOGW_MEM(data_ptr, data_sz, "format string", args, ...)
  * - ZF_LOGE_MEM(data_ptr, data_sz, "format string", args, ...)
@@ -712,7 +712,7 @@ void _zf_log_write_mem_aux(
  *
  * Auxiliary logging macros:
  * - ZF_LOGV_AUX(&log_instance, "format string", args, ...)
- * - ZF_LOGI_AUX(&log_instance, "format string", args, ...)
+ * - ZF_LOGD_AUX(&log_instance, "format string", args, ...)
  * - ZF_LOGI_AUX(&log_instance, "format string", args, ...)
  * - ZF_LOGW_AUX(&log_instance, "format string", args, ...)
  * - ZF_LOGE_AUX(&log_instance, "format string", args, ...)
@@ -720,7 +720,7 @@ void _zf_log_write_mem_aux(
  *
  * Auxiliary memory logging macros:
  * - ZF_LOGV_MEM_AUX(&log_instance, data_ptr, data_sz, "format string", args, ...)
- * - ZF_LOGI_MEM_AUX(&log_instance, data_ptr, data_sz, "format string", args, ...)
+ * - ZF_LOGD_MEM_AUX(&log_instance, data_ptr, data_sz, "format string", args, ...)
  * - ZF_LOGI_MEM_AUX(&log_instance, data_ptr, data_sz, "format string", args, ...)
  * - ZF_LOGW_MEM_AUX(&log_instance, data_ptr, data_sz, "format string", args, ...)
  * - ZF_LOGE_MEM_AUX(&log_instance, data_ptr, data_sz, "format string", args, ...)
@@ -728,7 +728,7 @@ void _zf_log_write_mem_aux(
  *
  * Preformatted string logging macros:
  * - ZF_LOGV_STR("preformatted string");
- * - ZF_LOGI_STR("preformatted string");
+ * - ZF_LOGD_STR("preformatted string");
  * - ZF_LOGI_STR("preformatted string");
  * - ZF_LOGW_STR("preformatted string");
  * - ZF_LOGE_STR("preformatted string");
@@ -818,19 +818,19 @@ static _ZF_LOG_INLINE void _zf_log_unused(const int dummy, ...) {(void)dummy;}
 #endif
 
 #if ZF_LOG_ENABLED_DEBUG
-	#define ZF_LOGI(...) \
+	#define ZF_LOGD(...) \
 			ZF_LOG_WRITE(ZF_LOG_DEBUG, _ZF_LOG_TAG, __VA_ARGS__)
-	#define ZF_LOGI_AUX(log, ...) \
+	#define ZF_LOGD_AUX(log, ...) \
 			ZF_LOG_WRITE_AUX(log, ZF_LOG_DEBUG, _ZF_LOG_TAG, __VA_ARGS__)
-	#define ZF_LOGI_MEM(d, d_sz, ...) \
+	#define ZF_LOGD_MEM(d, d_sz, ...) \
 			ZF_LOG_WRITE_MEM(ZF_LOG_DEBUG, _ZF_LOG_TAG, d, d_sz, __VA_ARGS__)
-	#define ZF_LOGI_MEM_AUX(log, d, d_sz, ...) \
+	#define ZF_LOGD_MEM_AUX(log, d, d_sz, ...) \
 			ZF_LOG_WRITE_MEM_AUX(log, ZF_LOG_DEBUG, _ZF_LOG_TAG, d, d_sz, __VA_ARGS__)
 #else
-	#define ZF_LOGI(...) _ZF_LOG_UNUSED(__VA_ARGS__)
-	#define ZF_LOGI_AUX(...) _ZF_LOG_UNUSED(__VA_ARGS__)
-	#define ZF_LOGI_MEM(...) _ZF_LOG_UNUSED(__VA_ARGS__)
-	#define ZF_LOGI_MEM_AUX(...) _ZF_LOG_UNUSED(__VA_ARGS__)
+	#define ZF_LOGD(...) _ZF_LOG_UNUSED(__VA_ARGS__)
+	#define ZF_LOGD_AUX(...) _ZF_LOG_UNUSED(__VA_ARGS__)
+	#define ZF_LOGD_MEM(...) _ZF_LOG_UNUSED(__VA_ARGS__)
+	#define ZF_LOGD_MEM_AUX(...) _ZF_LOG_UNUSED(__VA_ARGS__)
 #endif
 
 #if ZF_LOG_ENABLED_INFO
@@ -898,7 +898,7 @@ static _ZF_LOG_INLINE void _zf_log_unused(const int dummy, ...) {(void)dummy;}
 #endif
 
 #define ZF_LOGV_STR(s) ZF_LOGV("%s", (s))
-#define ZF_LOGI_STR(s) ZF_LOGI("%s", (s))
+#define ZF_LOGD_STR(s) ZF_LOGD("%s", (s))
 #define ZF_LOGI_STR(s) ZF_LOGI("%s", (s))
 #define ZF_LOGW_STR(s) ZF_LOGW("%s", (s))
 #define ZF_LOGE_STR(s) ZF_LOGE("%s", (s))

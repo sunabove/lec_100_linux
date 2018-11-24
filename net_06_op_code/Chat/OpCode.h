@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "zf_log.h"
+
 class OpCode {
     public:
         // header
