@@ -81,31 +81,37 @@ int OpCode::writeOpCode( int sockfd ) {
 
 int OpCode::readDataOnSocket( int sockfd, void * data , const int size ) {
     int trn = 0 ;
-    int rn = 0 ;
-    char * buff = (char *) data ;
-    do {
-        rn = read( sockfd, buff, size - trn );
-        buff += rn ;
-        trn  += rn;
-    } while ( -1 < rn && trn < size );
+
+    if( 0 < size ) { 
+        int rn = 0 ;
+        char * buff = (char *) data ;
+        do {
+            rn = read( sockfd, buff, size - trn );
+            buff += rn ;
+            trn  += rn;
+        } while ( -1 < rn && trn < size );
+    }
 
     ZF_LOGW( "read data size = %d, trn = %d", size, trn );
 
-    return rn ;
+    return trn ;
 }
 
 int OpCode::writeDataOnSocket( int sockfd, const void * data , const int size ) {
     int twn = 0 ;
-    int wn = 0 ;
-    char * buff = (char *) data ;
-    do {
-        buff += wn ;
-        wn = write( sockfd, buff, size - twn );
-        twn  += wn;
-    } while ( -1 < wn && twn < size );
+    
+    if( 0 < size ) {
+        int wn = 0 ;
+        char * buff = (char *) data ;
+        do {
+            buff += wn ;
+            wn = write( sockfd, buff, size - twn );
+            twn  += wn;
+        } while ( -1 < wn && twn < size );
+    }
 
     ZF_LOGW( "write data size = %d, twn = %d", size, twn );
 
-    return wn ;
+    return twn ;
 }
 
