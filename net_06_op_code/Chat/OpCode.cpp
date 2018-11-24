@@ -44,12 +44,17 @@ int OpCode::readHead( int sockfd ) {
 int OpCode::readOpCode( int sockfd ) {
     int valid = 1;
 
-    ZF_LOGW( "Reading an opCode ..." );
+    ZF_LOGI( "Reading an opCode ..." );
+
+    ZF_LOGI( "readHead" );
     valid = valid and this->readHead( sockfd );
+    ZF_LOGI( "Done. readHead" );
 
     ZF_LOGI( "readBody" );
     valid = valid and this->readBody( sockfd );
-    ZF_LOGW( "Deon. readBody" );
+    ZF_LOGI( "Deon. readBody" );
+
+    ZF_LOGI( "Deon. reading an opCode." );
 
     return valid ;
 }
@@ -58,9 +63,14 @@ int OpCode::writeOpCode( int sockfd ) {
     int valid = 1 ;
 
     ZF_LOGI( "Writing an opCode ..." );
+
+    ZF_LOGI( "writeHead" );
     valid = valid and this->writeHead( sockfd ) ;
+    ZF_LOGI( "Done. writeHead" );
+
     ZF_LOGI( "writeBody" );
     valid = valid and this->writeBody( sockfd ) ;
+    ZF_LOGI( "Deon. writeBody" );
 
     fsync( sockfd );
 
