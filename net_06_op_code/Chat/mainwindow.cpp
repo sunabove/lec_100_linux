@@ -66,10 +66,12 @@ void MainWindow::slot_sendMessage() {
         qstring = " ";
     }
 
+    Socket * socket = & this->socket ;
+
     OpCodeMsg opCodeMsg ;
+    opCodeMsg.clientId = this->clientId ;
     opCodeMsg.text = 1 > qstring.size() ? " " : qstring.toUtf8().constData() ;
 
-    Socket * socket = & this->socket ;
     socket->writeOpCode( & opCodeMsg );
 
     //ui->message->setText( "" );
@@ -88,6 +90,7 @@ int MainWindow::processOpCode( OpCode * opCode ) {
         this->insertChatContent( & opCodeMsg->text );
     } else if( OP_CODE_SYS_INFO == code ) {
         OpCodeSysInfo * opCodeSysInfo = (OpCodeSysInfo * ) opCode ;
+        this->clientId = opCodeSysInfo->clientId ;
         this->insertChatContent( & opCodeSysInfo->sysMessage );
     }
 
@@ -115,6 +118,7 @@ void MainWindow::closeEvent(QCloseEvent * ) {
         ZF_LOGI( "Sending exit message ..." );
 
         OpCodeExit opCodeExit ;
+        opCodeExit.clientId = clientId ;
         opCodeExit.exitCode = 0 ;
         socket->writeOpCode( & opCodeExit );
 

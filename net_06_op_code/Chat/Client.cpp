@@ -3,7 +3,8 @@
 #include "zf_log.h"
 
 Client::Client() {
-};
+    this->clientId = 0 ;
+}
 
 int Client::connectServer(const char * hostName , const char * portNo ) {
     struct hostent *server = gethostbyname( hostName );

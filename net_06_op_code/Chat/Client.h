@@ -10,6 +10,7 @@ int connect_socket (int domain, int type, int protocol) ;
 class Client { 
     public : 
         Socket socket ;
+        unsigned int clientId ;
 
     public : Client() ;
 
