@@ -2,14 +2,15 @@
 
 #include "OpCode.h"
 
-class OpCodeMsg : public OpCode {
-    public :
-        std::string  text ;
+class OpCodeSysInfo : public OpCode {
+    private :
+        std::string     sysMessage ;
 
-    public: OpCodeMsg() ;
+    public: OpCodeSysInfo() ;
 
     public: int readBody( int sockfd ) ;
 
     public: int writeBody( int sockfd ) ;
 
 } ;
+//

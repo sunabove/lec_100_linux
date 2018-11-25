@@ -12,7 +12,7 @@
 #include <vector>
 #include <string>
 
-#include "OpCodeMsg.h"
+#include "OpCode.h"
 
 class ChatRoom ;
 
@@ -29,10 +29,10 @@ class Socket  {
     public: Socket() ;
 
     // read a client message
-    public: OpCodeMsg readOpCode() ;
+    public: OpCode * readOpCode() ;
 
     // write a message
-    public: void writeOpCode( OpCodeMsg * opCodeMsg ) ;
+    public: int writeOpCode( OpCode * opCodeMsg ) ;
 
 } ;
 

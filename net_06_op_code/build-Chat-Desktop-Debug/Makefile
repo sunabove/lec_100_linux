@@ -58,7 +58,8 @@ SOURCES       = ../Chat/main.cpp \
 		../Chat/Client.cpp \
 		../Chat/Socket.cpp \
 		../Chat/ChatRoom.cpp \
-		../Chat/OpCodeExit.cpp moc_mainwindow.cpp
+		../Chat/OpCodeExit.cpp \
+		../Chat/OpCodeSysInfo.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		OpCode.o \
@@ -68,6 +69,7 @@ OBJECTS       = main.o \
 		Socket.o \
 		ChatRoom.o \
 		OpCodeExit.o \
+		OpCodeSysInfo.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -155,7 +157,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../Chat/OpCode.h \
 		../Chat/OpCodeMsg.h \
 		../Chat/zf_log.h \
-		../Chat/OpCodeExit.h ../Chat/main.cpp \
+		../Chat/OpCodeExit.h \
+		../Chat/OpCodeSysInfo.h ../Chat/main.cpp \
 		../Chat/mainwindow.cpp \
 		../Chat/OpCode.cpp \
 		../Chat/OpCodeMsg.cpp \
@@ -163,7 +166,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../Chat/Client.cpp \
 		../Chat/Socket.cpp \
 		../Chat/ChatRoom.cpp \
-		../Chat/OpCodeExit.cpp
+		../Chat/OpCodeExit.cpp \
+		../Chat/OpCodeSysInfo.cpp
 QMAKE_TARGET  = Chat
 DESTDIR       = 
 TARGET        = Chat
@@ -355,8 +359,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Chat/mainwindow.h ../Chat/Socket.h ../Chat/Client.h ../Chat/ChatRoom.h ../Chat/Server.h ../Chat/OpCode.h ../Chat/OpCodeMsg.h ../Chat/zf_log.h ../Chat/OpCodeExit.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Chat/main.cpp ../Chat/mainwindow.cpp ../Chat/OpCode.cpp ../Chat/OpCodeMsg.cpp ../Chat/zf_log.c ../Chat/Client.cpp ../Chat/Socket.cpp ../Chat/ChatRoom.cpp ../Chat/OpCodeExit.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Chat/mainwindow.h ../Chat/Socket.h ../Chat/Client.h ../Chat/ChatRoom.h ../Chat/Server.h ../Chat/OpCode.h ../Chat/OpCodeMsg.h ../Chat/zf_log.h ../Chat/OpCodeExit.h ../Chat/OpCodeSysInfo.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Chat/main.cpp ../Chat/mainwindow.cpp ../Chat/OpCode.cpp ../Chat/OpCodeMsg.cpp ../Chat/zf_log.c ../Chat/Client.cpp ../Chat/Socket.cpp ../Chat/ChatRoom.cpp ../Chat/OpCodeExit.cpp ../Chat/OpCodeSysInfo.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Chat/mainwindow.ui $(DISTDIR)/
 
 
@@ -396,6 +400,7 @@ moc_mainwindow.cpp: ../Chat/Client.h \
 		../Chat/Socket.h \
 		../Chat/OpCodeMsg.h \
 		../Chat/OpCode.h \
+		../Chat/zf_log.h \
 		../Chat/mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -433,8 +438,8 @@ mainwindow.o: ../Chat/mainwindow.cpp ../Chat/mainwindow.h \
 		../Chat/Socket.h \
 		../Chat/OpCodeMsg.h \
 		../Chat/OpCode.h \
-		ui_mainwindow.h \
-		../Chat/zf_log.h
+		../Chat/zf_log.h \
+		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Chat/mainwindow.cpp
 
 OpCode.o: ../Chat/OpCode.cpp ../Chat/OpCode.h \
@@ -458,18 +463,26 @@ Client.o: ../Chat/Client.cpp ../Chat/Client.h \
 
 Socket.o: ../Chat/Socket.cpp ../Chat/Socket.h \
 		../Chat/OpCodeMsg.h \
-		../Chat/OpCode.h
+		../Chat/OpCode.h \
+		../Chat/zf_log.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Socket.o ../Chat/Socket.cpp
 
 ChatRoom.o: ../Chat/ChatRoom.cpp ../Chat/ChatRoom.h \
 		../Chat/OpCodeMsg.h \
 		../Chat/OpCode.h \
+		../Chat/zf_log.h \
 		../Chat/Socket.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ChatRoom.o ../Chat/ChatRoom.cpp
 
 OpCodeExit.o: ../Chat/OpCodeExit.cpp ../Chat/OpCodeExit.h \
-		../Chat/OpCode.h
+		../Chat/OpCode.h \
+		../Chat/zf_log.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o OpCodeExit.o ../Chat/OpCodeExit.cpp
+
+OpCodeSysInfo.o: ../Chat/OpCodeSysInfo.cpp ../Chat/OpCodeSysInfo.h \
+		../Chat/OpCode.h \
+		../Chat/zf_log.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o OpCodeSysInfo.o ../Chat/OpCodeSysInfo.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

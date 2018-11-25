@@ -3,8 +3,8 @@
 OpCode::~OpCode() {
 }
 
-OpCode::OpCode(void) {
-    this->opCode = 0x00 ;
+OpCode::OpCode( unsigned int opCode ) {
+    this->opCode = opCode ;
     this->seqNo = 0x00;
     this->flowControl = 0x00 ;
     this->contLast = 0x00;
@@ -79,6 +79,44 @@ int OpCode::writeOpCode( int sockfd ) {
     return valid ;
 }
 
+int OpCode::readString( int sockfd, std::string * text ) {
+    int valid = 1;
+
+    size_t textSize = 0 ;
+
+    valid = valid and this->readDataOnSocket( sockfd, & textSize , sizeof( textSize ) ) ;
+
+    if( 0 < textSize ) {
+        char readMsg[ textSize + 1 ];
+        bzero( readMsg, sizeof( readMsg ));
+
+        valid = valid and this->readDataOnSocket( sockfd, readMsg , textSize ) ;
+
+        (* text) = valid ? readMsg : "" ;
+    } else {
+        (* text) = "";
+    }
+
+    return valid;
+}
+
+int OpCode::writeString( int sockfd, const std::string * text ) {
+    int valid = 1 ;
+
+    const char * str = text->c_str();
+    size_t textSize = strlen( str );
+
+    ZF_LOGI( "str = %s, len = %zu", str, strlen( str ) );
+
+    valid = valid and this->writeDataOnSocket( sockfd, & textSize, sizeof( textSize ) );
+
+    if( valid and 0 < textSize ) {
+        valid = valid and this->writeDataOnSocket( sockfd, str, strlen( str ) );
+    }
+
+    return valid ;
+}
+
 int OpCode::readDataOnSocket( int sockfd, void * data , const int size ) {
     int trn = 0 ;
 
@@ -88,7 +126,7 @@ int OpCode::readDataOnSocket( int sockfd, void * data , const int size ) {
         do {
             rn = read( sockfd, buff, size - trn );
             buff += rn ;
-            trn  += rn;
+            trn  += 1 > rn ? 0 : rn ;
         } while ( -1 < rn && trn < size );
     }
 
@@ -106,7 +144,7 @@ int OpCode::writeDataOnSocket( int sockfd, const void * data , const int size ) 
         do {
             buff += wn ;
             wn = write( sockfd, buff, size - twn );
-            twn  += wn;
+            twn  += 1 > wn ? 0 : wn ;
         } while ( -1 < wn && twn < size );
     }
 

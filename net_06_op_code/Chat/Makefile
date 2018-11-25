@@ -1,13 +1,13 @@
 CC = g++
-CFLAGS  = -Wall
-#CFLAGS  = -std=c++17 -Wall
+#CFLAGS  = -Wall
+CFLAGS  = -std=c++17 -Wall
 cflags  = -Wall
 LDFLAGS = -pthread 
 
 %.o: %.cpp $(DEPS)
-	$(CC) $< -c -o $@ $(CFLAGS)
+	$(CC) $< -o $@ -c $(CFLAGS)
 
-server: OpCode.o OpCodeMsg.o ChatRoom.o Socket.o Server.o zf_log.o 
+server: OpCode.o OpCodeMsg.o OpCodeExit.o OpCodeSysInfo.o ChatRoom.o Socket.o Server.o zf_log.o 
 	$(CC) -o $@.out $^ $(LDFLAGS)
 
 server-run:

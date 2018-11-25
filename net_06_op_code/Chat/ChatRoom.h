@@ -1,18 +1,21 @@
 #pragma once
 
 #include <vector>
-#include "OpCodeMsg.h"
+#include <queue>
+#include "OpCode.h"
 #include "Socket.h"
 
 class ChatRoom {
     public:
-        FILE * console ;
-        int valid ;
-        std::vector<Socket * > sockets ;
+    FILE * console ;
+    int valid ;
+    std::vector<Socket * > sockets ;
+    std::queue<OpCode *> opCodes;
+    bool sendingOpCodes = false ;
     
     public:
     ChatRoom() ;
 
-    void appendOpCode( OpCodeMsg * opCodeMsg ) ;
+    void appendOpCode( OpCode * opCode ) ;
     
 } ;

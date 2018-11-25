@@ -7,7 +7,15 @@
 
 #include "zf_log.h"
 
+#define OP_CODE_SYS_INFO 0x04
+#define OP_CODE_MSG  0x22
+#define OP_CODE_FILE 0x24
+#define OP_CODE_EXIT 0x26
+#define OP_CODE_ACK  0xA0
+#define OP_CODE_NACK  0xA1
+
 class OpCode {
+
     public:
         // header
         unsigned char    opCode ;
@@ -18,12 +26,16 @@ class OpCode {
         unsigned int     clientId ;
         unsigned int     bodySize ;
 
-    public: OpCode();
+    public: OpCode( unsigned int opCode );
             virtual ~ OpCode() ;
 
     public: int readDataOnSocket( int sockfd, void * data , const int size )  ;
 
     public: int writeDataOnSocket( int sockfd, const void * data , const int size ) ;
+
+    public: int readString( int sockfd, std::string * text ) ;
+
+    public: int writeString( int sockfd, const std::string * text ) ;
 
     public: int writeHead( int sockfd ) ;
 
@@ -35,7 +47,7 @@ class OpCode {
 
     public: virtual int readBody( int sockfd ) = 0 ;
 
-    private: virtual int writeBody( int sockfd ) = 0 ;
+    public: virtual int writeBody( int sockfd ) = 0 ;
 
 } ; 
 

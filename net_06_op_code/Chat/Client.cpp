@@ -52,13 +52,13 @@ void * Client::runReadOpCodeWhile( ) {
     int idx = 0 ;
 
     while( socket->valid  ) {
-        OpCodeMsg message = socket->readOpCode();
+        OpCode * opCode = socket->readOpCode();
 
         if ( not socket->valid ) {
             ZF_LOGI( "ERROR reading from socket" );
         } else if( socket->valid ) {
             ZF_LOGI( "[%04d] Processing opCode ....", idx );
-            this->processOpCode( & message );
+            this->processOpCode( opCode );
             ZF_LOGI( "[%04d] Done processing opCode.", idx );
             idx ++;
         }

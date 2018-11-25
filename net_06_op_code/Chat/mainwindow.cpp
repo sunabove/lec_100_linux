@@ -3,6 +3,8 @@
 #include <QtDebug>
 #include <iostream>
 
+#include "OpCodeMsg.h"
+
 int connect_socket (int domain, int type, int protocol) {
     return socket( domain, type, protocol );
 }
@@ -61,14 +63,14 @@ void MainWindow::slot_sendMessage() {
     }
 
     OpCodeMsg opCodeMsg ;
-    opCodeMsg.setText( 1 > qstring.size() ? " " : qstring.toUtf8().constData() );
+    opCodeMsg.text = 1 > qstring.size() ? " " : qstring.toUtf8().constData() ;
 
     Socket * socket = & this->socket ;
     socket->writeOpCode( & opCodeMsg );
 
     ui->message->setText( "" );
 
-    ZF_LOGI( "Message sent = %s", opCodeMsg.getText().c_str() );
+    ZF_LOGI( "Message sent = %s", opCodeMsg.text.c_str() );
 
     ui->sendButton->setEnabled( true );
 }
@@ -78,9 +80,9 @@ int MainWindow::processOpCode( OpCode * opCode ) {
 
     OpCodeMsg * opCodeMsg = (OpCodeMsg * ) opCode ;
 
-    QString qstring = QString::fromStdString( opCodeMsg->getText() ) ;
+    QString qstring = QString::fromStdString( opCodeMsg->text ) ;
 
-    ZF_LOGI( "Message read = %s", opCodeMsg->getText().c_str() );
+    ZF_LOGI( "Message read = %s", opCodeMsg->text.c_str() );
 
     if( true ) {
         chatContent->insertPlainText ( qstring );

@@ -1,33 +1,29 @@
 #include "Socket.h"
+#include "OpCodeMsg.h"
 
 Socket::Socket() {
     this->valid = false ;
 }
 
-OpCodeMsg Socket::readOpCode( ) {
-    OpCodeMsg opCodeMsg ;
-    int valid = opCodeMsg.readOpCode( this->sockfd );
+OpCode * Socket::readOpCode( ) {
+    OpCode * opCode = NULL ;
 
-    opCodeMsg.clientId = clientId ;
+    opCode = new OpCodeMsg();
+
+    int valid = opCode->readOpCode( this->sockfd );
+
+    opCode->clientId = clientId ;
 
     this->valid = valid ;
 
-    return opCodeMsg;
+    return opCode ;
 }
 
-void Socket::writeOpCode( OpCodeMsg * opCodeMsg ) {
+int Socket::writeOpCode( OpCode * opCode ) {
 
-    std::string textOrg = opCodeMsg->getText() ;
+    this->valid = opCode->writeOpCode( this->sockfd );
 
-    if( opCodeMsg->clientId == this->clientId ) {
-        opCodeMsg->setText( "*" + textOrg );
-    }
-
-    int valid = opCodeMsg->writeOpCode( this->sockfd );
-
-    opCodeMsg->setText( textOrg );
-
-    this->valid = valid ;
+    return this->valid ;
 }
 
 //

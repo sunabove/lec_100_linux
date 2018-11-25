@@ -35,7 +35,7 @@ bool Server::runServer( const char * portNo ) {
         perror("ERROR on binding");
         exit( 1 );
     } else {
-        fprintf( console, "Server bindded on port(%d)[%d]\n" , portno, servAddr.sin_port );
+        fprintf( console, "Server bindded on port(%d)\n" , portno );
     }
 
     struct sockaddr_in clientAddr;
@@ -94,24 +94,24 @@ void * Server::chatWithClientThread( void * args ) {
         OpCodeMsg opCodeMsg ;
         opCodeMsg.clientId = clientId ; 
 
-        opCodeMsg.setText( welcomeMsg ); 
+        opCodeMsg.text = welcomeMsg ; 
         socket->writeOpCode( & opCodeMsg );
         
-        opCodeMsg.setText( "Enter a message" ); 
+        opCodeMsg.text = "Enter a message" ; 
         socket->writeOpCode( & opCodeMsg );
 
         ZF_LOGI( "Welcome message sent.\n" ); 
     }
 
     while( socket->valid ) {
-        OpCodeMsg opCodeMsg = socket->readOpCode( ); 
+        OpCode * opCode = socket->readOpCode( ); 
 
         if ( false == socket->valid ) {
             ZF_LOGI( "[%03d] ERROR: reading from socket\n", clientId ); 
         } else if( socket->valid ) {
-            ZF_LOGI( "[%03d] A client message: %s\n", clientId, opCodeMsg.getText().c_str() ); 
+            ZF_LOGI( "[%03d] A client message: \n", clientId ); 
 
-            chatRoom->appendOpCode( & opCodeMsg ); 
+            chatRoom->appendOpCode( opCode ); 
         }
     } 
 
@@ -125,17 +125,11 @@ void * Server::chatWithClientThread( void * args ) {
 }
 // -- chatWithClientThread 
 
+// main
 int main(int argc, char **argv) { 
 
-    if (argc < 2) {
-        fprintf(stderr, "ERROR, no port provided\n");
-        exit(1);
-    } else {
-        const char * portNo = argv[1];
-        Server server ;
-        server.runServer( portNo );
-    }
-    
-    return 0;
+    const char * portNo = 2 > argc ? "100" : argv[1];
+    Server server ;
+    return server.runServer( portNo ); 
 } 
-//
+// -- main

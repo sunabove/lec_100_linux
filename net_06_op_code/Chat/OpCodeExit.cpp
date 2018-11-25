@@ -1,6 +1,6 @@
 #include "OpCodeExit.h"
 
-OpCodeExit::OpCodeExit() {
+OpCodeExit::OpCodeExit() : OpCode( OP_CODE_EXIT )  {
     this->exitCode = 0 ; 
 }
 
