@@ -60,8 +60,7 @@ bool Server::runServer( const char * portNo ) {
             Socket * socket = new Socket();
             socket->sockfd = clientSockFd ;
             socket->clientId = clientId ;
-            socket->valid = true ;
-            socket->console = console;
+            socket->valid = true ; 
             socket->appName = appName ;
             socket->chatRoom = & chatRoom ; 
 
@@ -80,12 +79,11 @@ bool Server::runServer( const char * portNo ) {
 void * Server::chatWithClientThread( void * args ) {
     Socket * socket         = (Socket *) args       ; 
     
-    FILE * console          = socket->console       ;
     const int clientId      = socket->clientId      ;
     const char * appName    = socket->appName       ; 
     ChatRoom * chatRoom     = socket->chatRoom      ;
 
-    fprintf( console, "A Process(clientId = %03d) started.\n", clientId );
+    ZF_LOGI( "A Process(clientId = %03d) started.\n", clientId );
 
     if( socket->valid ) {
         // send a welcome message to client.
@@ -102,19 +100,16 @@ void * Server::chatWithClientThread( void * args ) {
         opCodeMsg.setText( "Enter a message" ); 
         socket->writeOpCode( & opCodeMsg );
 
-        fprintf( console, "Welcome message sent.\n" );
-        fflush( console );
+        ZF_LOGI( "Welcome message sent.\n" ); 
     }
 
     while( socket->valid ) {
         OpCodeMsg opCodeMsg = socket->readOpCode( ); 
 
         if ( false == socket->valid ) {
-            fprintf(console,"[%03d] ERROR: reading from socket\n", clientId);
-            fflush( console );
+            ZF_LOGI( "[%03d] ERROR: reading from socket\n", clientId ); 
         } else if( socket->valid ) {
-            fprintf( console, "[%03d] A client message: %s\n", clientId, opCodeMsg.getText().c_str() );
-            fflush( console );
+            ZF_LOGI( "[%03d] A client message: %s\n", clientId, opCodeMsg.getText().c_str() ); 
 
             chatRoom->appendOpCode( & opCodeMsg ); 
         }
@@ -124,8 +119,7 @@ void * Server::chatWithClientThread( void * args ) {
 
     close( socket->sockfd );
 
-    fprintf( console, "The client(id = %03d) disconnected.\n", clientId );
-    fflush( console );
+    ZF_LOGI( "The client(id = %03d) disconnected.\n", clientId ); 
 
     return 0;
 }

@@ -2,7 +2,6 @@
 
 Socket::Socket() {
     this->valid = false ;
-    this->console = stdout ;
 }
 
 OpCodeMsg Socket::readOpCode( ) {

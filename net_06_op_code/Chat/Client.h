@@ -17,10 +17,10 @@ class Client {
 
     public: int connectServer(const char * hostName , const char * portNo );
 
-    public: static void * readMessageThread( void * args ) ;
+    public: static void * runReadOpCodeThread( void * args ) ;
 
-    public: void readOpCode();
-    
+    public: void * runReadOpCodeWhile() ;
+
 };
 
 //

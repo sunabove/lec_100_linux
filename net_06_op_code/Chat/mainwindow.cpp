@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->sendButton->setEnabled( false );
     ui->message->setEnabled( false );
 
+    ui->statusBar->showMessage( "HANSEI Chat v.1.0" );
+
     connect( ui->connButton , SIGNAL(clicked()), this, SLOT(slot_connectServer()));
     connect( ui->sendButton , SIGNAL(clicked()), this, SLOT(slot_sendMessage()));
     connect( ui->message    , SIGNAL(returnPressed()), this, SLOT(slot_sendMessage()));
@@ -27,6 +29,7 @@ MainWindow::~MainWindow() {
 void MainWindow::slot_connectServer() {
     ui->connButton->setEnabled( false );
     ui->sendButton->setEnabled( false );
+    ui->hostName->setReadOnly( true );
 
     const char * hostNameText   = ui->hostName->displayText().toUtf8().constData();
     const char * portNoText     = "100" ;
@@ -34,12 +37,18 @@ void MainWindow::slot_connectServer() {
     ZF_LOGI( "hostName = %s", hostNameText );
     ZF_LOGI( "portNo   = %s", portNoText );
 
+    ui->statusBar->showMessage( "Connecting ...." );
+
     int valid = this->connectServer( hostNameText, portNoText );
+
+    ui->statusBar->showMessage( valid ? "Connected." : "Not Connected." );
 
     ui->connButton->setEnabled( ! valid );
 
-    ui->message->setEnabled( valid );
+    ui->hostName->setReadOnly( valid );
     ui->sendButton->setEnabled( valid );
+    ui->message->setEnabled( valid );
+
 }
 
 void MainWindow::slot_sendMessage() {
@@ -52,7 +61,7 @@ void MainWindow::slot_sendMessage() {
     }
 
     OpCodeMsg opCodeMsg ;
-    opCodeMsg.setText( qstring.toUtf8().constData() );
+    opCodeMsg.setText( 1 > qstring.size() ? " " : qstring.toUtf8().constData() );
 
     Socket * socket = & this->socket ;
     socket->writeOpCode( & opCodeMsg );

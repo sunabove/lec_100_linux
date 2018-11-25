@@ -22,8 +22,7 @@ class Socket  {
     int valid ; 
     int sockfd;
     unsigned int clientId ;
-    const char * appName ;  
-    FILE * console ;
+    const char * appName ;
 
     ChatRoom * chatRoom ;
 

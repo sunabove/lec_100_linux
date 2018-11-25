@@ -6,15 +6,14 @@ Client::Client() {
 };
 
 int Client::connectServer(const char * hostName , const char * portNo ) {
-    FILE * console = stdout ;
-
     struct hostent *server = gethostbyname( hostName );
-    if (server == NULL) {
+
+    if ( NULL == server ) {
         ZF_LOGI( "ERROR no such host or port" );
     } else {
         int portno = atoi( portNo );
         int sockfd = connect_socket(AF_INET, SOCK_STREAM, 0);
-        if (sockfd < 0) {
+        if ( 0 > sockfd ) {
             ZF_LOGI( "ERROR opening socket" );
         } else {
             struct sockaddr_in serv_addr;
@@ -23,16 +22,15 @@ int Client::connectServer(const char * hostName , const char * portNo ) {
             bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
             serv_addr.sin_port = htons(portno);
 
-            if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+            if ( 0 > connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) ) {
                 ZF_LOGI( "ERROR connecting" );
             } else {
                 Socket * socket = & this->socket ;
                 socket->sockfd     = sockfd;
                 socket->valid      = 1 ;
-                socket->console    = console ;
 
                 pthread_t readThread ;
-                pthread_create (&readThread, NULL, readMessageThread, this );
+                pthread_create (&readThread, NULL, runReadOpCodeThread, this );
             }
         }
     }
@@ -40,16 +38,18 @@ int Client::connectServer(const char * hostName , const char * portNo ) {
     return this->socket.valid ;
 }
 
-void * Client::readMessageThread( void * args ) {
+void * Client::runReadOpCodeThread( void * args ) {
     Client * client = (Client *) args ;
-    client->readOpCode();
-    return 0;
+
+    return client->runReadOpCodeWhile();
 }
 
-void Client::readOpCode( ) {
+void * Client::runReadOpCodeWhile( ) {
     Socket * socket = & this->socket ;
 
     ZF_LOGI( "Reading Thread started." );
+
+    int idx = 0 ;
 
     while( socket->valid  ) {
         OpCodeMsg message = socket->readOpCode();
@@ -57,9 +57,14 @@ void Client::readOpCode( ) {
         if ( not socket->valid ) {
             ZF_LOGI( "ERROR reading from socket" );
         } else if( socket->valid ) {
+            ZF_LOGI( "[%04d] Processing opCode ....", idx );
             this->processOpCode( & message );
+            ZF_LOGI( "[%04d] Done processing opCode.", idx );
+            idx ++;
         }
     }
+
+    return 0;
 }
 
 //
