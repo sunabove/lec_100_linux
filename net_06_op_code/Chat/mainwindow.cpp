@@ -4,6 +4,8 @@
 #include <iostream>
 
 #include "OpCodeMsg.h"
+#include "OpCodeSysInfo.h"
+#include "OpCodeExit.h"
 
 int connect_socket (int domain, int type, int protocol) {
     return socket( domain, type, protocol );
@@ -31,7 +33,8 @@ MainWindow::~MainWindow() {
 void MainWindow::slot_connectServer() {
     ui->connButton->setEnabled( false );
     ui->sendButton->setEnabled( false );
-    ui->hostName->setReadOnly( true );
+    ui->hostName->setEnabled( false );
+    ui->chatContent->setEnabled( false );
 
     const char * hostNameText   = ui->hostName->displayText().toUtf8().constData();
     const char * portNoText     = "100" ;
@@ -47,7 +50,8 @@ void MainWindow::slot_connectServer() {
 
     ui->connButton->setEnabled( ! valid );
 
-    ui->hostName->setReadOnly( valid );
+    ui->hostName->setEnabled( ! valid );
+    ui->chatContent->setEnabled( valid );
     ui->sendButton->setEnabled( valid );
     ui->message->setEnabled( valid );
 
@@ -68,7 +72,7 @@ void MainWindow::slot_sendMessage() {
     Socket * socket = & this->socket ;
     socket->writeOpCode( & opCodeMsg );
 
-    ui->message->setText( "" );
+    //ui->message->setText( "" );
 
     ZF_LOGI( "Message sent = %s", opCodeMsg.text.c_str() );
 
@@ -76,21 +80,50 @@ void MainWindow::slot_sendMessage() {
 }
 
 int MainWindow::processOpCode( OpCode * opCode ) {
-    QPlainTextEdit * chatContent = ui->chatContent ;
 
-    OpCodeMsg * opCodeMsg = (OpCodeMsg * ) opCode ;
+    auto code = opCode->code ;
 
-    QString qstring = QString::fromStdString( opCodeMsg->text ) ;
-
-    ZF_LOGI( "Message read = %s", opCodeMsg->text.c_str() );
-
-    if( true ) {
-        chatContent->insertPlainText ( qstring );
-        chatContent->insertPlainText ( "\n" );
-        //chatContent->moveCursor(QTextCursor::End);
+    if( OP_CODE_MSG == code ) {
+        OpCodeMsg * opCodeMsg = (OpCodeMsg * ) opCode ;
+        this->insertChatContent( & opCodeMsg->text );
+    } else if( OP_CODE_SYS_INFO == code ) {
+        OpCodeSysInfo * opCodeSysInfo = (OpCodeSysInfo * ) opCode ;
+        this->insertChatContent( & opCodeSysInfo->sysMessage );
     }
 
     return 1;
 }
+
+void MainWindow::insertChatContent( std::string * text ) {
+    auto chatContent = ui->chatContent ;
+
+    ZF_LOGI( "Message chat = %s", text->c_str() );
+
+    chatContent->insertPlainText( QString::fromStdString( * text ) );
+    chatContent->insertPlainText( "\n" );
+    chatContent->moveCursor(QTextCursor::End);
+}
+
+// closeEvent
+void MainWindow::closeEvent(QCloseEvent * ) {
+    ZF_LOGI( "closeEvent" );
+
+    Socket * socket = & this->socket ;
+
+    if( NULL != socket and socket->valid ) {
+        // send exit message
+        ZF_LOGI( "Sending exit message ..." );
+
+        OpCodeExit opCodeExit ;
+        opCodeExit.exitCode = 0 ;
+        socket->writeOpCode( & opCodeExit );
+
+        ZF_LOGI( "Done. sending exit message." );
+        // -- send exit message
+    }
+
+    this->close();
+}
+// -- closeEvent
 
 //

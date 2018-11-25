@@ -18,7 +18,7 @@ class OpCode {
 
     public:
         // header
-        unsigned char    opCode ;
+        unsigned char    code ;
         unsigned int     seqNo ;
         unsigned char    flowControl ;
         unsigned char    contLast ; // C/L
@@ -26,7 +26,7 @@ class OpCode {
         unsigned int     clientId ;
         unsigned int     bodySize ;
 
-    public: OpCode( unsigned int opCode );
+    public: OpCode( unsigned int code );
             virtual ~ OpCode() ;
 
     public: int readDataOnSocket( int sockfd, void * data , const int size )  ;

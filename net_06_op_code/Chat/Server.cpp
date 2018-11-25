@@ -1,6 +1,7 @@
 /* A simple server */ 
 
 #include "Server.h"
+#include "OpCodeSysInfo.h"
  
 Server::Server() {
 }
@@ -83,36 +84,65 @@ void * Server::chatWithClientThread( void * args ) {
     const char * appName    = socket->appName       ; 
     ChatRoom * chatRoom     = socket->chatRoom      ;
 
+    auto console = stdout ;
+
     ZF_LOGI( "A Process(clientId = %03d) started.\n", clientId );
 
     if( socket->valid ) {
-        // send a welcome message to client.
-        char welcomeMsg [2048];
-        bzero( welcomeMsg, sizeof(welcomeMsg) );
-        snprintf ( welcomeMsg, sizeof(welcomeMsg), "Welcome to %s" , appName ); 
-        
-        OpCodeMsg opCodeMsg ;
-        opCodeMsg.clientId = clientId ; 
+        auto valid = true ; 
+        if( valid ) {  
+            // send a welcome message to client.
+            char welcomeMsg [2048];
+            bzero( welcomeMsg, sizeof(welcomeMsg) );
+            snprintf ( welcomeMsg, sizeof(welcomeMsg), "Welcome to %s" , appName ); 
+            
+            // send sysinfo message
+            OpCodeSysInfo opCodeSysInfo ;
+            opCodeSysInfo.clientId = clientId ; 
 
-        opCodeMsg.text = welcomeMsg ; 
-        socket->writeOpCode( & opCodeMsg );
-        
-        opCodeMsg.text = "Enter a message" ; 
-        socket->writeOpCode( & opCodeMsg );
+            opCodeSysInfo.sysMessage = welcomeMsg ; 
+            socket->writeOpCode( & opCodeSysInfo );
 
-        ZF_LOGI( "Welcome message sent.\n" ); 
+            ZF_LOGI( "Welcome message sent.\n" ); 
+        }
+        
+        if( valid ) {  
+            OpCodeMsg opCodeMsg ;
+            opCodeMsg.clientId = clientId ; 
+            opCodeMsg.text = "Enter a message" ; 
+            socket->writeOpCode( & opCodeMsg );
+
+            ZF_LOGI( "Enter message sent.\n" ); 
+        }
+        
     }
 
     while( socket->valid ) {
         OpCode * opCode = socket->readOpCode( ); 
 
-        if ( false == socket->valid ) {
+        if( NULL == opCode ) {
+            ZF_LOGI( "OPCODE IS NULL." );
+        } else if ( false == socket->valid ) {
             ZF_LOGI( "[%03d] ERROR: reading from socket\n", clientId ); 
         } else if( socket->valid ) {
-            ZF_LOGI( "[%03d] A client message: \n", clientId ); 
 
-            chatRoom->appendOpCode( opCode ); 
-        }
+            auto code = opCode->code ;
+
+            ZF_LOGI( "opCode = %d", code );
+
+            if( OP_CODE_MSG == code ) { 
+                // close socket
+                OpCodeMsg * opCodeMsg = (OpCodeMsg * ) opCode ;
+                ZF_LOGI( "[%03d] A client message: %s\n", clientId, opCodeMsg->text.c_str() );
+                
+                chatRoom->appendOpCode( opCode ); 
+            } else if ( OP_CODE_EXIT == code ) {
+                // close socket   
+                fprintf( console, "[%03d] client has exited.\n" , clientId ); 
+
+                socket->valid = false ; 
+            }
+        } 
     } 
 
     socket->valid = false ;  

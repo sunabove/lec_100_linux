@@ -19,9 +19,9 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
@@ -36,10 +36,10 @@ public:
     QLineEdit *hostName;
     QPushButton *connButton;
     QLabel *label_2;
-    QPlainTextEdit *chatContent;
     QLabel *label_3;
     QLineEdit *message;
     QPushButton *sendButton;
+    QTextEdit *chatContent;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -75,12 +75,6 @@ public:
 
         gridLayout->addWidget(label_2, 1, 0, 1, 1);
 
-        chatContent = new QPlainTextEdit(centralWidget);
-        chatContent->setObjectName(QStringLiteral("chatContent"));
-        chatContent->setReadOnly(true);
-
-        gridLayout->addWidget(chatContent, 1, 1, 1, 2);
-
         label_3 = new QLabel(centralWidget);
         label_3->setObjectName(QStringLiteral("label_3"));
 
@@ -95,6 +89,11 @@ public:
         sendButton->setObjectName(QStringLiteral("sendButton"));
 
         gridLayout->addWidget(sendButton, 2, 2, 1, 1);
+
+        chatContent = new QTextEdit(centralWidget);
+        chatContent->setObjectName(QStringLiteral("chatContent"));
+
+        gridLayout->addWidget(chatContent, 1, 1, 1, 2);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -115,7 +114,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Chart OpCode V1.0", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Chat OpCode V1.0", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "Host", Q_NULLPTR));
         hostName->setText(QApplication::translate("MainWindow", "localhost", Q_NULLPTR));
         connButton->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));

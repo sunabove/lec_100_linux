@@ -25,6 +25,8 @@ public slots :
     void slot_sendMessage();
 
 public: int processOpCode( OpCode * opCode ) ;
+public: void insertChatContent( std::string * text );
+protected: void closeEvent(QCloseEvent* e) ;
 };
 
 #endif // MAINWINDOW_H

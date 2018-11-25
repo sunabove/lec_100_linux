@@ -3,8 +3,8 @@
 OpCode::~OpCode() {
 }
 
-OpCode::OpCode( unsigned int opCode ) {
-    this->opCode = opCode ;
+OpCode::OpCode( unsigned int code ) {
+    this->code = code ;
     this->seqNo = 0x00;
     this->flowControl = 0x00 ;
     this->contLast = 0x00;
@@ -16,13 +16,16 @@ OpCode::OpCode( unsigned int opCode ) {
 int OpCode::writeHead( int sockfd ) {
     int valid = 1 ;
 
-    valid = valid and this->writeDataOnSocket( sockfd, & opCode, sizeof( opCode ) );
+    valid = valid and this->writeDataOnSocket( sockfd, & code, sizeof( code ) );
+
+    valid = valid and this->writeDataOnSocket( sockfd, & bodySize, sizeof( bodySize ) );
+
     valid = valid and this->writeDataOnSocket( sockfd, & seqNo, sizeof( seqNo ) );
     valid = valid and this->writeDataOnSocket( sockfd, & flowControl, sizeof( flowControl ) );
     valid = valid and this->writeDataOnSocket( sockfd, & contLast, sizeof( contLast ) );
     valid = valid and this->writeDataOnSocket( sockfd, & date, sizeof( date ) );
     valid = valid and this->writeDataOnSocket( sockfd, & clientId, sizeof( clientId ) );
-    valid = valid and this->writeDataOnSocket( sockfd, & bodySize, sizeof( bodySize ) );
+
 
     return valid;
 }
@@ -30,13 +33,15 @@ int OpCode::writeHead( int sockfd ) {
 int OpCode::readHead( int sockfd ) {
     int valid = 1;
 
-    valid = valid and this->readDataOnSocket( sockfd, & this->opCode , sizeof( opCode ) );
+    //valid = valid and this->readDataOnSocket( sockfd, & this->code , sizeof( code ) );
+
+    valid = valid and this->readDataOnSocket( sockfd, & this->bodySize , sizeof( bodySize ) );
+
     valid = valid and this->readDataOnSocket( sockfd, & this->seqNo , sizeof( seqNo ) );
     valid = valid and this->readDataOnSocket( sockfd, & this->flowControl , sizeof( flowControl ) );
     valid = valid and this->readDataOnSocket( sockfd, & this->contLast , sizeof( contLast ) );
     valid = valid and this->readDataOnSocket( sockfd, & this->date , sizeof( date ) );
     valid = valid and this->readDataOnSocket( sockfd, & this->clientId , sizeof( clientId ) );
-    valid = valid and this->readDataOnSocket( sockfd, & this->bodySize , sizeof( bodySize ) );
 
     return valid ;
 }

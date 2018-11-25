@@ -54,13 +54,15 @@ void * Client::runReadOpCodeWhile( ) {
     while( socket->valid  ) {
         OpCode * opCode = socket->readOpCode();
 
-        if ( not socket->valid ) {
+        if ( false == socket->valid ) {
             ZF_LOGI( "ERROR reading from socket" );
-        } else if( socket->valid ) {
+        } else if( socket->valid and NULL != opCode ) {
             ZF_LOGI( "[%04d] Processing opCode ....", idx );
             this->processOpCode( opCode );
             ZF_LOGI( "[%04d] Done processing opCode.", idx );
             idx ++;
+        } else if( NULL == opCode ) {
+            ZF_LOGI( "OpCode is NULL." );
         }
     }
 

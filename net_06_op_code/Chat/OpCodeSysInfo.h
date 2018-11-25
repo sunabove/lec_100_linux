@@ -3,7 +3,7 @@
 #include "OpCode.h"
 
 class OpCodeSysInfo : public OpCode {
-    private :
+    public :
         std::string     sysMessage ;
 
     public: OpCodeSysInfo() ;
