@@ -114,7 +114,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Chat OpCode V1.0", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Chat Filter V1.0", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "Host", Q_NULLPTR));
         hostName->setText(QApplication::translate("MainWindow", "localhost", Q_NULLPTR));
         connButton->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));
