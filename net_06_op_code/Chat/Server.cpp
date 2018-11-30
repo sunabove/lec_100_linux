@@ -113,8 +113,7 @@ void * Server::chatWithClientThread( void * args ) {
             socket->writeOpCode( & opCodeMsg );
 
             ZF_LOGI( "Enter message sent.\n" ); 
-        }
-        
+        }        
     }
 
     while( socket->valid ) {
