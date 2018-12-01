@@ -43,12 +43,12 @@ int OpCode::writeHead( int sockfd ) {
     if( valid ) {
         std::time_t rawtime;
         std::tm* timeinfo;
-        char buffer [80];
+        char buffer [15];
 
         std::time(&rawtime);
         timeinfo = std::localtime(&rawtime);
 
-        std::strftime(buffer,80,"%Y%m%d%H%M%S",timeinfo);
+        std::strftime(buffer, 15, "%Y%m%d%H%M%S",timeinfo);
 
         DateType date = strtoul(buffer, NULL, 0);
 
