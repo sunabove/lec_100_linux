@@ -22,7 +22,7 @@ typedef unsigned int    SeqNo ;
 typedef unsigned int    ClientId ;
 typedef unsigned char   FlowControl ;
 typedef unsigned char   ContLast ;
-typedef unsigned int    DateType ;
+typedef unsigned long   DateType ;
 
 class OpCode {
 

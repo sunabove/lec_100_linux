@@ -1,5 +1,7 @@
 #include "OpCode.h"
 
+#include <ctime>
+
 OpCode::~OpCode() {
     this->flowControl = 0x01 ;
     this->contLast = 0x00;
@@ -38,7 +40,24 @@ int OpCode::writeHead( int sockfd ) {
 
     valid = valid and this->writeDataOnSocket( sockfd, & flowControl, sizeof( flowControl ) );
     valid = valid and this->writeDataOnSocket( sockfd, & contLast, sizeof( contLast ) );
-    valid = valid and this->writeDataOnSocket( sockfd, & date, sizeof( date ) );
+    if( valid ) {
+        std::time_t rawtime;
+        std::tm* timeinfo;
+        char buffer [80];
+
+        std::time(&rawtime);
+        timeinfo = std::localtime(&rawtime);
+
+        std::strftime(buffer,80,"%Y%m%d%H%M%S",timeinfo);
+
+        DateType date = strtoul(buffer, NULL, 0);
+
+        ZF_LOGI( "date = [%s], ul = [%zu]", buffer, date );
+
+        this->date = date;
+
+        valid = valid and this->writeDataOnSocket( sockfd, & date, sizeof( date ) );
+    }
     // -- header validation data
 
     valid = valid and this->writeDataOnSocket( sockfd, & bodySize, sizeof( bodySize ) );
