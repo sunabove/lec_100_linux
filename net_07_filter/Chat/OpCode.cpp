@@ -1,6 +1,7 @@
 #include "OpCode.h"
 
 OpCode::~OpCode() {
+    this->flowControl = 0x01 ;
 }
 
 OpCode::OpCode( unsigned int code ) {
@@ -13,19 +14,33 @@ OpCode::OpCode( unsigned int code ) {
     this->bodySize = 0x00;
 }
 
+DataLength OpCode::getHeaderSize() {
+    DataLength len = 0 ;
+
+    len += sizeof( code );
+    len += sizeof( bodySize );
+    len += sizeof( seqNo );
+    len += sizeof( flowControl );
+    len += sizeof( contLast );
+    len += sizeof( clientId );
+    len += sizeof( date );
+
+    return len ;
+}
+
 int OpCode::writeHead( int sockfd ) {
     int valid = 1 ;
 
     valid = valid and this->writeDataOnSocket( sockfd, & code, sizeof( code ) );
 
-    valid = valid and this->writeDataOnSocket( sockfd, & bodySize, sizeof( bodySize ) );
-
-    valid = valid and this->writeDataOnSocket( sockfd, & seqNo, sizeof( seqNo ) );
     valid = valid and this->writeDataOnSocket( sockfd, & flowControl, sizeof( flowControl ) );
     valid = valid and this->writeDataOnSocket( sockfd, & contLast, sizeof( contLast ) );
-    valid = valid and this->writeDataOnSocket( sockfd, & date, sizeof( date ) );
-    valid = valid and this->writeDataOnSocket( sockfd, & clientId, sizeof( clientId ) );
 
+    valid = valid and this->writeDataOnSocket( sockfd, & bodySize, sizeof( bodySize ) );
+    valid = valid and this->writeDataOnSocket( sockfd, & date, sizeof( date ) );
+
+    valid = valid and this->writeDataOnSocket( sockfd, & seqNo, sizeof( seqNo ) );
+    valid = valid and this->writeDataOnSocket( sockfd, & clientId, sizeof( clientId ) );
 
     return valid;
 }
@@ -35,12 +50,13 @@ int OpCode::readHead( int sockfd ) {
 
     //valid = valid and this->readDataOnSocket( sockfd, & this->code , sizeof( code ) );
 
-    valid = valid and this->readDataOnSocket( sockfd, & this->bodySize , sizeof( bodySize ) );
-
-    valid = valid and this->readDataOnSocket( sockfd, & this->seqNo , sizeof( seqNo ) );
     valid = valid and this->readDataOnSocket( sockfd, & this->flowControl , sizeof( flowControl ) );
     valid = valid and this->readDataOnSocket( sockfd, & this->contLast , sizeof( contLast ) );
+
+    valid = valid and this->readDataOnSocket( sockfd, & this->bodySize , sizeof( bodySize ) );
     valid = valid and this->readDataOnSocket( sockfd, & this->date , sizeof( date ) );
+
+    valid = valid and this->readDataOnSocket( sockfd, & this->seqNo , sizeof( seqNo ) );
     valid = valid and this->readDataOnSocket( sockfd, & this->clientId , sizeof( clientId ) );
 
     return valid ;
@@ -69,6 +85,8 @@ int OpCode::writeOpCode( int sockfd ) {
 
     ZF_LOGI( "Writing an opCode ..." );
 
+    this->bodySize = this->getBodySize();
+
     ZF_LOGI( "writeHead" );
     valid = valid and this->writeHead( sockfd ) ;
     ZF_LOGI( "Done. writeHead" );
@@ -87,7 +105,7 @@ int OpCode::writeOpCode( int sockfd ) {
 int OpCode::readString( int sockfd, std::string * text ) {
     int valid = 1;
 
-    size_t textSize = 0 ;
+    DataLength textSize = 0 ;
 
     valid = valid and this->readDataOnSocket( sockfd, & textSize , sizeof( textSize ) ) ;
 
@@ -109,7 +127,7 @@ int OpCode::writeString( int sockfd, const std::string * text ) {
     int valid = 1 ;
 
     const char * str = text->c_str();
-    size_t textSize = strlen( str );
+    DataLength textSize = strlen( str );
 
     ZF_LOGI( "str = %s, len = %zu", str, strlen( str ) );
 

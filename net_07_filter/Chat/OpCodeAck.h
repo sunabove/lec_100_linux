@@ -2,11 +2,13 @@
 
 #include "OpCode.h"
 
-class OpCodeSysInfo : public OpCode {
+class OpCodeAck : public OpCode {
     public :
-        std::string     sysMessage ;
+        SeqNo   recvSeqNo ;
+        Code    recvOpCode ;
 
-    public: OpCodeSysInfo() ;
+    public: OpCodeAck() ;
+
     public: virtual DataLength getBodySize() ;
 
     public: int readBody( int sockfd ) ;

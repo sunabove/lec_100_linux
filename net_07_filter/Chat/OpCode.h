@@ -14,20 +14,38 @@
 #define OP_CODE_ACK  0xA0
 #define OP_CODE_NACK  0xA1
 
+#define SOH 0x01 // Start Of Heading
+
+typedef unsigned char   Code ;
+typedef unsigned short  DataLength ;
+typedef unsigned int    SeqNo ;
+typedef unsigned int    ClientId ;
+typedef unsigned char   FlowControl ;
+typedef unsigned char   ContLast ;
+typedef unsigned int    DateType ;
+
 class OpCode {
 
     public:
         // header
-        unsigned char    code ;
-        unsigned int     seqNo ;
-        unsigned char    flowControl ;
-        unsigned char    contLast ; // C/L
-        unsigned int     date ;
-        unsigned int     clientId ;
-        unsigned int     bodySize ;
+        Code        code ;
+        SeqNo       seqNo ;
+        FlowControl flowControl ;
+        ContLast    contLast ; // C/L
+        DateType    date ;
+        ClientId    clientId ;
+        DataLength   bodySize ;
 
     public: OpCode( unsigned int code );
             virtual ~ OpCode() ;
+
+    public: DataLength getHeaderSize( ) ;
+
+    public: virtual DataLength getBodySize() = 0 ;
+
+    public: virtual int readBody( int sockfd ) = 0 ;
+
+    public: virtual int writeBody( int sockfd ) = 0 ;
 
     public: int readDataOnSocket( int sockfd, void * data , const int size )  ;
 
@@ -45,9 +63,7 @@ class OpCode {
 
     public: int writeOpCode( int sockfd ) ;
 
-    public: virtual int readBody( int sockfd ) = 0 ;
 
-    public: virtual int writeBody( int sockfd ) = 0 ;
 
 } ; 
 

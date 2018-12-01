@@ -36,7 +36,7 @@ bool Server::runServer( const char * portNo ) {
         perror("ERROR on binding");
         exit( 1 );
     } else {
-        fprintf( console, "Server bindded on port(%d)\n" , portno );
+        fprintf( console, "Server port: %d\n" , portno );
     }
 
     struct sockaddr_in clientAddr;

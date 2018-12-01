@@ -5,6 +5,14 @@ OpCodeMsg::OpCodeMsg() : OpCode( OP_CODE_MSG ) {
     this->text = "" ;
 }
 
+DataLength OpCodeMsg::getBodySize() {
+    DataLength len = 0 ;
+
+    len += this->text.size();
+
+    return len ;
+}
+
 int OpCodeMsg::readBody( int sockfd ) {
     return this->readString( sockfd, & this->text );
 }

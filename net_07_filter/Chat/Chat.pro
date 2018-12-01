@@ -33,7 +33,10 @@ SOURCES += \
     Socket.cpp \
     ChatRoom.cpp \
     OpCodeExit.cpp \
-    OpCodeSysInfo.cpp
+    OpCodeSysInfo.cpp \
+    OpCodeAck.cpp \
+    OpCodeNack.cpp \
+    OpCodeFile.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,7 +48,10 @@ HEADERS += \
     OpCodeMsg.h \
     zf_log.h \
     OpCodeExit.h \
-    OpCodeSysInfo.h
+    OpCodeSysInfo.h \
+    OpCodeAck.h \
+    OpCodeNack.h \
+    OpCodeFile.h
 
 FORMS += \
         mainwindow.ui

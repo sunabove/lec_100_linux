@@ -7,6 +7,7 @@ class OpCodeMsg : public OpCode {
         std::string  text ;
 
     public: OpCodeMsg() ;
+    public: virtual DataLength getBodySize() ;
 
     public: int readBody( int sockfd ) ;
 
