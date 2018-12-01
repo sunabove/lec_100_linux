@@ -36,6 +36,8 @@ class OpCode {
         ClientId    clientId ;
         DataLength   bodySize ;
 
+        bool headValid = false ;
+
     public: OpCode( unsigned int code );
             virtual ~ OpCode() ;
 
@@ -58,6 +60,8 @@ class OpCode {
     public: int writeHead( int sockfd ) ;
 
     public: int readHead( int sockfd ) ;
+
+    public: bool validateHead() ;
 
     public: int readOpCode( int sockfd );
 

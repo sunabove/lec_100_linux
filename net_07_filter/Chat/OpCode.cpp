@@ -2,6 +2,8 @@
 
 OpCode::~OpCode() {
     this->flowControl = 0x01 ;
+    this->contLast = 0x00;
+    this->date = 0x00;
 }
 
 OpCode::OpCode( unsigned int code ) {
@@ -31,14 +33,15 @@ DataLength OpCode::getHeaderSize() {
 int OpCode::writeHead( int sockfd ) {
     int valid = 1 ;
 
+    // header validation data
     valid = valid and this->writeDataOnSocket( sockfd, & code, sizeof( code ) );
 
     valid = valid and this->writeDataOnSocket( sockfd, & flowControl, sizeof( flowControl ) );
     valid = valid and this->writeDataOnSocket( sockfd, & contLast, sizeof( contLast ) );
+    valid = valid and this->writeDataOnSocket( sockfd, & date, sizeof( date ) );
+    // -- header validation data
 
     valid = valid and this->writeDataOnSocket( sockfd, & bodySize, sizeof( bodySize ) );
-    valid = valid and this->writeDataOnSocket( sockfd, & date, sizeof( date ) );
-
     valid = valid and this->writeDataOnSocket( sockfd, & seqNo, sizeof( seqNo ) );
     valid = valid and this->writeDataOnSocket( sockfd, & clientId, sizeof( clientId ) );
 
@@ -48,16 +51,49 @@ int OpCode::writeHead( int sockfd ) {
 int OpCode::readHead( int sockfd ) {
     int valid = 1;
 
+    // header validation data
     //valid = valid and this->readDataOnSocket( sockfd, & this->code , sizeof( code ) );
-
     valid = valid and this->readDataOnSocket( sockfd, & this->flowControl , sizeof( flowControl ) );
     valid = valid and this->readDataOnSocket( sockfd, & this->contLast , sizeof( contLast ) );
+    valid = valid and this->readDataOnSocket( sockfd, & this->date , sizeof( date ) );
+    // -- header validation data
 
     valid = valid and this->readDataOnSocket( sockfd, & this->bodySize , sizeof( bodySize ) );
-    valid = valid and this->readDataOnSocket( sockfd, & this->date , sizeof( date ) );
-
     valid = valid and this->readDataOnSocket( sockfd, & this->seqNo , sizeof( seqNo ) );
     valid = valid and this->readDataOnSocket( sockfd, & this->clientId , sizeof( clientId ) );
+
+    return valid ;
+}
+
+bool OpCode::validateHead() {
+    auto valid = true ;
+
+    const auto code = this->code ;
+    const auto flowControl = this->flowControl;
+    const auto contLast = this->contLast;
+
+    switch ( code ) {
+        case OP_CODE_ACK:
+            break;
+        case OP_CODE_NACK:
+            break;
+        case OP_CODE_MSG:
+            break;
+        case OP_CODE_SYS_INFO :
+            break;
+        case OP_CODE_FILE :
+            break;
+        case OP_CODE_EXIT :
+            break;
+        default:
+            valid = false ;
+        break;
+    };
+
+    valid = valid and ( 0x00 == flowControl or 0x01 == flowControl ) ;
+    valid = valid and ( 0x00 == contLast or 0x01 == contLast or 0x11 == contLast );
+
+    this->headValid = valid ;
 
     return valid ;
 }
@@ -71,12 +107,19 @@ int OpCode::readOpCode( int sockfd ) {
     valid = valid and this->readHead( sockfd );
     ZF_LOGI( "Done. readHead" );
 
-    ZF_LOGI( "readBody" );
-    valid = valid and this->readBody( sockfd );
-    ZF_LOGI( "Deon. readBody" );
+    if( valid ) {
+        ZF_LOGI( "validate head" );
+        valid = valid && this->validateHead();
+        ZF_LOGI( "validate head = %d", valid );
+
+        if( valid ) {
+            ZF_LOGI( "readBody" );
+            valid = valid and this->readBody( sockfd );
+            ZF_LOGI( "Deon. readBody" );
+        }
+    }
 
     ZF_LOGI( "Deon. reading an opCode." );
-
     return valid ;
 }
 
