@@ -2,10 +2,29 @@
 
 #include <ctime>
 
+bool Date::setNow() {
+    std::time_t rawtime;
+    std::tm* timeinfo;
+
+    std::time(&rawtime);
+    timeinfo = std::localtime(&rawtime);
+
+    const size_t buffSize = 15 ;
+    char buff[buffSize];
+    bzero( buff, buffSize );
+
+    std::strftime(buff, buffSize, "%Y%m%d%H%M%S", timeinfo);
+
+    sscanf( buff, "%04u%02u%02u%02u%02u%02u", & yy, & mm, & dd, & hh, & mi, & ss );
+
+    ZF_LOGI( "Date: yyyy=%04d, mm=%02d, dd=%02d, hh=%02d, mi=%02d, ss=%02d", yy, mm, dd, hh, mi, ss) ;
+
+    return true;
+}
+
 OpCode::~OpCode() {
     this->flowControl = 0x01 ;
     this->contLast = 0x00;
-    this->date = 0x00;
 }
 
 OpCode::OpCode( unsigned int code ) {
@@ -13,7 +32,6 @@ OpCode::OpCode( unsigned int code ) {
     this->seqNo = 0x00;
     this->flowControl = 0x00 ;
     this->contLast = 0x00;
-    this->date = 0x00;
     this->clientId = 0x00 ;
     this->bodySize = 0x00;
 }
@@ -40,24 +58,10 @@ int OpCode::writeHead( int sockfd ) {
 
     valid = valid and this->writeDataOnSocket( sockfd, & flowControl, sizeof( flowControl ) );
     valid = valid and this->writeDataOnSocket( sockfd, & contLast, sizeof( contLast ) );
-    if( valid ) {
-        std::time_t rawtime;
-        std::tm* timeinfo;
-        char buffer [15];
 
-        std::time(&rawtime);
-        timeinfo = std::localtime(&rawtime);
+    valid = valid and this->date.setNow();
 
-        std::strftime(buffer, 15, "%Y%m%d%H%M%S",timeinfo);
-
-        DateType date = strtoul(buffer, NULL, 0);
-
-        ZF_LOGI( "date = [%s], ul = [%zu]", buffer, date );
-
-        this->date = date;
-
-        valid = valid and this->writeDataOnSocket( sockfd, & date, sizeof( date ) );
-    }
+    valid = valid and this->writeDataOnSocket( sockfd, & date, sizeof( date ) );
     // -- header validation data
 
     valid = valid and this->writeDataOnSocket( sockfd, & bodySize, sizeof( bodySize ) );
@@ -111,6 +115,29 @@ bool OpCode::validateHead() {
 
     valid = valid and ( 0x00 == flowControl or 0x01 == flowControl ) ;
     valid = valid and ( 0x00 == contLast or 0x01 == contLast or 0x11 == contLast );
+
+    // date validation
+
+    if( valid ) {
+        //   YY MM DD  hh mi ss
+        // 2999 12 31  24 60 60
+
+        // yy
+        valid = valid and ( 2999 > date.yy );
+        // MM
+        valid = valid and ( 12 >= date.mm );
+        // DD
+        valid = valid and ( 31 >= date.dd );
+
+        // hh
+        valid = valid and ( 60 >= date.hh );
+        // mi
+        valid = valid and ( 60 >= date.mi );
+        // ss
+        valid = valid and ( 60 >= date.ss );
+    }
+
+    // -- date validation
 
     this->headValid = valid ;
 

@@ -22,18 +22,29 @@ typedef unsigned int    SeqNo ;
 typedef unsigned int    ClientId ;
 typedef unsigned char   FlowControl ;
 typedef unsigned char   ContLast ;
-typedef unsigned long   DateType ;
+
+class Date {
+    public:
+        unsigned int yy;
+        unsigned int mm;
+        unsigned int dd;
+        unsigned int hh;
+        unsigned int mi;
+        unsigned int ss;
+
+    public : bool setNow() ;
+};
 
 class OpCode {
 
     public:
         // header
-        Code        code ;
-        SeqNo       seqNo ;
-        FlowControl flowControl ;
-        ContLast    contLast ; // C/L
-        DateType    date ;
-        ClientId    clientId ;
+        Code         code ;
+        SeqNo        seqNo ;
+        FlowControl  flowControl ;
+        ContLast     contLast ;
+        Date         date ;
+        ClientId     clientId ;
         DataLength   bodySize ;
 
         bool headValid = false ;
