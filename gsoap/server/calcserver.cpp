@@ -1,13 +1,25 @@
+#include <stdio.h>
+
 #include "calc.nsmap"
 #include "soapcalcService.h"
 
-int main()
-{
+int main() {
+  FILE * console = stdout ; 
+
+  fprintf( console, "Hello...\n" );
+  fflush( console );
+
+  fprintf( console, "Server is running....\n" );
+  fflush( console );
+
   calcService calc(SOAP_XML_INDENT);
-  //if (calc.serve() != SOAP_OK)
-  if (calc.run(8080) != SOAP_OK)
+  
+  if (calc.run(8080) != SOAP_OK) {
     calc.soap_stream_fault(std::cerr);
+  } 
   calc.destroy();
+
+  return 0 ; 
 }
 int calcService::add(double a, double b, double &result)
 {
