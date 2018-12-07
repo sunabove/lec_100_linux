@@ -1,4 +1,5 @@
 CC = g++
+#CFLAGS  = 
 CFLAGS  = -std=c++17 
 cflags  = -Wall
 LDFLAGS = -lgsoap++ 

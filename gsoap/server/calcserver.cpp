@@ -14,7 +14,10 @@ int main() {
 
   calcService calc(SOAP_XML_INDENT);
   
-  if (calc.run(8080) != SOAP_OK) {
+  auto result = calc.run(8080) ; // calc.serve(); 
+  //auto result = calc.serve(); 
+
+  if ( SOAP_OK == result ) {
     calc.soap_stream_fault(std::cerr);
   } 
   calc.destroy();
