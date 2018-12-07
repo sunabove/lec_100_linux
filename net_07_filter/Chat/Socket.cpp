@@ -2,6 +2,9 @@
 #include "OpCodeMsg.h"
 #include "OpCodeSysInfo.h"
 #include "OpCodeExit.h"
+#include "OpCodeAck.h"
+#include "OpCodeNack.h"
+#include "OpCodeFile.h"
 
 Socket::Socket() {
     this->valid = false ;
@@ -32,6 +35,12 @@ OpCode * Socket::readOpCode( ) {
             opCode = new OpCodeSysInfo();
         } else if( OP_CODE_EXIT == code ) {
             opCode = new OpCodeExit();
+        } else if( OP_CODE_ACK == code ) {
+            opCode = new OpCodeAck();
+        } else if( OP_CODE_NACK == code ) {
+            opCode = new OpCodeNack();
+        } else if( OP_CODE_FILE == code ) {
+            opCode = new OpCodeFile();
         }
 
         if( NULL != opCode ) {
