@@ -11,3 +11,4 @@ language.settings.xml
 #sample/*
 /.metadata/
 #/net_04_protocol_org/
+test/*
