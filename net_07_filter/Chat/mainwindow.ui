@@ -23,14 +23,14 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLineEdit" name="hostName">
+     <widget class="QLineEdit" name="hostname">
       <property name="text">
        <string>localhost</string>
       </property>
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="QPushButton" name="connButton">
+     <widget class="QPushButton" name="connect">
       <property name="text">
        <string>Connect</string>
       </property>
@@ -54,14 +54,34 @@
      <widget class="QLineEdit" name="message"/>
     </item>
     <item row="2" column="2">
-     <widget class="QPushButton" name="sendButton">
+     <widget class="QPushButton" name="sendMsg">
       <property name="text">
        <string>Send</string>
       </property>
      </widget>
     </item>
+    <item row="3" column="2">
+     <widget class="QPushButton" name="sendFile">
+      <property name="text">
+       <string>Send File</string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="1" colspan="2">
      <widget class="QTextEdit" name="chatContent"/>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>435</width>
+        <height>22</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>
