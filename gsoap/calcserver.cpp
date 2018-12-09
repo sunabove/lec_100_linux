@@ -14,7 +14,7 @@ int main() {
 
   calcService calc(SOAP_XML_INDENT);
   
-  auto result = calc.run(8080) ; // calc.serve(); 
+  auto result = calc.run(8080) ; 
   //auto result = calc.serve(); 
 
   if ( SOAP_OK == result ) {
