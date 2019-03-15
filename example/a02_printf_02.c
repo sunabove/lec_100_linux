@@ -1,4 +1,4 @@
-/* First C program: Hello World */
+/* printf */
 
 #include <stdio.h>
 
