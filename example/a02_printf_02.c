@@ -5,16 +5,14 @@
 int main( int argc , char ** argv ) {
     FILE * out = stdout ; 
 
- 	fprintf( out, "Hello World!" );
-	fprintf( out, "\nprintf format specifier example program.\n" );
+ 	fprintf( out, "Program : printf example\n" ); 
 
-	fprintf( out, "\n\e[1mbold\e[0m" );
-	fprintf( out, "\n\e[4munderline\e[0m" );
-	fprintf( out, "\n\e[31mHello World\e[0m" ); 
-	fprintf( out, "\n\e[9mstrikethrough\e[0m" );
-	fprintf( out, "\n\e[3mitalic\e[0m" );	
+	fprintf( out, "%d\n",0) ;
+	fprintf( out, "%d\n",-7) ;
+	fprintf( out, "%d\n",1560133635) ;
+	fprintf( out, "%d\n",-2035065302) ;  
 
-	fprintf( out, "\n\nGood bye!\n" );
+	fprintf( out, "Good bye!\n" );
 
 	return 0 ;
 }
