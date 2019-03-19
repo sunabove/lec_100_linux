@@ -28,4 +28,6 @@ int main(void) {
            "j = %d\ny = %f\nstr2 = %s\n"
            "warr[0] = U+%x warr[1] = U+%x\n",
            ret, i, x, str1, j, y, str2, warr[0], warr[1]); 
+
+   return 0;
 }
