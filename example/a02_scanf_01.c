@@ -3,8 +3,7 @@
 #include <stddef.h>
 #include <locale.h>
  
-int main(void)
-{
+int main(void) {
     int i, j;
     float x, y;
     char str1[10], str2[4];
