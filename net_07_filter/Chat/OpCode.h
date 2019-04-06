@@ -25,12 +25,12 @@ typedef unsigned char   ContLast ;
 
 class Date {
     public:
-        unsigned int yy;
-        unsigned int mm;
-        unsigned int dd;
-        unsigned int hh;
-        unsigned int mi;
-        unsigned int ss;
+        unsigned char yy;
+        unsigned char mm;
+        unsigned char dd;
+        unsigned char hh;
+        unsigned char mi;
+        unsigned char ss;
 
     public : bool setNow() ;
 };

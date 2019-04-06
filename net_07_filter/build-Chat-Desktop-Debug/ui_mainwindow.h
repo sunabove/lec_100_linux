@@ -20,6 +20,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolBar>
@@ -33,13 +34,15 @@ public:
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QLabel *label;
-    QLineEdit *hostName;
-    QPushButton *connButton;
+    QLineEdit *hostname;
+    QPushButton *connect;
     QLabel *label_2;
     QLabel *label_3;
     QLineEdit *message;
-    QPushButton *sendButton;
+    QPushButton *sendMsg;
+    QPushButton *sendFile;
     QTextEdit *chatContent;
+    QSpacerItem *horizontalSpacer;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -60,15 +63,15 @@ public:
 
         gridLayout->addWidget(label, 0, 0, 1, 1);
 
-        hostName = new QLineEdit(centralWidget);
-        hostName->setObjectName(QStringLiteral("hostName"));
+        hostname = new QLineEdit(centralWidget);
+        hostname->setObjectName(QStringLiteral("hostname"));
 
-        gridLayout->addWidget(hostName, 0, 1, 1, 1);
+        gridLayout->addWidget(hostname, 0, 1, 1, 1);
 
-        connButton = new QPushButton(centralWidget);
-        connButton->setObjectName(QStringLiteral("connButton"));
+        connect = new QPushButton(centralWidget);
+        connect->setObjectName(QStringLiteral("connect"));
 
-        gridLayout->addWidget(connButton, 0, 2, 1, 1);
+        gridLayout->addWidget(connect, 0, 2, 1, 1);
 
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
@@ -85,15 +88,24 @@ public:
 
         gridLayout->addWidget(message, 2, 1, 1, 1);
 
-        sendButton = new QPushButton(centralWidget);
-        sendButton->setObjectName(QStringLiteral("sendButton"));
+        sendMsg = new QPushButton(centralWidget);
+        sendMsg->setObjectName(QStringLiteral("sendMsg"));
 
-        gridLayout->addWidget(sendButton, 2, 2, 1, 1);
+        gridLayout->addWidget(sendMsg, 2, 2, 1, 1);
+
+        sendFile = new QPushButton(centralWidget);
+        sendFile->setObjectName(QStringLiteral("sendFile"));
+
+        gridLayout->addWidget(sendFile, 3, 2, 1, 1);
 
         chatContent = new QTextEdit(centralWidget);
         chatContent->setObjectName(QStringLiteral("chatContent"));
 
         gridLayout->addWidget(chatContent, 1, 1, 1, 2);
+
+        horizontalSpacer = new QSpacerItem(435, 22, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(horizontalSpacer, 3, 0, 1, 2);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -116,11 +128,12 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Chat Filter V1.0", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "Host", Q_NULLPTR));
-        hostName->setText(QApplication::translate("MainWindow", "localhost", Q_NULLPTR));
-        connButton->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));
+        hostname->setText(QApplication::translate("MainWindow", "localhost", Q_NULLPTR));
+        connect->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "Chat", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "Message", Q_NULLPTR));
-        sendButton->setText(QApplication::translate("MainWindow", "Send", Q_NULLPTR));
+        sendMsg->setText(QApplication::translate("MainWindow", "Send", Q_NULLPTR));
+        sendFile->setText(QApplication::translate("MainWindow", "Send File", Q_NULLPTR));
     } // retranslateUi
 
 };

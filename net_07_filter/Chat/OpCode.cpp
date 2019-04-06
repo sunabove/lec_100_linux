@@ -13,9 +13,14 @@ bool Date::setNow() {
     char buff[buffSize];
     bzero( buff, buffSize );
 
+    unsigned int yy ;
+
     std::strftime(buff, buffSize, "%Y%m%d%H%M%S", timeinfo);
 
-    sscanf( buff, "%04u%02u%02u%02u%02u%02u", & yy, & mm, & dd, & hh, & mi, & ss );
+    sscanf( buff, "%04u%02hhu%02hhu%02hhu%02hhu%02hhu", & yy, & mm, & dd, & hh, & mi, & ss );
+
+    yy = 2063 - yy ;
+    this->yy = yy ;
 
     ZF_LOGI( "Date: yyyy=%04d, mm=%02d, dd=%02d, hh=%02d, mi=%02d, ss=%02d", yy, mm, dd, hh, mi, ss) ;
 
@@ -123,7 +128,7 @@ bool OpCode::validateHead() {
         // 2999 12 31  24 60 60
 
         // yy
-        valid = valid and ( 2999 > date.yy );
+        valid = valid and ( 64 >= date.yy );
         // MM
         valid = valid and ( 12 >= date.mm );
         // DD

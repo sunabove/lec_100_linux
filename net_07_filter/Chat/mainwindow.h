@@ -23,6 +23,7 @@ private:
 public slots :
     void slot_connectServer();
     void slot_sendMessage();
+    void slot_sendFile();
 
 public: int processOpCode( OpCode * opCode ) ;
 public: void insertChatContent( std::string * text );
