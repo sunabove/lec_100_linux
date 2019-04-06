@@ -14,8 +14,8 @@ int main( int argc, char ** argv) {
 
     int fd  = -1 ;
     const char * inputFileName = "inputFile.txt" ; 
-    //fd = open( inputFileName , O_RDONLY ) ;
-    fd = STDIN_FILENO ;  
+    fd = open( inputFileName , O_RDONLY ) ;
+    //fd = STDIN_FILENO ;  
 
     if( -1 == fd ) {
         fprintf( out, "\nError: cannot open(%d) : %s", fd, inputFileName );
