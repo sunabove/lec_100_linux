@@ -7,7 +7,7 @@
 
 int main( int argc, char ** argv) {
     FILE * out = stdout ; 
-    fprintf( out, "This is a file read program.\n" );
+    fprintf( out, "A file reading program." );
 
     int fd  = -1 ;
     fd = open( "inputFile.txt" , O_RDONLY ) ; 
@@ -17,16 +17,14 @@ int main( int argc, char ** argv) {
     } else {
         fprintf( out, "\nSuccess: file open." );
         unsigned char c;
-        ssize_t nr = 0;
-        size_t bufSize = sizeof( c );
-        fprintf( out, "\nsizeof char = %zu", bufSize);
+        ssize_t ret = 0;
+        size_t len = sizeof( c );
+        fprintf( out, "\nsizeof char = %zu", len);
         fflush( out );
-        do {
-            nr = read( fd, &c, bufSize ) ;
-            if( 0 < nr ) {
-                fprintf( out, "\n0x%0X, %d, %c", c, c, c );
-            }
-        } while( 0 < nr );
+        void * buf = & c ; 
+        while( len > 0 && ( ret = read( fd, buf, len ) ) > 0 ) {
+            fprintf( out, "\n0x%0X, %d, %c", c, c, c );
+        } ;
         fflush( out );
         // close the filedescriptor and may be resued.
         close( fd );

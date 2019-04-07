@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -14,8 +15,8 @@ int main( int argc, char ** argv) {
 
     int fd  = -1 ;
     const char * inputFileName = "inputFile.txt" ; 
-    //fd = open( inputFileName , O_RDONLY ) ;
-    fd = STDIN_FILENO ;  
+    fd = open( inputFileName , O_RDONLY ) ;
+    //fd = STDIN_FILENO ;  
 
     if( -1 == fd ) {
         fprintf( out, "\nError: cannot open(%d) : %s", fd, inputFileName );
@@ -27,37 +28,51 @@ int main( int argc, char ** argv) {
         fprintf( out, "\n%s", LINE );
         fflush( out );
         
-        if( 1 ) {
-            // when the buffer size less than the max size - 1.
-            ssize_t tnr = 0;
-            ssize_t nr ; 
-            void * buf = & word ;
-            unsigned int idx = 0 ; 
-            do {
+        unsigned int idx = 0 ; 
+        
+        ssize_t ret = 1 ; 
+        while( ret > 0 ) {  
+            word = 0 ; 
+            ssize_t len = bufSize ; 
+            void * buf = & word ;  
+            
+            while( len > 0 && ret > 0 ) {
                 idx ++ ;                
-                fprintf( out, "\n[%03d] Try to read %zu byte(s) ...." , idx, (bufSize - tnr) ); 
+                fprintf( out, "\n[%03d] Try to read %zu byte(s) ...." , idx, ( len ) ); 
                 fflush( out );
-                nr = read( fd, buf, bufSize - tnr ) ;
-                tnr += nr ;                 
-                fprintf( out, "\n[%03d] %zu byte(s) read.", idx, nr );
+                // set errno as 0 before to check
+                errno = 0 ; 
+                // try to rea len bytes from fd to buf
+                ret = read( fd, buf, len ) ;
+                // store the errno on the local variable
+                const int err = errno ; 
+                fprintf( out, "\n[%03d] %zu byte(s) read.", idx, ret );
 
-                if( 0 == nr ) { // when end of file is encountered.
+                if( -1 == ret ) {
+                    if( EINTR == err ) {
+                        // a signal was received, continue to read
+                        ret = 1; 
+                    }
+                } else if( 0 == ret ) {
+                    // when end of file is encountered.
                     fprintf( out, "\n[%03d] End of file.", idx );
-                } else if( bufSize > tnr ) {
-                    fprintf( out, "\n[%03d] Bad: Total read number : %zu, Current read number : %zu", idx, tnr, nr );
-                    fprintf( out, "\n[%03d] Bad: word = 0x%0lX, %zu", idx, word, word );
-                    fprintf( out, "\n[%03d] Bad: Reissuing required.", idx );
-                    buf += nr;
-                } else if( bufSize == tnr ) {
-                    fprintf( out, "\n[%03d] Good: word = 0x%0lX, %zu", idx, word, word );
-                    tnr     = 0 ;
-                    word    = 0 ;
-                    buf     = & word ;
-                }
+                } else {
+                    len -= ret;
+                    buf += ret; 
 
-                fprintf( out, "\n%s", LINE );
-            } while( 0 < nr );
-        }
+                    if( 0 < len ) {
+                        fprintf( out, "\n[%03d] Bad: Total read number : %zu, Current read number : %zu", idx, (bufSize - len), len );
+                        fprintf( out, "\n[%03d] Bad: word = 0x%0lX, %zu", idx, word, word );
+                        fprintf( out, "\n[%03d] Bad: Reissuing required.", idx ); 
+                    } else if( 0 == len ) {
+                        fprintf( out, "\n[%03d] Good: word = 0x%0lX, %zu", idx, word, word ); 
+                    }
+                }
+            } 
+
+            fprintf( out, "\n%s", LINE );
+        } ;
+
         fflush( out );
         // close the filedescriptor and may be resued.
         close( fd );
