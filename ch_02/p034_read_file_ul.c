@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -52,6 +53,8 @@ int main( int argc, char ** argv) {
                     if( EINTR == err ) {
                         // a signal was received, continue to read
                         ret = 1; 
+                    } else {
+                        fprintf(stderr, "\nError while reading : %s", strerror(err) );
                     }
                 } else if( 0 == ret ) {
                     // when end of file is encountered.
