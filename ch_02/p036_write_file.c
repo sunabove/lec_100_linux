@@ -28,7 +28,7 @@ int main( int argc, char ** argv) {
         ssize_t nr = 0 ;        
         for( char c = 'A' ; -1 < nr && c <= 'Z' ; c ++ ) {  
             /* write the string in 'buf' to 'fd' */
-            nr = write (fd, &c, sizeof( c )); 
+            nr = write(fd, &c, sizeof( c )); 
         }
 
         // close the filedescriptor and may be resued.
