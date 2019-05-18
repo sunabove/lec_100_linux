@@ -5,13 +5,16 @@ int main()
 { 
 
 	pid_t pid;
+    int i = 0 ; 
     pid = fork ();
+    printf( "i = %d\n", i);
     if (pid > 0) {
+        i ++ ; 
         printf ("I am the parent of pid=%d!\n", pid);
     } else if (! pid) {
         printf ("I am the child!\n");
-    } else if (pid == −1) {
+    } else if (pid == -1) {
         perror ("fork error ");
     }
-
+    
 } 
