@@ -7,11 +7,9 @@ int main() {
     pid = fork();
     if (pid > 0) {
         i ++ ; 
-        printf ("I am the parent of pid=%d!\n", pid);
-        printf( "parent i = %d\n", i); 
-    } else if (! pid) {
-        printf ("I am the child!\n");
-        printf( "child i = %d\n", i); 
+        printf( "parent process i = %d\n", i); 
+    } else if (0 == pid) {
+        printf( "child process i = %d\n", i); 
     } else if (pid == -1) {
         perror ("fork error ");
     }    
