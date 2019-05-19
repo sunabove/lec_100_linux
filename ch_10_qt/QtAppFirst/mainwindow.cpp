@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // connect slot
-    connect( ui->pushButton, SIGNAL(clicked()), this, SLOT(clickButton()));
+    connect( ui->myPushButton, SIGNAL(clicked()), this, SLOT(clickButton()));
 }
 
 MainWindow::~MainWindow()
@@ -18,5 +18,5 @@ MainWindow::~MainWindow()
 
 // click Button slot definition
 void MainWindow::clickButton() {
-    ui->label->setText( ui->lineEdit->text() );
+    ui->myLabel->setText( ui->myLineEdit->text() );
 }
