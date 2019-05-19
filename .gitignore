@@ -13,4 +13,4 @@ language.settings.xml
 /.metadata/
 #/net_04_protocol_org/
 test/*
-
+test*
