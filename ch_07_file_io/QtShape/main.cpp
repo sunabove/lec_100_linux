@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-#include "zf_log.h"
+#include <zf_log.h>
 
 static void custom_output_callback(const zf_log_message *msg, void *arg) {
     qDebug( msg->buf, arg );
