@@ -1,7 +1,7 @@
 CC = g++
 cc = gcc
 CFLAGS  = -Wall
-LDFLAGS = -lpthread -ldl
+LDFLAGS = -lpthread -ldl -lzf_log
 
 %.o: %.c $(DEPS)
 	@echo "======================================="
@@ -13,7 +13,7 @@ LDFLAGS = -lpthread -ldl
 	@echo "Compiling $<"
 	$(CC) $< -c -o $@ $(CFLAGS)
 
-a: shape_header.o zf_log.o
+a: shape_header.o 
 	@echo "======================================="
 	@echo "Linking $<" 
 	$(CC) -o $@.out $^ $(LDFLAGS) 
