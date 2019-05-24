@@ -2,8 +2,7 @@
 #define ZF_LOG_TAG "MAIN"
 #include "zf_log.c"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
 	zf_log_set_tag_prefix("hello");
 
 	ZF_LOGI("You will see the number of arguments: %i", argc);
