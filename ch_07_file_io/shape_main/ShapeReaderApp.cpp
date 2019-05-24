@@ -38,9 +38,9 @@ int main( int argc , char ** argv ) {
  	ZF_LOGI( "Hello..." );
 	ZF_LOGI( "%s", LINE );
 	
-	//const char * fileName = argv[ 1 ]; 	
+	const char * fileName = argv[ 1 ]; 	
 
-	const char * fileName = "/home/sunabove/shapefiles/usa-major-cities.shp" ;
+	//const char * fileName = "/home/sunabove/shapefiles/usa-major-cities.shp" ;
 
 	FILE * file = NULL ;
 		
