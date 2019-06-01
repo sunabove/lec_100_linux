@@ -78,8 +78,8 @@ namespace esri {
 			virtual ~Polyline() ;
 
         Box box;
-        int32_t numParts ;
-        int32_t numPoints ;
+        uint32_t numParts ;
+        uint32_t numPoints ;
         int32_t * parts ;
         Point * points ;
 	};
@@ -92,12 +92,12 @@ namespace esri {
 		MainFileHeader mainFileHeader ; 
 		vector<Shape> shapes;
 
-        int size() {
+        auto size() {
             return shapes.size();
         }
 	};
 
-    size_t readData( FILE * file, void * buff, const int size, bool isSwap = false ) ;
+    size_t readData( FILE * file, void * buff, size_t size, bool isSwap = false ) ;
     size_t readInteger( FILE * file, void * buff, bool isSwap = false ) ;
     size_t readDouble ( FILE * file, void * buff, bool isSwap = false ) ;
     string readShapeFile( ShapeFile * shapeFile, FILE * file ) ;

@@ -6,16 +6,16 @@ namespace esri {
         this->numParts = 0 ;
         this->numParts = 0 ;
 
-        this->parts = NULL ;
-        this->points = NULL ;
+        this->parts = nullptr ;
+        this->points = nullptr ;
     }
 
     Polyline::~Polyline() {
-        if( NULL != this->parts ) {
+        if( nullptr != this->parts ) {
             delete [] this->parts ;
         }
 
-        if( NULL != this->points ) {
+        if( nullptr != this->points ) {
             delete [] this->points ;
         }
     }
@@ -25,18 +25,18 @@ namespace esri {
     }
 
     size_t readDouble ( FILE * file, void * buff, bool isSwap ) {
-        return readData( file, buff, 8 , isSwap );
+        return readData( file, buff, 8, isSwap );
     }
 
-    size_t readData( FILE * file, void * buff, const int size, bool isSwap ) {
+    size_t readData( FILE * file, void * buff, size_t size, bool isSwap ) {
         size_t rn = fread(buff, size, 1 , file );
 
         if( isSwap ) {
             if( 4 == size ) {
-                int * i = (int *) buff ;
+                uint32_t * i = static_cast<uint32_t *>( buff ) ;
                 * i = bswap_32( * i );
             } else if( 8 == size ) {
-                double * d = (double *) buff ;
+                double * d = static_cast<double *>( buff ) ;
                 * d = bswap_64( * d );
             }
         }
@@ -114,7 +114,7 @@ namespace esri {
                 ZF_LOGI( "Content Length = %d", header.contentLength );
             }
 
-            Shape * shape = NULL ; 
+            Shape * shape = nullptr ;
         
             if( 0 != errno or 1 > nr ) {
                 // do nothing.
@@ -135,7 +135,7 @@ namespace esri {
                     ZF_LOGI( "Y = %+011.6f", point->y ); 
                 }
             } else if( 3 == shapeType || 5 == shapeType ) { // Polyline, Polygon
-                Polyline * poly = NULL ; 
+                Polyline * poly = nullptr ;
                 if ( 3 == shapeType ) { 
                     poly = new Polyline() ; 
                 } else if ( 5 == shapeType ) { 
@@ -159,10 +159,10 @@ namespace esri {
 
                 auto numParts = poly->numParts; 
 
-                int32_t * parts = new int[numParts] ; 
+                int32_t * parts = new int32_t[numParts] ;
                 poly->parts = parts ;
 
-                for( int i = 0, iLen = numParts ; nr && i < iLen ; i ++ ) {
+                for( uint i = 0, iLen = numParts ; nr && i < iLen ; i ++ ) {
                     nr = nr and readInteger( file, parts ); 
                     parts ++ ;
                 }
@@ -171,7 +171,7 @@ namespace esri {
                 Point * points = new Point[ numPoints ] ; 
                 poly->points = points ; 
 
-                for( int i = 0, iLen = numPoints ; nr && i < iLen ; i ++ ) {
+                for( size_t i = 0, iLen = numPoints ; nr && i < iLen ; i ++ ) {
                     nr = nr and readDouble( file, & points->x );
                     nr = nr and readDouble( file, & points->y );
                     points ++ ; 
@@ -184,7 +184,7 @@ namespace esri {
                 }
             }
 
-            if( NULL != shape ) {
+            if( nullptr != shape ) {
                 shape->header = header ; 
                 shapes->push_back( * shape ); 
             }

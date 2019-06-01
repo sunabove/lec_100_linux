@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     ZF_LOGI( "Hello ..." );
     ZF_LOGI( "%s", LINE );
 
-    zf_log_set_output_v(ZF_LOG_PUT_STD, 0, custom_output_callback);
+    zf_log_set_output_v(ZF_LOG_PUT_STD, nullptr, custom_output_callback);
     zf_log_set_output_level(ZF_LOG_DEBUG);
 
     QApplication a(argc, argv);
