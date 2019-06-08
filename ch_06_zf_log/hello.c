@@ -1,6 +1,6 @@
 #define ZF_LOG_LEVEL ZF_LOG_INFO
 #define ZF_LOG_TAG "MAIN"
-#include "zf_log.c"
+#include <zf_log.h>
 
 int main(int argc, char *argv[]){
 	zf_log_set_tag_prefix("hello");
