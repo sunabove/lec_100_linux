@@ -7,6 +7,7 @@ int main() {
     long int fa = 0 ;
     long int fb = 1 ; 
     long int fc ; 
+    there :
     fc = fa + fb ; 
     pid = fork();
     if (0 == pid) { 
@@ -15,6 +16,7 @@ int main() {
             fa = fb ;
             fb = fc ;
             i ++ ;  
+            goto there ;
         }        
     }   
 } 
