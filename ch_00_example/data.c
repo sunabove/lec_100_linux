@@ -4,7 +4,7 @@ int main(int argc, char **argv) {
     setlocale(LC_NUMERIC, "");
 
     char c = 'A';
-    const char * s = "ABCD" ;
+    char * s = "ABCD" ;
     int i = 1234 ;
     double d = 1234.5678 ; 
 
