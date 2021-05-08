@@ -25,7 +25,7 @@ int main( int argc , char ** argv )
 		unsigned int beard_len; /* in inches */
 	} ;
 	
-	struct pirate p, blackbeard = { "Edward Teach", 950, 48 };
+	struct pirate blackbeard = { "Edward Teach", 950, 48 };
 	
 	out = fopen ( fileName, "w");
 	
@@ -50,6 +50,8 @@ int main( int argc , char ** argv )
 		perror ("fopen");
 		return 1;
 	}
+ 
+    struct pirate p;    
 
 	if(!fread (&p, sizeof (struct pirate), 1, in)) {
 		perror ("fread");
