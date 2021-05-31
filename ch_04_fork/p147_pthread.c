@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-void * start_thread (void *message) {
+void * start_thread (void * message) {
    printf ("%s\n", (const char *) message);
    return message;
 }
